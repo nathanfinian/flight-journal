@@ -11,13 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('airports', function (Blueprint $table) {
+        Schema::create('routes', function (Blueprint $table) {
             $table->id();
-            $table->char('iata', 3)->unique();         // CGK, PKY
-            $table->char('icao', 4)->nullable();        // WIII, WAOO, etc.
-            $table->string('city', 120)->nullable();
-            $table->string('country', 80)->nullable();
-            $table->string('tz', 40)->default('Asia/Jakarta'); // IANA tz
+            $table->foreignId('origin_id')->constrained('airports')
+                ->cascadeOnUpdate()->restrictOnDelete();
+            $table->foreignId('destination_id')->constrained('airports')
+                ->cascadeOnUpdate()->restrictOnDelete();
+            $table->unique(['origin_id', 'destination_id'], 'uniq_route');
             $table->timestamps();
 
             $table->foreignId('created_by')->nullable()
@@ -32,6 +32,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('airports');
+        Schema::dropIfExists('routes');
     }
 };

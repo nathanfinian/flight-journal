@@ -11,19 +11,22 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('airports', function (Blueprint $table) {
+        Schema::create('equipment', function (Blueprint $table) {
             $table->id();
-            $table->char('iata', 3)->unique();         // CGK, PKY
-            $table->char('icao', 4)->nullable();        // WIII, WAOO, etc.
-            $table->string('city', 120)->nullable();
-            $table->string('country', 80)->nullable();
-            $table->string('tz', 40)->default('Asia/Jakarta'); // IANA tz
+            $table->string('registration', 10)->unique();  // PK-LAO
+            $table->foreignId('aircraft_id')                // FK to aircraft type/specs
+                ->constrained('aircraft')
+                ->cascadeOnUpdate()
+                ->restrictOnDelete();
+            $table->enum('status', ['ACTIVE', 'MAINT', 'RETIRED'])->default('ACTIVE');
             $table->timestamps();
 
             $table->foreignId('created_by')->nullable()
                 ->constrained('users')->nullOnDelete()->cascadeOnUpdate();
             $table->foreignId('updated_by')->nullable()
                 ->constrained('users')->nullOnDelete()->cascadeOnUpdate();
+
+            $table->index(['aircraft_id', 'status'], 'idx_equipment_aircraft_status');
         });
     }
 
@@ -32,6 +35,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('airports');
+        Schema::dropIfExists('equipment');
     }
 };
