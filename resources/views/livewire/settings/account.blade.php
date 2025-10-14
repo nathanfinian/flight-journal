@@ -1,7 +1,7 @@
 <div class="mx-auto space-y-20 mt-20">
     <div>
         <x-ui.heading>Account Information</x-ui.heading>
-        <x-ui.text class="opacity-50">update your account public crendetiels</x-ui.text>
+        <x-ui.text class="opacity-50">update your account public credentials</x-ui.text>
         <div class="grow">
             <form 
                 wire:submit="saveChanges"
