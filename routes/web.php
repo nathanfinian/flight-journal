@@ -10,6 +10,7 @@ use App\Livewire\Auth\ResetPassword;
 use App\Livewire\Auth\VerifyEmail;
 use App\Livewire\Dashboard;
 use App\Livewire\FlightJournal;
+use App\Livewire\Settings;
 use App\Livewire\Settings\Account;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Support\Facades\Route;
@@ -28,6 +29,7 @@ Route::get('reset-password/{token}', ResetPassword::class)->name('password.reset
 Route::middleware('auth')->group(function () {
     Route::get('/dashboard', Dashboard::class)->name('dashboard');
     Route::get('/flight-journal', FlightJournal::class)->name('flight-journal');
+    Route::get('/settings', Settings::class)->name('settings');
     Route::get('/settings/account', Account::class)->name('settings.account');
 });
 
