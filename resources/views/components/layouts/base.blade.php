@@ -8,7 +8,7 @@
               content="width=device-width, initial-scale=1.0">
         <meta name="csrf-token"
               content="{{ csrf_token() }}">
-        <title> Sheaf UI {{ isset($title) ? '| ' . $title : '' }}</title>
+        <title> MCA | Journal {{ isset($title) ? '| ' . $title : '' }}</title>
         <link rel="icon" type="image/x-icon" href="{{ asset('favicon.png') }}">
 
         @vite(['resources/css/app.css', 'resources/js/app.js'])
