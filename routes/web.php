@@ -36,7 +36,12 @@ Route::middleware('auth')->group(function () {
     Route::get('/settings/account', Account::class)->name('settings.account');
     
     Route::get('/settings/aircraft', Aircraft::class)->name('settings.aircraft');
-    Route::get('/settings/aircraft-modify', AircraftModify::class)->name('settings.aircraft-modify');
+    Route::get('/settings/aircraft/create', AircraftModify::class)
+        ->name('settings.aircraft.create');
+
+    Route::get('/settings/aircraft/{aircraft:id}/edit', AircraftModify::class)
+        ->whereNumber('aircraft') // optional safety
+        ->name('settings.aircraft.edit');  // <-- {aircraft} matches the type-hint
 });
 
 Route::middleware(['auth'])->group(function () {
