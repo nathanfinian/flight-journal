@@ -1,78 +1,76 @@
-<div class="mx-auto space-y-20 mt-20">
+<div class="mx-auto max-w-2xl space-y-20 mt-20">
     <div>
-        <x-ui.heading>Modify Aircraft</x-ui.heading>
-        <x-ui.text class="opacity-50">update your account public credentials</x-ui.text>
+        <x-ui.heading level="h1" size="xl">Modify Aircraft</x-ui.heading>
+        <x-ui.text class="opacity-50">update data kelengkapan aircraft disini</x-ui.text>
+
+        <x-ui.separator class="my-2"/>
+        <x-ui.breadcrumbs>
+            <x-ui.breadcrumbs.item wire:navigate.hover :href="route('settings')">Settings</x-ui.breadcrumbs.item>
+            <x-ui.breadcrumbs.item wire:navigate.hover :href="route('settings.aircraft')">Aircraft List</x-ui.breadcrumbs.item>
+            <x-ui.breadcrumbs.item>Modify Aircraft</x-ui.breadcrumbs.item>
+        </x-ui.breadcrumbs>
+
         <div class="grow">
-            <form 
-                wire:submit="saveChanges"
-                class="mt-8 space-y-4 rounded-lg bg-white p-6 dark:bg-neutral-800/10"
-            >
-                <x-ui.field>
-                    <x-ui.label>name</x-ui.label>
-                    <x-ui.input wire:model="name" />
-                    <x-ui.error name="name" />
-                </x-ui.field>
-                
-                <x-ui.field>
-                    <x-ui.label>email address</x-ui.label>
-                    <x-ui.input 
-                        wire:model="email"
-                        type="email"
-                        copyable 
-                    />
-                    <x-ui.error name="email" />
-                </x-ui.field>
-                <x-ui.button 
-                    type="submit"
-                >Save changes</x-ui.button>
-            </form>
+            <div class="w-full max-w-xl mx-auto space-y-4">
+                <form 
+                    wire:submit="saveChanges"
+                    class="mt-8 space-y-4 rounded-lg bg-white p-6 dark:bg-neutral-800/10"
+                >
+                    {{-- Type Name --}}
+                    <x-ui.field required>
+                        <x-ui.label>Type Name</x-ui.label>
+                        <x-ui.input
+                            wire:model.defer="type_name"
+                            maxlength="40"
+                            placeholder="ATR 72-600"
+                            clearable
+                        />
+                        <x-ui.error name="type_name" />
+                    </x-ui.field>
+
+                    {{-- ICAO Code (up to 4, uppercase) --}}
+                    <x-ui.field required>
+                        <x-ui.label>ICAO Code</x-ui.label>
+                        <x-ui.input
+                            wire:model.lazy="icao_code"
+                            maxlength="4"
+                            placeholder="AT76"
+                            x-on:input="$el.value=$el.value.toUpperCase()"
+                            clearable
+                        />
+                        <x-ui.error name="icao_code" />
+                    </x-ui.field>
+
+                    {{-- IATA Code (up to 3, uppercase) --}}
+                    <x-ui.field>
+                        <x-ui.label>IATA Code</x-ui.label>
+                        <x-ui.input
+                            wire:model.lazy="iata_code"
+                            maxlength="3"
+                            placeholder="ATR"
+                            x-on:input="$el.value=$el.value.toUpperCase()"
+                            clearable
+                        />
+                        <x-ui.error name="iata_code" />
+                    </x-ui.field>
+
+                    {{-- Seat Capacity (0–65535) --}}
+                    <x-ui.field required>
+                        <x-ui.label>Seat Capacity</x-ui.label>
+                        <x-ui.input
+                            wire:model.defer="seat_capacity"
+                            type="number"
+                            min="1"
+                            max="65535"
+                            placeholder="70"
+                            clearable
+                        />
+                        <x-ui.error name="seat_capacity" />
+                        </x-ui.field>
+
+                    <x-ui.button type="submit">Save changes</x-ui.button>
+                </form>
+            </div>
         </div>
-    </div>
-    
-    <div>
-        <x-ui.heading>Change password</x-ui.heading>
-        <x-ui.text class="opacity-50">Update your security credentials</x-ui.text>
-        <form 
-            wire:submit="updatePassword"
-            class="mt-8 space-y-4 rounded-lg bg-white p-6 dark:bg-neutral-800/10"
-        >
-            
-            <x-ui.field>
-                <x-ui.label>Current Password</x-ui.label>
-                <x-ui.input 
-                    wire:model="current_password"
-                    type="password"
-                    revealable 
-                />
-                <x-ui.error name="current_password" />
-            </x-ui.field>
-            
-            <x-ui.field>
-                <x-ui.label>New Password</x-ui.label>
-                <x-ui.input 
-                    wire:model="password"
-                    type="password"
-                    revealable 
-                />
-                <x-ui.error name="password" />
-            </x-ui.field>
-            
-            <x-ui.field>
-                <x-ui.label>Confirm New Password</x-ui.label>
-                <x-ui.input 
-                    wire:model="password_confirmation"
-                    type="password"
-                    revealable
-                />
-                <x-ui.error name="password_confirmation" />
-            </x-ui.field>
-            
-            <x-ui.button 
-                type="submit"
-                class="mt-6"
-            >
-                Change Password
-            </x-ui.button>
-        </form>
     </div>
 </div>

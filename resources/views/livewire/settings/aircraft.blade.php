@@ -1,26 +1,24 @@
 <div>
-    <x-ui.layout.header class="flex justify-between dark:border-b-neutral-800 dark:bg-neutral-900">
+    <x-ui.heading level="h1" size="xl" class="flex items-center justify-between">
         <div class="flex items-center">
-            <x-ui.button
-                wire:navigate.hover
-                size="sm"
-                variant="ghost"
-                icon="arrow-left"
-                :href="route('settings')"
-                class="mr-6"
-            />
-            Aircraft List
-    </div>
+           Aircraft List
+        </div>
         <div class="flex items-center">
             <x-ui.button 
                 wire:navigate.hover
                 size="sm"
                 variant="outline"
                 icon="plus"
-                :href="route('settings.aircraft-modify')"
+                :href="route('settings.aircraft.create')"
             />
         </div>
-    </x-ui.layout.header>
+    </x-ui.heading>
+
+    <x-ui.separator class="my-2"/>
+     <x-ui.breadcrumbs>
+        <x-ui.breadcrumbs.item wire:navigate.hover :href="route('settings')">Settings</x-ui.breadcrumbs.item>
+        <x-ui.breadcrumbs.item>Aircraft List</x-ui.breadcrumbs.item>
+    </x-ui.breadcrumbs>
 
     <table class="border-collapse border border-gray-400 w-full mt-4">
         <thead>
