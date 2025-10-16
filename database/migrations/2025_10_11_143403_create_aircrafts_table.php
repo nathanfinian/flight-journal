@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('aircraft', function (Blueprint $table) {
+        Schema::create('aircrafts', function (Blueprint $table) {
             $table->id();
             $table->string('type_name', 40)->unique();   // e.g., ATR 72-600
             $table->string('icao_code', 4)->nullable();  // e.g., AT76

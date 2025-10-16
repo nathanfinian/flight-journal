@@ -11,11 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('equipment', function (Blueprint $table) {
+        Schema::create('equipments', function (Blueprint $table) {
             $table->id();
             $table->string('registration', 10)->unique();  // PK-LAO
             $table->foreignId('aircraft_id')                // FK to aircraft type/specs
-                ->constrained('aircraft')
+                ->constrained('aircrafts')
                 ->cascadeOnUpdate()
                 ->restrictOnDelete();
             $table->enum('status', ['ACTIVE', 'MAINT', 'RETIRED'])->default('ACTIVE');
