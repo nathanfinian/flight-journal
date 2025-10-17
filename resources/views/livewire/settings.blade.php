@@ -9,6 +9,16 @@
         <div class="w-full max-w-xl mx-auto space-y-4">
             <x-ui.link 
                 wire:navigate.hover
+                :href="route('settings.account')"
+                variant="ghost"
+            >
+                <x-ui.card class="flex items-center justify-between mb-4" size="xl">
+                    <span>My Account</span>
+                    <x-ui.icon name="arrow-up-right" class="text-gray-800 dark:text-white size-4" />
+                </x-ui.card>
+            </x-ui.link>
+            <x-ui.link 
+                wire:navigate.hover
                 :href="route('settings.aircraft')"
                 variant="ghost"
             >
