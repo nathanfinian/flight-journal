@@ -17,7 +17,7 @@ return new class extends Migration
             $table->foreignId('route_id')->constrained('routes')
                 ->cascadeOnUpdate()->restrictOnDelete();
             $table->date('service_date');     // 2025-07-01
-            $table->foreignId('equipment_id')->constrained('equipment')
+            $table->foreignId('equipment_id')->constrained('equipments')
                 ->cascadeOnUpdate()->restrictOnDelete();
 
             // Optional planned times
