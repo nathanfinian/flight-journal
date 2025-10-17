@@ -29,7 +29,7 @@
                 </x-ui.link>
                 <x-ui.link 
                     wire:navigate.hover
-                    :href="route('settings')" 
+                    :href="route('settings.index')" 
                     :attributes="$attributes->when(Request::routeIs('settings.*'), fn($attr)=> $attr->class('dark:!text-white text-neutral-900'))"
                     variant="soft"
                 >

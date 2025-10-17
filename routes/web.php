@@ -32,7 +32,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/dashboard', Dashboard::class)->name('dashboard');
     Route::get('/flight-journal', FlightJournal::class)->name('flight-journal');
 
-    Route::get('/settings', Settings::class)->name('settings');
+    Route::get('/settings', Settings::class)->name('settings.index');
     Route::get('/settings/account', Account::class)->name('settings.account');
     
     Route::get('/settings/aircraft', Aircraft::class)->name('settings.aircraft');
