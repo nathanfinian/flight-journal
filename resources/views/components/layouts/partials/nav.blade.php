@@ -35,41 +35,21 @@
                 >
                     settings
                 </x-ui.link>
-                <x-ui.link 
-                    wire:navigate.hover
-                    :href="route('settings.account')" 
-                    :attributes="$attributes->when(Request::routeIs('settings.account') , fn($attr)=> $attr->class('dark:!text-white text-neutral-900'))"
-                    variant="soft"
-                >
-                    account
-                </x-ui.link>
             </div>
         </div>
 
 
-        <div 
-            class="flex lg:hidden gap-4 items-center"
-        >
-            <button 
-                type="button"
-                class="bg-base-200/6 text-base-100 ring-base-200/10 hover:bg-base-200/10 inline-flex h-8 w-8 items-center justify-center rounded-field text-sm font-medium ring-1 ring-inset"
-                x-on:click="open = true"
+        <div class="flex lg:hidden gap-4 items-center">
+            <form
+                action="{{ route('app.auth.logout') }}"
+                method="post"
+                class="contents" {{-- this make the form does contribute the layotu, so it does not break --}}
             >
-                <span class="sr-only">Open main menu</span>
-                <svg 
-                    class="h-6 w-6"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke-width="1.5"
-                    stroke="currentColor"
-                >
-                    <path 
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        d="M3.75 6.75h16.5M3.75 12h16.5M12 17.25h8.25" 
-                    />
-                </svg>
-            </button>
+                @csrf
+                <x-ui.dropdown.item as="button" type="submit">
+                    <x-ui.icon name="arrow-left-start-on-rectangle" variant="solid" class="text-white"/> 
+                </x-ui.dropdown.item>
+            </form>
         </div>
 
         <div class="hidden gap-4 lg:flex lg:items-center lg:justify-end">
