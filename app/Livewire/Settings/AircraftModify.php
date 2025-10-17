@@ -8,6 +8,7 @@ use Illuminate\Validation\Rule;
 
 class AircraftModify extends Component
 {
+    public ?int $aircraft = null;
     public ?int $typeId = null;
 
     public string $type_name = '';
@@ -15,22 +16,11 @@ class AircraftModify extends Component
     public ?string $iata_code = null;
     public ?int $seat_capacity = null;
 
-    // If you pass an Aircraft via route model binding
-    // public function mount(?Aircraft $aircraft = null): void
-    // {
-    //     if ($aircraft) {
-    //         $this->typeId        = $aircraft->getKey();
-    //         $this->type_name     = $aircraft->type_name;
-    //         $this->icao_code     = $aircraft->icao_code;
-    //         $this->iata_code     = $aircraft->iata_code;
-    //         $this->seat_capacity = $aircraft->seat_capacity;
-    //     }
-    // }
-    public function mount(?int $id = null): void
+    public function mount(?int $aircraft = null): void
     {
-        if ($id) {
-            $aircraft = Aircraft::find($id);
-            if (!$aircraft) {
+        if ($aircraft) {
+            $aircraftData = Aircraft::find($aircraft);
+            if (!$aircraftData) {
                 // Handle gracefully instead of 404
                 $this->dispatch('notify', [
                     'title' => 'Not found',
@@ -38,14 +28,14 @@ class AircraftModify extends Component
                     'type' => 'error',
                 ]);
                 // Optionally redirect:
-                // return $this->redirectRoute('settings.aircraft');
+                // return $this->redirectRoute('settings.aircraftData');
                 return;
             }
-            $this->typeId        = $aircraft->getKey();
-            $this->type_name     = $aircraft->type_name;
-            $this->icao_code     = $aircraft->icao_code;
-            $this->iata_code     = $aircraft->iata_code;
-            $this->seat_capacity = $aircraft->seat_capacity;
+            $this->typeId        = $aircraftData->getKey();
+            $this->type_name     = $aircraftData->type_name;
+            $this->icao_code     = $aircraftData->icao_code;
+            $this->iata_code     = $aircraftData->iata_code;
+            $this->seat_capacity = $aircraftData->seat_capacity;
         }
     }
 
@@ -56,7 +46,6 @@ class AircraftModify extends Component
                 'required',
                 'string',
                 'max:40',
-                Rule::unique('aircrafts', 'type_name')->ignore($this->typeId), // ✅ table = aircraft
             ],
             'icao_code'     => ['required', 'string', 'max:4', 'regex:/^[A-Z0-9]{2,4}$/'],
             'iata_code'     => ['nullable', 'string', 'max:3', 'regex:/^[A-Z0-9]{2,3}$/'],
@@ -74,7 +63,7 @@ class AircraftModify extends Component
         $this->iata_code = $value ? strtoupper(trim($value)) : null;
     }
 
-    public function saveChanges(): void
+    public function saveChanges()
     {
         // make sure '' doesn't fail integer validation
         if ($this->seat_capacity === '') {
@@ -99,6 +88,15 @@ class AircraftModify extends Component
             'message' => 'Aircraft saved successfully.',
             'type' => 'success',
         ]);
+
+        // Optionally redirect after save
+        return $this->redirectRoute('settings.aircraft', navigate: true);
+    }
+
+    /** Helper for the view (button text, header, etc.) */
+    public function getIsEditProperty(): bool
+    {
+        return (bool) $this->aircraft?->exists;
     }
 
     public function render()

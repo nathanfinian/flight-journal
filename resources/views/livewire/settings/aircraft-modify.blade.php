@@ -16,6 +16,7 @@
                     wire:submit="saveChanges"
                     class="mt-8 space-y-4 rounded-lg bg-white p-6 dark:bg-neutral-800/10"
                 >
+                @csrf
                     {{-- Type Name --}}
                     <x-ui.field required>
                         <x-ui.label>Type Name</x-ui.label>
