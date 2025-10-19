@@ -4,7 +4,7 @@ namespace App\Livewire\Settings;
 
 use Livewire\Component;
 use App\Models\Aircraft;
-use Illuminate\Validation\Rule;
+use Illuminate\Database\QueryException;
 
 class AircraftModify extends Component
 {
@@ -83,20 +83,52 @@ class AircraftModify extends Component
 
         $this->typeId = $aircraft->id;
 
-        $this->dispatch('notify', [
-            'title' => 'Saved',
-            'message' => 'Aircraft saved successfully.',
-            'type' => 'success',
+        session()->flash('notify', [
+            'content' => 'Aircraft saved successfully',
+            'type' => 'success'
         ]);
 
         // Optionally redirect after save
         return $this->redirectRoute('settings.aircraft', navigate: true);
     }
 
+    public function delete()
+    {
+        $row = Aircraft::find($this->aircraft);
+
+        if (!$row) {
+            session()->flash('notify', [
+                'content' => 'Aircraft not found',
+                'type' => 'error'
+            ]);
+        }
+
+        try {
+            $row->delete();
+
+            session()->flash('notify', [
+                'content' => 'Aircraft deleted successfully!',
+                'type' => 'success'
+            ]);
+            $this->redirectRoute('settings.aircraft', navigate: true);
+        } catch (QueryException $e) {
+            // 23000 => integrity constraint violation (FK in use, etc.)
+            if ($e->getCode() === '23000') {
+                session()->flash('notify', [
+                    'content' => 'Aircraft ini ada di catatan penerbangan dan tidak dapat dihapus.',
+                    'type' => 'warning'
+                ]);
+                return;
+            }
+            // Re-throw unexpected errors for visibility in logs
+            throw $e;
+        }
+    }
+
     /** Helper for the view (button text, header, etc.) */
     public function getIsEditProperty(): bool
     {
-        return (bool) $this->aircraft?->exists;
+        return (bool) $this->aircraft;
     }
 
     public function render()

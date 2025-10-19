@@ -69,9 +69,39 @@
                         <x-ui.error name="seat_capacity" />
                         </x-ui.field>
 
-                    <x-ui.button type="submit">Save changes</x-ui.button>
+                    <div class="flex items-center justify-between mt-6">
+                        <x-ui.button type="submit">Save changes</x-ui.button>
+                        @if ($this->isEdit)
+                            <x-ui.modal.trigger id="delete-modal">
+                                <x-ui.button variant="ghost">
+                                <x-ui.icon name="ps:trash" variant="thin" class="text-red-600 dark:text-red-500"/>
+                                </x-ui.button>
+                            </x-ui.modal.trigger>
+                        @endif
+                    </div>
                 </form>
             </div>
         </div>
     </div>
+<x-ui.modal 
+    id="delete-modal"
+    position="center"
+    heading="Delete Aircraft"
+    description="Yakin ingin menghapus aircraft ini?"
+>
+    <div class="mt-4 flex justify-end space-x-2">
+        <x-ui.button 
+            variant="outline" 
+            wire:click="$emit('close-modal', 'delete-modal')"
+        >
+            Cancel
+        </x-ui.button>
+        <x-ui.button 
+            variant="danger" 
+            wire:click.stop="delete"
+        >
+            Delete
+        </x-ui.button>
+    </div>
+</x-ui.modal>
 </div>
