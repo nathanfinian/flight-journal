@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "3de93a029dfee02468b2532845ac692a",
+    "content-hash": "958cd36b7d4f68361164e68c3de54a6c",
     "packages": [
         {
             "name": "brick/math",
@@ -6222,6 +6222,72 @@
                 "source": "https://github.com/wireui/heroicons/tree/v2.9.0"
             },
             "time": "2025-03-02T22:06:22+00:00"
+        },
+        {
+            "name": "wireui/phosphoricons",
+            "version": "v2.4.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/wireui/phosphoricons.git",
+                "reference": "a4d4ed73adf760a34878f561edb982ace0aa31ef"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/wireui/phosphoricons/zipball/a4d4ed73adf760a34878f561edb982ace0aa31ef",
+                "reference": "a4d4ed73adf760a34878f561edb982ace0aa31ef",
+                "shasum": ""
+            },
+            "require": {
+                "laravel/framework": "^9.52|^10.0|^11.0|^12.0",
+                "php": "^8.1|^8.2|^8.3|^8.4"
+            },
+            "require-dev": {
+                "larastan/larastan": "^3.0",
+                "laravel/pint": "^1.6",
+                "mockery/mockery": "^1.5",
+                "orchestra/testbench": "^10.0",
+                "pestphp/pest": "^3.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "aliases": [],
+                    "providers": [
+                        "WireUi\\PhosphorIcons\\PhosphorIconsServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "WireUi\\PhosphorIcons\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "ph7jack",
+                    "email": "pedro@wireui.dev"
+                }
+            ],
+            "description": "The phosphoricons made for laravel blade by WireUI",
+            "keywords": [
+                "Blade Icons",
+                "blade components",
+                "blade phosphoricons",
+                "laravel components",
+                "livewire icons",
+                "livewire icons components",
+                "wireui",
+                "wireui phosphoricons"
+            ],
+            "support": {
+                "issues": "https://github.com/wireui/phosphoricons/issues",
+                "source": "https://github.com/wireui/phosphoricons/tree/v2.4.0"
+            },
+            "time": "2025-03-02T22:06:11+00:00"
         }
     ],
     "packages-dev": [
