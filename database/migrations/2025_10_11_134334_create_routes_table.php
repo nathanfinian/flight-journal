@@ -17,13 +17,18 @@ return new class extends Migration
                 ->cascadeOnUpdate()->restrictOnDelete();
             $table->foreignId('destination_id')->constrained('airports')
                 ->cascadeOnUpdate()->restrictOnDelete();
+            $table->boolean('is_active')->default(true);
             $table->unique(['origin_id', 'destination_id'], 'uniq_route');
-            $table->timestamps();
 
+            //Audit
+            $table->timestamps();
             $table->foreignId('created_by')->nullable()
                 ->constrained('users')->nullOnDelete()->cascadeOnUpdate();
             $table->foreignId('updated_by')->nullable()
                 ->constrained('users')->nullOnDelete()->cascadeOnUpdate();
+
+            // Helpful filter
+            $table->index(['is_active']);
         });
     }
 
