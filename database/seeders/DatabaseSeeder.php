@@ -18,6 +18,9 @@ class DatabaseSeeder extends Seeder
         $this->call([
             AircraftSeeder::class,
         ]);
+        $this->call([
+            AirlineSeeder::class,
+        ]);
 
         User::factory()->create([
             'name' => 'Test User',
