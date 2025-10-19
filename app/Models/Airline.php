@@ -21,6 +21,7 @@ class Airline extends Model
         'iata_code',
         'country',
         'callsign',
+        'status',
         'created_by',
         'updated_by'
     ];
