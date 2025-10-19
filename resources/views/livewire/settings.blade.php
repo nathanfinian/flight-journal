@@ -13,7 +13,7 @@
                 variant="ghost"
             >
                 <x-ui.card class="flex items-center justify-between mb-4" size="xl">
-                    <span>My Account</span>
+                    <span>my account</span>
                     <x-ui.icon name="arrow-up-right" class="text-gray-800 dark:text-white size-4" />
                 </x-ui.card>
             </x-ui.link>
@@ -23,47 +23,47 @@
                 variant="ghost"
             >
                 <x-ui.card class="flex items-center justify-between mb-4" size="xl">
-                    <span>Aircraft List</span>
+                    <span>tipe pesawat</span>
                     <x-ui.icon name="arrow-up-right" class="text-gray-800 dark:text-white size-4" />
                 </x-ui.card>
             </x-ui.link>
             <x-ui.link 
                 wire:navigate.hover
-                :href="route('flight-journal')" 
+                :href="route('settings.equipment')" 
                 variant="ghost"
             >
                 <x-ui.card class="flex items-center justify-between mb-4" size="xl">
-                    <span>Equipment List</span>
+                    <span>daftar equipment airline</span>
                     <x-ui.icon name="arrow-up-right" class="text-gray-800 dark:text-white size-4" />
                 </x-ui.card>
             </x-ui.link>
             <x-ui.link 
                 wire:navigate.hover
-                :href="route('flight-journal')" 
+                :href="route('settings.index')" 
                 variant="ghost"
             >
                 <x-ui.card class="flex items-center justify-between mb-4" size="xl">
-                    <span>Airport List</span>
+                    <span>daftar bandara</span>
                     <x-ui.icon name="arrow-up-right" class="text-gray-800 dark:text-white size-4" />
                 </x-ui.card>
             </x-ui.link>
             <x-ui.link 
                 wire:navigate.hover
-                :href="route('flight-journal')" 
+                :href="route('settings.index')" 
                 variant="ghost"
             >
                 <x-ui.card class="flex items-center justify-between mb-4" size="xl">
-                    <span>Routes List</span>
+                    <span>daftar rute penerbangan</span>
                     <x-ui.icon name="arrow-up-right" class="text-gray-800 dark:text-white size-4" />
                 </x-ui.card>
             </x-ui.link>
             <x-ui.link 
                 wire:navigate.hover
-                :href="route('flight-journal')" 
+                :href="route('settings.index')" 
                 variant="ghost"
             >
                 <x-ui.card class="flex items-center justify-between mb-4" size="xl">
-                    <span>Regular Flights List</span>
+                    <span>daftar flight reguler</span>
                     <x-ui.icon name="arrow-up-right" class="text-gray-800 dark:text-white size-4" />
                 </x-ui.card>
             </x-ui.link>
