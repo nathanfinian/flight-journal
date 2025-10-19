@@ -4,6 +4,7 @@ namespace App\Livewire\Settings;
 
 use Livewire\Component;
 use App\Models\Aircraft;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\QueryException;
 
 class AircraftModify extends Component
@@ -75,6 +76,16 @@ class AircraftModify extends Component
         // normalize
         $data['icao_code'] = $data['icao_code'] ? strtoupper($data['icao_code']) : null;
         $data['iata_code'] = $data['iata_code'] ? strtoupper($data['iata_code']) : null;
+
+        $userId = Auth::id();
+        if ($this->isEdit) {
+            // editing existing row → only updated_by
+            $data['updated_by'] = $userId;
+        } else {
+            // creating new row → set both created_by & updated_by
+            $data['created_by'] = $userId;
+            $data['updated_by'] = $userId;
+        }
 
         $aircraft = Aircraft::updateOrCreate(
             ['id' => $this->typeId],
