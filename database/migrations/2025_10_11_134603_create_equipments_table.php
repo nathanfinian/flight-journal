@@ -18,6 +18,10 @@ return new class extends Migration
                 ->constrained('aircrafts')
                 ->cascadeOnUpdate()
                 ->restrictOnDelete();
+            $table->foreignId('airline_id')                // FK to airline operator
+                ->constrained('airlines')
+                ->cascadeOnUpdate()
+                ->restrictOnDelete();
             $table->enum('status', ['ACTIVE', 'MAINT', 'RETIRED'])->default('ACTIVE');
             $table->timestamps();
 
