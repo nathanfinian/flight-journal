@@ -20,9 +20,15 @@ class Airline extends Model
         'icao_code',
         'iata_code',
         'country',
+        'callsign',
         'created_by',
         'updated_by'
     ];
+
+    public function getRouteKeyName()
+    {
+        return 'id'; //Assuming you are using 'id' as a unique field
+    }
 
     public function routes()
     {
