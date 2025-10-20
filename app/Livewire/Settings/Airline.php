@@ -5,12 +5,9 @@ namespace App\Livewire\Settings;
 use Livewire\Component;
 use Livewire\WithPagination;
 use App\Models\Airline as AirlineModel;
-use Illuminate\Database\QueryException;
 
 class Airline extends Component
 {
-    private string $EMPTY_LABEL = 'Empty';
-
     use WithPagination;
 
     private int $perPage = 30;

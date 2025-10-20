@@ -17,7 +17,7 @@
     <x-ui.separator class="my-2"/>
      <x-ui.breadcrumbs>
         <x-ui.breadcrumbs.item wire:navigate.hover :href="route('settings.index')">Settings</x-ui.breadcrumbs.item>
-        <x-ui.breadcrumbs.item>Aircraft List</x-ui.breadcrumbs.item>
+        <x-ui.breadcrumbs.item>Airline List</x-ui.breadcrumbs.item>
     </x-ui.breadcrumbs>
 
     <table class="border border-collapse min-w-full text-sm rounded-xl overflow-hidden mt-4 shadow-lg">
