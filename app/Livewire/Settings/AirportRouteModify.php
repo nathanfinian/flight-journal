@@ -92,10 +92,11 @@ class AirportRouteModify extends Component
     public function delete()
     {
         if ($this->record) {
+            $rute = 'Rute ' . $this->record->origin->iata . ' → ' . $this->record->destination->iata;
             $this->record->delete();
 
             session()->flash('notify', [
-                'content' => 'Airport route deleted',
+                'content' => $rute . ' successfully deleted',
                 'type' => 'success',
             ]);
 

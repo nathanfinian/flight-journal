@@ -77,10 +77,11 @@ class EquipmentModify extends Component
     public function delete()
     {
         if ($this->record) {
+            $name = $this->record->registration;
             $this->record->delete();
 
             session()->flash('notify', [
-                'content' => 'Equipment data deleted successfully',
+                'content' => $name . ' deleted successfully',
                 'type' => 'success'
             ]);
             return redirect()->route('settings.equipment');

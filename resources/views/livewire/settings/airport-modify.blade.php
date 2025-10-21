@@ -95,7 +95,7 @@
     <div class="mt-4 flex justify-end space-x-2">
         <x-ui.button 
             variant="outline" 
-            wire:click="$emit('close-modal', 'delete-modal')"
+            x-on:click="$data.close();"
         >
             Cancel
         </x-ui.button>

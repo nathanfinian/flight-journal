@@ -125,6 +125,7 @@ class AirportModify extends Component
     public function delete()
     {
         $row = Airport::find($this->airportId);
+        $airportName = $row?->city . ' (' . $row?->iata . ')';
 
         if (!$row) {
             session()->flash('notify', [
@@ -138,7 +139,7 @@ class AirportModify extends Component
             $row->delete();
 
             session()->flash('notify', [
-                'content' => 'Airport deleted successfully!',
+                'content' => $airportName . ' deleted successfully!',
                 'type' => 'success'
             ]);
 

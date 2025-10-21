@@ -134,6 +134,7 @@ class AirlineModify extends Component
     public function delete()
     {
         $row = Airline::find($this->airlineId);
+        $name = $row?->name ?? 'Unknown';
 
         if (!$row) {
             session()->flash('notify', [
@@ -146,7 +147,7 @@ class AirlineModify extends Component
             $row->delete();
 
             session()->flash('notify', [
-                'content' => 'Airline deleted successfully!',
+                'content' => $name . ' deleted successfully!',
                 'type' => 'success'
             ]);
             $this->redirectRoute('settings.airline', navigate: true);
