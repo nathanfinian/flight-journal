@@ -27,10 +27,10 @@ return new class extends Migration
             $table->timestamps();
 
             // Ensure unique pairing
-            $table->unique(['airline_id', 'route_id'], 'uniq_airline_route');
+            $table->unique(['airline_id', 'airport_route_id'], 'uniq_airline_route');
 
             // Common filters
-            $table->index(['route_id', 'airline_id']);
+            $table->index(['airport_route_id', 'airline_id']);
         });
     }
 

@@ -31,7 +31,7 @@ return new class extends Migration
             $table->string('notes', 255)->nullable();
 
             $table->unique(['flight_no', 'service_date'], 'uniq_flight_instance');
-            $table->index(['route_id', 'service_date'], 'idx_route_date');
+            $table->index(['airport_route_id', 'service_date'], 'idx_route_date');
 
             $table->timestamps();
 
