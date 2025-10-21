@@ -16,7 +16,10 @@ use App\Livewire\Settings\Aircraft;
 use App\Livewire\Settings\AircraftModify;
 use App\Livewire\Settings\Airline;
 use App\Livewire\Settings\AirlineModify;
+use App\Livewire\Settings\Airport;
+use App\Livewire\Settings\AirportModify;
 use App\Livewire\Settings\Equipment;
+use App\Livewire\Settings\EquipmentModify;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Support\Facades\Route;
 
@@ -53,11 +56,18 @@ Route::middleware('auth')->group(function () {
         ->name('settings.aircraft.edit');  // <-- {aircraft} matches the type-hint
 
     Route::get('/settings/equipment', Equipment::class)->name('settings.equipment');
-    // Route::get('/settings/equipment/create', AircraftModify::class)
-    //     ->name('settings.equipment.create');
-    // Route::get('/settings/equipment/{equipment:id}/edit', AircraftModify::class)
-    //     ->whereNumber('equipment') // optional safety
-    //     ->name('settings.equipment.edit');  // <-- {aircraft} matches the type-hint
+    Route::get('/settings/equipment/create', EquipmentModify::class)
+        ->name('settings.equipment.create');
+    Route::get('/settings/equipment/{equipment:id}/edit', EquipmentModify::class)
+        ->whereNumber('equipment') // optional safety
+        ->name('settings.equipment.edit');  // <-- {equipment} matches the type-hint
+
+    Route::get('/settings/airport', Airport::class)->name('settings.airport');
+    Route::get('/settings/airport/create', AirportModify::class)
+        ->name('settings.airport.create');
+    Route::get('/settings/airport/{airport:id}/edit', AirportModify::class)
+        ->whereNumber('airport') // optional safety
+        ->name('settings.airport.edit');  // <-- {airport} matches the type-hint
 });
 
 Route::middleware(['auth'])->group(function () {
