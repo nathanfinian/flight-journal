@@ -4,7 +4,7 @@
     x-on:keydown.window.escape="open = false"
     class="border-b-neutral-100 dark:border-b-neutral-800 dark:bg-neutral-900 bg-neutral-50 fixed inset-x-0 top-0 z-50 border-b"
 >
-    <nav 
+    {{-- <nav 
         class="mx-auto flex items-center justify-between px-6 py-3 text-base-100 lg:px-8"
         aria-label="global"
     >
@@ -26,14 +26,17 @@
                     variant="soft"
                 >
                     flight journal
-                </x-ui.link>
-                <x-ui.link 
+                </x-ui.link> --}}
+                {{-- This link set below is modified --}}
+                {{-- <x-ui.link 
                     wire:navigate.hover
                     :href="route('flight-schedule')" 
-                    :attributes="$attributes->when(Request::routeIs('flight-schedule'), fn($attr)=> $attr->class('dark:!text-white text-neutral-900'))"
                     variant="soft"
                 >
-                    scheduling
+                    <div class="flex items-center {{ Request::routeIs('flight-schedule') ? 'dark:!text-white text-neutral-900' : '' }}">
+                        <x-ui.icon name="ps:calendar-dots" class="size-5 mr-2"/>
+                        <span>Scheduling</span>
+                    </div>
                 </x-ui.link>
                 <x-ui.link 
                     wire:navigate.hover
@@ -46,12 +49,11 @@
             </div>
         </div>
 
-
         <div class="flex lg:hidden gap-4 items-center">
             <form
                 action="{{ route('app.auth.logout') }}"
                 method="post"
-                class="contents" {{-- this make the form does contribute the layotu, so it does not break --}}
+                class="contents"
             >
                 @csrf
                 <x-ui.dropdown.item as="button" type="submit">
@@ -72,7 +74,71 @@
 
             <x-ui.theme-switcher variant="inline"/>
         </div>
-    </nav>
+    </nav> --}}
+    <x-ui.navbar class="mx-auto flex items-center justify-between px-6 py-3 text-base-100 lg:px-8" aria-label="global">
+            <div class="flex items-center pr-7">
+                <x-app.logo />
+                <div class="flex gap-4 ml-8">
+                    <x-ui.navbar.item 
+                        wire:navigate.hover
+                        icon="ps:house"
+                        icon:class="w-5 h-5" 
+                        label="Dashboard" 
+                        :href="route('dashboard')" 
+                        :active="request()->is('dashboard')"
+                    />
+                    <x-ui.navbar.item 
+                        wire:navigate.hover
+                        icon="ps:notepad"
+                        icon:class="w-5 h-5" 
+                        label="Flight Journal" 
+                        :href="route('flight-journal')"
+                        :active="request()->is('flight-journal*')"
+                    />
+                    <x-ui.navbar.item 
+                        wire:navigate.hover
+                        icon="ps:calendar-dots"
+                        icon:class="w-5 h-5" 
+                        label="Scheduling" 
+                        :href="route('flight-schedule')"
+                        :active="request()->is('flight-schedule*')"
+                    />
+                    <x-ui.navbar.item 
+                        wire:navigate.hover
+                        icon="cog-6-tooth" 
+                        icon:class="w-5 h-5"
+                        label="Settings" 
+                        :href="route('settings.index')" 
+                        :active="request()->is('settings*')"
+                    />
+                </div>
+            </div>
+            <div class="flex lg:hidden gap-4 items-center">
+                <form
+                    action="{{ route('app.auth.logout') }}"
+                    method="post"
+                    class="contents"
+                >
+                    @csrf
+                    <x-ui.dropdown.item as="button" type="submit">
+                        <x-ui.icon name="arrow-left-start-on-rectangle" variant="solid" class="text-white"/> 
+                    </x-ui.dropdown.item>
+                </form>
+            </div>
+
+            <div class="hidden gap-4 lg:flex lg:items-center lg:justify-end">
+                @auth
+                    <x-user-dropdown/>
+                @endauth
+
+                <x-ui.separator 
+                    class="my-2" 
+                    vertical
+                />
+
+                <x-ui.theme-switcher variant="inline"/>
+            </div>
+    </x-ui.navbar>
 
     <!-- Mobile Menu -->
     <div x-show="open"
