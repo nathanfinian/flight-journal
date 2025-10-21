@@ -29,6 +29,14 @@
                 </x-ui.link>
                 <x-ui.link 
                     wire:navigate.hover
+                    :href="route('flight-schedule')" 
+                    :attributes="$attributes->when(Request::routeIs('flight-schedule'), fn($attr)=> $attr->class('dark:!text-white text-neutral-900'))"
+                    variant="soft"
+                >
+                    scheduling
+                </x-ui.link>
+                <x-ui.link 
+                    wire:navigate.hover
                     :href="route('settings.index')" 
                     :attributes="$attributes->when(Request::routeIs('settings.*'), fn($attr)=> $attr->class('dark:!text-white text-neutral-900'))"
                     variant="soft"
