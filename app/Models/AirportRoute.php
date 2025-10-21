@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class AirportRoute extends Model
 {
-    protected $table = 'routes';
+    protected $table = 'airport_routes';
 
     protected $guarded = ['id'];
 
@@ -18,13 +18,39 @@ class AirportRoute extends Model
     protected $fillable = [
         'origin_id',
         'destination_id',
-        'is_active',
+        'status',
         'created_by',
         'updated_by'
     ];
 
+    public function origin()
+    {
+        return $this->belongsTo(Airport::class, 'origin_id');
+    }
+
+    public function destination()
+    {
+        return $this->belongsTo(Airport::class, 'destination_id');
+    }
+
     public function airlines()
     {
         return $this->belongsToMany(Airline::class, 'airline_route')->withTimestamps();
+    }
+
+    // Optional: nice label like "CGK → DPS"
+    public function getCodePairAttribute(): string
+    {
+        return ($this->origin?->iata ?? $this->origin?->icao ?? '—')
+            . ' → '
+            . ($this->destination?->iata ?? $this->destination?->icao ?? '—');
+    }
+
+    // Optional: nice label like "CGK → DPS"
+    public function getCityPairAttribute(): string
+    {
+        return ($this->origin?->city ?? $this->origin?->iata ?? '—')
+            . ' → '
+            . ($this->destination?->city ?? $this->destination?->iata ?? '—');
     }
 }
