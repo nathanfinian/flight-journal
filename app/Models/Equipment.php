@@ -7,6 +7,9 @@ use Illuminate\Database\Eloquent\Model;
 class Equipment extends Model
 {
     protected $table = 'equipments';
+
+    protected $guarded = ['id'];
+
     /**
      * The attributes that are mass assignable.
      *
@@ -21,10 +24,18 @@ class Equipment extends Model
         'updated_by'
     ];
 
-    protected $guarded = ['id'];
-
-    public function getRouteKeyName()
+    public function aircraft()
     {
-        return 'id'; //Assuming you are using 'id' as a unique field
+        return $this->belongsTo(Aircraft::class);
+    }
+    
+    public function airline()
+    {
+        return $this->belongsTo(Airline::class);
+    }
+
+    public function getRouteKeyName(): string
+    {
+        return 'id'; // optional, this is default — but include it for clarity
     }
 }
