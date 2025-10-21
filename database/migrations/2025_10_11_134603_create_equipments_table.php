@@ -22,7 +22,7 @@ return new class extends Migration
                 ->constrained('airlines')
                 ->cascadeOnUpdate()
                 ->restrictOnDelete();
-            $table->enum('status', ['ACTIVE', 'MAINT', 'RETIRED'])->default('ACTIVE');
+            $table->enum('status', ['ACTIVE', 'RETIRED'])->default('ACTIVE');
             $table->timestamps();
 
             $table->foreignId('created_by')->nullable()
