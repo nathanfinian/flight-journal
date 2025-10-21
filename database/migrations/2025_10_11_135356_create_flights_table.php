@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('flights', function (Blueprint $table) {
             $table->id();
             $table->string('flight_no', 20);  // ID-6200
-            $table->foreignId('route_id')->constrained('routes')
+            $table->foreignId('airport_route_id')->constrained('airport_routes')
                 ->cascadeOnUpdate()->restrictOnDelete();
             $table->date('service_date');     // 2025-07-01
             $table->foreignId('equipment_id')->constrained('equipments')

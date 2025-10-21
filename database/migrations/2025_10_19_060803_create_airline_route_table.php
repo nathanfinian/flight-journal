@@ -17,8 +17,8 @@ return new class extends Migration
             $table->foreignId('airline_id')
                 ->constrained('airlines')->cascadeOnUpdate()->restrictOnDelete();
 
-            $table->foreignId('route_id')
-                ->constrained('routes')->cascadeOnUpdate()->restrictOnDelete();
+            $table->foreignId('airport_route_id')
+                ->constrained('airport_routes')->cascadeOnUpdate()->restrictOnDelete();
 
             // Optional flags/metadata (seasonality, codeshare, etc.)
             $table->boolean('is_primary_operator')->default(false);
