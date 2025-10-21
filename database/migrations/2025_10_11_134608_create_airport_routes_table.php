@@ -17,7 +17,7 @@ return new class extends Migration
                 ->cascadeOnUpdate()->restrictOnDelete();
             $table->foreignId('destination_id')->constrained('airports')
                 ->cascadeOnUpdate()->restrictOnDelete();
-            $table->boolean('is_active')->default(true);
+            $table->enum('status', ['ACTIVE', 'INACTIVE'])->default('ACTIVE');
             $table->unique(['origin_id', 'destination_id'], 'uniq_route');
 
             //Audit
@@ -28,7 +28,7 @@ return new class extends Migration
                 ->constrained('users')->nullOnDelete()->cascadeOnUpdate();
 
             // Helpful filter
-            $table->index(['is_active']);
+            $table->index(['status']);
         });
     }
 
