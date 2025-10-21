@@ -28,7 +28,7 @@
                 <x-ui.card class="flex items-center justify-between mb-4" size="xl">
                     <div class="flex">
                         <x-ui.icon name="ps:clipboard-text" variant="thin" class="text-gray-800 dark:text-white mr-2"/>
-                         <span>daftar airlines</span>
+                        <span>daftar airlines</span>
                     </div>
                     <x-ui.icon name="arrow-up-right" class="text-gray-800 dark:text-white size-4" />
                 </x-ui.card>
@@ -74,26 +74,13 @@
             </x-ui.link>
             <x-ui.link 
                 wire:navigate.hover
-                :href="route('settings.index')" 
+                :href="route('settings.airport-route')" 
                 variant="ghost"
             >
                 <x-ui.card class="flex items-center justify-between mb-4" size="xl">
                     <div class="flex">
                         <x-ui.icon name="ps:path" variant="thin" class="text-gray-800 dark:text-white mr-2"/>
                         <span>daftar rute penerbangan</span>
-                    </div>
-                    <x-ui.icon name="arrow-up-right" class="text-gray-800 dark:text-white size-4" />
-                </x-ui.card>
-            </x-ui.link>
-            <x-ui.link 
-                wire:navigate.hover
-                :href="route('settings.index')" 
-                variant="ghost"
-            >
-                <x-ui.card class="flex items-center justify-between mb-4" size="xl">
-                     <div class="flex">
-                        <x-ui.icon name="ps:calendar-dots" variant="thin" class="text-gray-800 dark:text-white mr-2"/>
-                        <span>daftar flight reguler</span>
                     </div>
                     <x-ui.icon name="arrow-up-right" class="text-gray-800 dark:text-white size-4" />
                 </x-ui.card>
