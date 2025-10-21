@@ -15,16 +15,6 @@ class DatabaseSeeder extends Seeder
     {
         // User::factory(10)->create();
 
-        $this->call([
-            AirportSeeder::class,
-        ]);
-        $this->call([
-            AircraftSeeder::class,
-        ]);
-        $this->call([
-            AirlineSeeder::class,
-        ]);
-
         User::factory()->create([
             'name' => 'Test User',
             'email' => 'test@example.com',
@@ -34,6 +24,16 @@ class DatabaseSeeder extends Seeder
             'name' => 'Nathanael Finian',
             'email' => 'nathan@test.com',
             'password' => bcrypt('2525'),
+        ]);
+        
+        $this->call([
+            AircraftSeeder::class,
+        ]);
+        $this->call([
+            AirlineSeeder::class,
+        ]);
+        $this->call([
+            AirportSeeder::class,
         ]);
     }
 }
