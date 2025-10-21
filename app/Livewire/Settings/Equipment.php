@@ -20,6 +20,10 @@ class Equipment extends Component
     public function render()
     {
         $equipment = EquipmentModel::query()
+            ->with([
+                'aircraft:id,type_name',
+                'airline:id,name',
+            ])
             ->orderBy('id', 'asc')
             ->paginate($this->perPage); // change to ->get() to disable pagination
             

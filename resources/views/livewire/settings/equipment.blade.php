@@ -9,7 +9,7 @@
                 size="sm"
                 variant="outline"
                 icon="plus"
-                :href="route('settings.aircraft.create')"
+                :href="route('settings.equipment.create')"
             />
         </div>
     </x-ui.heading>
@@ -24,9 +24,9 @@
         <thead class="bg-gray-200 dark:bg-neutral-800">
             <tr>
                 <th class="px-4 py-3 text-left">#</th>
+                <th class="px-4 py-3 text-left">Airline</th>
                 <th class="px-4 py-3 text-left">Registration</th>
                 <th class="px-4 py-3 text-left">Type</th>
-                <th class="px-4 py-3 text-left">ICAO</th>
                 <th class="px-4 py-3 text-left">Status</th>
             </tr>
         </thead>
@@ -45,10 +45,10 @@
                 @endphp
                 {{ $num }}
                 </td>
-                <td class="px-4 py-3">{{ $equipment->type_name }}</td>
-                <td class="px-4 py-3">{{ $equipment->icao_code }}</td>
-                <td class="px-4 py-3">{{ $equipment->iata_code }}</td>
-                <td class="px-4 py-3">{{ $equipment->seat_capacity }}</td>
+                <td class="px-4 py-3">{{ $equipment->airline->name }}</td>
+                <td class="px-4 py-3">{{ $equipment->registration }}</td>
+                <td class="px-4 py-3">{{ $equipment->aircraft->type_name }}</td>
+                <td class="px-4 py-3">{{ $equipment->status }}</td>
             </tr>
             @empty
             <tr>
