@@ -23,10 +23,9 @@ class AircraftModify extends Component
             $aircraftData = Aircraft::find($aircraft);
             if (!$aircraftData) {
                 // Handle gracefully instead of 404
-                $this->dispatch('notify', [
-                    'title' => 'Not found',
-                    'message' => 'Aircraft not found.',
-                    'type' => 'error',
+                session()->flash('notify', [
+                    'content' => 'Aircraft tidak ditemukan!',
+                    'type' => 'error'
                 ]);
                 // Optionally redirect:
                 // return $this->redirectRoute('settings.aircraftData');

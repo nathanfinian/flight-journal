@@ -26,10 +26,9 @@ class AirlineModify extends Component
         if ($airline) {
             $row = Airline::find($airline);
             if (!$row) {
-                $this->dispatch('notify', [
-                    'title'   => 'Not found',
-                    'message' => 'Airline not found.',
-                    'type'    => 'error',
+                session()->flash('notify', [
+                    'content' => 'Airline tidak ditemukan!',
+                    'type' => 'error'
                 ]);
                 return;
             }
