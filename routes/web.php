@@ -10,6 +10,7 @@ use App\Livewire\Auth\ResetPassword;
 use App\Livewire\Auth\VerifyEmail;
 use App\Livewire\Dashboard;
 use App\Livewire\FlightJournal;
+use App\Livewire\FlightSchedule;
 use App\Livewire\Settings;
 use App\Livewire\Settings\Account;
 use App\Livewire\Settings\Aircraft;
@@ -18,6 +19,10 @@ use App\Livewire\Settings\Airline;
 use App\Livewire\Settings\AirlineModify;
 use App\Livewire\Settings\Airport;
 use App\Livewire\Settings\AirportModify;
+use App\Livewire\Settings\AirportRoute;
+use App\Livewire\Settings\AirportRouteModify;
+use App\Livewire\Settings\Branch;
+use App\Livewire\Settings\BranchModify;
 use App\Livewire\Settings\Equipment;
 use App\Livewire\Settings\EquipmentModify;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
@@ -37,6 +42,8 @@ Route::get('reset-password/{token}', ResetPassword::class)->name('password.reset
 Route::middleware('auth')->group(function () {
     Route::get('/dashboard', Dashboard::class)->name('dashboard');
     Route::get('/flight-journal', FlightJournal::class)->name('flight-journal');
+    
+    Route::get('/flight-schedule', FlightSchedule::class)->name('flight-schedule');
 
     Route::get('/settings', Settings::class)->name('settings.index');
     Route::get('/settings/account', Account::class)->name('settings.account');
@@ -68,6 +75,20 @@ Route::middleware('auth')->group(function () {
     Route::get('/settings/airport/{airport:id}/edit', AirportModify::class)
         ->whereNumber('airport') // optional safety
         ->name('settings.airport.edit');  // <-- {airport} matches the type-hint
+
+    Route::get('/settings/airport-route', AirportRoute::class)->name('settings.airport-route');
+    Route::get('/settings/airport-route/create', AirportRouteModify::class)
+        ->name('settings.airport-route.create');
+    Route::get('/settings/airport-route/{route:id}/edit', AirportRouteModify::class)
+        ->whereNumber('route') // optional safety
+        ->name('settings.airport-route.edit');  // <-- {airport-route} matches the type-hint
+
+    Route::get('/settings/branch', Branch::class)->name('settings.branch');
+    Route::get('/settings/branch/create', BranchModify::class)
+        ->name('settings.branch.create');
+    Route::get('/settings/branch/{branch}/edit', BranchModify::class)
+        ->whereNumber('branch') // optional safety
+        ->name('settings.branch.edit');  // <-- {branch} matches the type-hint
 });
 
 Route::middleware(['auth'])->group(function () {
