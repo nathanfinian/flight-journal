@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Livewire\Settings\AirportRoute;
 use Illuminate\Database\Eloquent\Model;
 
 class Airline extends Model
@@ -33,6 +34,6 @@ class Airline extends Model
 
     public function routes()
     {
-        return $this->belongsToMany(Route::class, 'airline_route')->withTimestamps();
+        return $this->belongsToMany(AirportRoute::class, 'airline_route')->withTimestamps();
     }
 }
