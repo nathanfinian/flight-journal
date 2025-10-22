@@ -14,8 +14,34 @@
             >
                 <x-ui.card class="flex items-center justify-between mb-4" size="xl">
                     <div class="flex">
-                        <x-ui.icon name="ps:user" variant="thin" class="text-gray-800 dark:text-white mr-2"/>
+                        <x-ui.icon name="ps:user" variant="light" class="text-gray-800 dark:text-white mr-2"/>
                         <span>my account</span>
+                    </div>
+                    <x-ui.icon name="arrow-up-right" class="text-gray-800 dark:text-white size-4" />
+                </x-ui.card>
+            </x-ui.link>
+            <x-ui.link 
+                wire:navigate.hover
+                :href="route('settings.branch')" 
+                variant="ghost"
+            >
+                <x-ui.card class="flex items-center justify-between mb-4" size="xl">
+                    <div class="flex">
+                        <x-ui.icon name="ps:building-office" variant="light" class="text-gray-800 dark:text-white mr-2"/>
+                        <span>daftar cabang</span>
+                    </div>
+                    <x-ui.icon name="arrow-up-right" class="text-gray-800 dark:text-white size-4" />
+                </x-ui.card>
+            </x-ui.link>
+            <x-ui.link 
+                wire:navigate.hover
+                :href="route('settings.airport')" 
+                variant="ghost"
+            >
+                <x-ui.card class="flex items-center justify-between mb-4" size="xl">
+                    <div class="flex">
+                        <x-ui.icon name="ps:air-traffic-control" variant="light" class="text-gray-800 dark:text-white mr-2"/>
+                        <span>bandara</span>
                     </div>
                     <x-ui.icon name="arrow-up-right" class="text-gray-800 dark:text-white size-4" />
                 </x-ui.card>
@@ -27,7 +53,7 @@
             >
                 <x-ui.card class="flex items-center justify-between mb-4" size="xl">
                     <div class="flex">
-                        <x-ui.icon name="ps:clipboard-text" variant="thin" class="text-gray-800 dark:text-white mr-2"/>
+                        <x-ui.icon name="ps:clipboard-text" variant="light" class="text-gray-800 dark:text-white mr-2"/>
                         <span>daftar airlines</span>
                     </div>
                     <x-ui.icon name="arrow-up-right" class="text-gray-800 dark:text-white size-4" />
@@ -40,7 +66,7 @@
             >
                 <x-ui.card class="flex items-center justify-between mb-4" size="xl">
                     <div class="flex">
-                        <x-ui.icon name="ps:airplane" variant="thin" class="text-gray-800 dark:text-white mr-2"/>
+                        <x-ui.icon name="ps:airplane" variant="light" class="text-gray-800 dark:text-white mr-2"/>
                         <span>tipe pesawat</span>
                     </div>
                     <x-ui.icon name="arrow-up-right" class="text-gray-800 dark:text-white size-4" />
@@ -53,21 +79,8 @@
             >
                 <x-ui.card class="flex items-center justify-between mb-4" size="xl">
                     <div class="flex">
-                        <x-ui.icon name="ps:airplane-tilt" variant="thin" class="text-gray-800 dark:text-white mr-2"/>
-                        <span>daftar equipment airline</span>
-                    </div>
-                    <x-ui.icon name="arrow-up-right" class="text-gray-800 dark:text-white size-4" />
-                </x-ui.card>
-            </x-ui.link>
-            <x-ui.link 
-                wire:navigate.hover
-                :href="route('settings.airport')" 
-                variant="ghost"
-            >
-                <x-ui.card class="flex items-center justify-between mb-4" size="xl">
-                    <div class="flex">
-                        <x-ui.icon name="ps:air-traffic-control" variant="thin" class="text-gray-800 dark:text-white mr-2"/>
-                        <span>daftar bandara</span>
+                        <x-ui.icon name="ps:airplane-tilt" variant="light" class="text-gray-800 dark:text-white mr-2"/>
+                        <span>equipment airline</span>
                     </div>
                     <x-ui.icon name="arrow-up-right" class="text-gray-800 dark:text-white size-4" />
                 </x-ui.card>
@@ -79,8 +92,8 @@
             >
                 <x-ui.card class="flex items-center justify-between mb-4" size="xl">
                     <div class="flex">
-                        <x-ui.icon name="ps:path" variant="thin" class="text-gray-800 dark:text-white mr-2"/>
-                        <span>daftar rute penerbangan</span>
+                        <x-ui.icon name="ps:path" variant="light" class="text-gray-800 dark:text-white mr-2"/>
+                        <span>rute penerbangan</span>
                     </div>
                     <x-ui.icon name="arrow-up-right" class="text-gray-800 dark:text-white size-4" />
                 </x-ui.card>
