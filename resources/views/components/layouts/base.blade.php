@@ -9,7 +9,7 @@
         <meta name="csrf-token"
               content="{{ csrf_token() }}">
         <title> MCA | Journal {{ isset($title) ? '| ' . $title : '' }}</title>
-        <link rel="icon" type="image/x-icon" href="{{ asset('favicon.png') }}">
+        <link rel="icon" type="image/x-icon" href="{{ asset('img/logo-black.png') }}">
 
         @vite(['resources/css/app.css', 'resources/js/app.js'])
         
