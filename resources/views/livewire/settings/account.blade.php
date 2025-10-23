@@ -1,13 +1,16 @@
 <div class="mx-auto space-y-20 mt-20">
     <div>
+        
+        <x-ui.heading>Account Information</x-ui.heading>
+        <x-ui.text class="opacity-50">update your account public credentials</x-ui.text>
+
+        <x-ui.separator class="my-2"/>
+     
         <x-ui.breadcrumbs>
             <x-ui.breadcrumbs.item wire:navigate.hover :href="route('settings.index')">Settings</x-ui.breadcrumbs.item>
             <x-ui.breadcrumbs.item>My Account</x-ui.breadcrumbs.item>
         </x-ui.breadcrumbs>
-        <x-ui.separator class="my-2"/>
-     
-        <x-ui.heading>Account Information</x-ui.heading>
-        <x-ui.text class="opacity-50">update your account public credentials</x-ui.text>
+
         <div class="grow">
             <form 
                 wire:submit="saveChanges"
