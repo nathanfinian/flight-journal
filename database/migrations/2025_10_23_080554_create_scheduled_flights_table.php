@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('flights', function (Blueprint $table) {
+        Schema::create('scheduled_flights', function (Blueprint $table) {
             $table->id();
             $table->string('flight_no', 20);  // ID-6200
             $table->foreignId('airline_route_id')->constrained('airport_routes')
@@ -26,21 +26,14 @@ return new class extends Migration
             $table->time('sched_dep')->nullable();
             $table->time('sched_arr')->nullable();
 
-            // Actuals from the sheet
-            $table->time('actual_arr')->nullable();   // TIBA WIB
-            $table->time('actual_dep')->nullable();   // BERANGKAT WIB
-
-            $table->string('notes', 255)->nullable();
-
             $table->unique(['flight_no', 'service_date'], 'uniq_flight_instance');
             $table->index(['airline_route_id', 'service_date'], 'idx_route_date');
-
-            $table->timestamps();
 
             $table->foreignId('created_by')->nullable()
                 ->constrained('users')->nullOnDelete()->cascadeOnUpdate();
             $table->foreignId('updated_by')->nullable()
                 ->constrained('users')->nullOnDelete()->cascadeOnUpdate();
+            $table->timestamps();
         });
     }
 
@@ -49,6 +42,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('flights');
+        Schema::dropIfExists('scheduled_flights');
     }
 };
