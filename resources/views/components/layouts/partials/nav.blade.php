@@ -81,7 +81,7 @@
                 <div class="flex gap-4 ml-8">
                     <x-ui.navbar.item 
                         wire:navigate.hover
-                        icon="ps:house"
+                        icon="chart-pie"
                         icon:class="w-5 h-5" 
                         label="Dashboard" 
                         :href="route('dashboard')" 
