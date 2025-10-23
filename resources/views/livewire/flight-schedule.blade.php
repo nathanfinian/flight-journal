@@ -10,7 +10,7 @@
                 variant="outline"
                 icon="plus"
                 {{-- change to create later --}}
-                :href="route('flight-schedule')" 
+                :href="route('flight-schedule.create')" 
             />
         </div>
     </x-ui.heading>
