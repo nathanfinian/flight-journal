@@ -9,8 +9,9 @@
     $classes = ['group/breadcrumbs flex items-center gap-x-0.5'];
 
     $linkClasses = [
-        'text-black dark:text-white text-sm flex items-center gap-x-1'
-    ];
+        'text-black dark:text-white text-sm flex items-center gap-x-1',
+        'hover:underline focus-visible:underline underline-offset-2 decoration-2 hover:decoration-current',    
+        ];
 
     $staticTextClasses = [
         'dark:text-gray-300 text-sm flex items-center gap-x-1'
