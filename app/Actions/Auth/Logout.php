@@ -23,6 +23,6 @@ class Logout
 
         Toast::success("You're getting logged out successfully");
 
-        return redirect()->route('home');
+        return redirect()->route('login');
     }
 }

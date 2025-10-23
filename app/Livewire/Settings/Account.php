@@ -3,7 +3,6 @@
 namespace App\Livewire\Settings;
 
 use App\Models\User;
-use App\Support\Toast;
 use Illuminate\Container\Attributes\CurrentUser;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Validation\Rules\Password;
@@ -20,8 +19,8 @@ class Account extends Component
     #[Validate('required|string|min:3|max:12')]
     public string $name = '';
 
-    #[Validate('required|string|email')]
-    public string $email = '';
+    #[Validate('required|string|username')]
+    public string $username = '';
 
     #[Validate('required|string|current_password')]
     public string $current_password = '';
@@ -34,32 +33,34 @@ class Account extends Component
     public function mount(#[CurrentUser] User $user)
     {
         $this->name = $user->name;
-        $this->email = $user->email;
+        $this->username = $user->username;
     }
 
     public function saveChanges(#[CurrentUser] User $user)
     {
+        $this->username = trim($this->username);
+        $this->name = trim($this->name);
+
         $validated = $this->validate([
             'name' => ['required', 'string', 'min:3', 'max:12'],
-            'email' => [
+            'username' => [
                 'required',
                 'string',
-                'lowercase',
-                'email',
-                'max:255',
+                'username',
+                'min:3',
+                'max:20',
                 Rule::unique(User::class)->ignore($user->id),
             ],
         ]);
 
         $user->fill($validated);
 
-        // If the email changed we need to make it unverified, for security reasons 
-        if ($user->isDirty('email')) {
-            $user->email_verified_at = null;
-        }
+        // If the username changed we need to make it unverified, for security reasons 
+        // if ($user->isDirty('username')) {
+        //     $user->email_verified_at = null;
+        // }
 
         $user->save();
-
 
         $this->toastSuccess('Your account has been updated.');
     }

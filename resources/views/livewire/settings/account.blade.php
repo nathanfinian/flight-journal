@@ -20,13 +20,13 @@
                 </x-ui.field>
                 
                 <x-ui.field>
-                    <x-ui.label>email address</x-ui.label>
+                    <x-ui.label>username</x-ui.label>
                     <x-ui.input 
-                        wire:model="email"
-                        type="email"
+                        wire:model="username"
+                        type="username"
                         copyable 
                     />
-                    <x-ui.error name="email" />
+                    <x-ui.error name="username" />
                 </x-ui.field>
                 <x-ui.button 
                     type="submit"

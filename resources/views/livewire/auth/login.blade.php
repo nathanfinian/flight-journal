@@ -1,5 +1,5 @@
 <x-slot:title>
-    Login to Sheaf
+    Login to Flight Journal
 </x-slot>
 
 <form 
@@ -9,11 +9,11 @@
 
     <div class="space-y-4">
         <x-ui.field>
-            <x-ui.label>email address</x-ui.label>
+            <x-ui.label>username</x-ui.label>
             <x-ui.input
-                wire:model="form.email"
+                wire:model="form.username"
             />
-            <x-ui.error name="form.email" />
+            <x-ui.error name="form.username" />
         </x-ui.field>
 
         <x-ui.field>
@@ -34,11 +34,11 @@
         Log in
     </x-ui.button>
 
-    <x-ui.link
+    {{-- <x-ui.link
         variant="soft" 
         href="{{ route('register') }}"
     >
         I dont have an account? 
         <span class="underline">Sign up</span>
-    </x-ui.link>
+    </x-ui.link> --}}
 </form>
