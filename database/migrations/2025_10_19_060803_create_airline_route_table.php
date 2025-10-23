@@ -20,8 +20,6 @@ return new class extends Migration
             $table->foreignId('airport_route_id')
                 ->constrained('airport_routes')->cascadeOnUpdate()->restrictOnDelete();
 
-            // Optional flags/metadata (seasonality, codeshare, etc.)
-            $table->boolean('is_primary_operator')->default(false);
             $table->string('notes')->nullable();
 
             $table->timestamps();
