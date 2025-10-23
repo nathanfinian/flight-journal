@@ -25,7 +25,8 @@
             <tr>
             <th class="px-4 py-3 text-left">#</th>
             <th class="px-4 py-3 text-left">Route (IATA)</th>
-            <th class="px-4 py-3 text-left">Route (Kota)</th>
+            {{-- <th class="px-4 py-3 text-left">Route (Kota)</th> --}}
+            <th class="px-4 py-3 text-left">Airlines</th>
             <th class="px-4 py-3 text-left">Status</th>
             </tr>
         </thead>
@@ -45,7 +46,15 @@
                 {{ $num }}
                 </td>
                 <td class="px-4 py-3">{{ $route->code_pair }}</td>
-                <td class="px-4 py-3">{{ $route->city_pair }}</td>
+                {{-- <td class="px-4 py-3">{{ $route->city_pair }}</td> --}}
+                <td class="px-4 py-3"> 
+                    @foreach ($route->airlines as $airline)
+                        <span class="inline-block bg-gray-100 dark:bg-neutral-800 text-sm px-2 py-1 rounded">
+                            {{ $airline->name }}
+                            <span class="text-gray-500 text-xs">({{ $airline->icao_code }})</span>
+                        </span>
+                    @endforeach
+                </td>
                 <td class="px-4 py-3">{{ $route->status}}</td>
             </tr>
             @empty

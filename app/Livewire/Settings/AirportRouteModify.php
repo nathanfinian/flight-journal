@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Settings;
 
+use App\Models\Airline;
 use Livewire\Component;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Auth;
@@ -14,10 +15,13 @@ class AirportRouteModify extends Component
 
     /** @var \Illuminate\Support\Collection<int, Airport> */
     public $cities; // naming kept to match your Blade
+    public $airlines; 
 
     public ?int $routeId = null;
     public string $origin_id = '';
     public string $destination_id = '';
+    public $selected_airlines = [];
+    public $selected_airlines_name = [];
     public string $status = 'ACTIVE';
 
     public bool $isEdit = false;
@@ -31,8 +35,24 @@ class AirportRouteModify extends Component
             ->orderBy('city')     // or ->orderBy('name')
             ->get(['id', 'city', 'iata']);
 
+        // Load choices
+        $this->airlines = Airline::query()
+            ->orderBy('name')     // or ->orderBy('name')
+            ->get(['id', 'name', 'icao_code']);
+
         if ($route) {
             $this->record = AirportRoute::findOrFail($route);
+            $this->selected_airlines = $this->record
+                ->airlines()
+                ->pluck('airlines.id')
+                ->map(fn($id) => (string) $id)
+                ->toArray();
+
+            $this->selected_airlines_name = $this->record
+                ->airlines()
+                ->get(['name', 'iata_code'])
+                ->map(fn($a) => "{$a->name} ({$a->iata_code})")
+                ->toArray();
             $this->isEdit = true;
 
             $this->origin_id      = (int) $this->record->origin_id;
@@ -44,10 +64,12 @@ class AirportRouteModify extends Component
     public function saveChanges()
     {
         // Validation (includes: origin != destination, composite uniqueness)
-        $validated = $this->validate([
+        $this->validate([
             'origin_id' => ['required', 'integer', 'exists:airports,id', 'different:destination_id'],
             'destination_id' => ['required', 'integer', 'exists:airports,id', 'different:origin_id'],
             'status' => ['required', 'in:ACTIVE,INACTIVE'],
+            'selected_airlines' => ['array', 'min:1'], // ✅ ensure at least one airline selected
+            'selected_airlines.*' => ['integer', 'exists:airlines,id'],
         ]);
 
         // Composite unique on (origin_id, destination_id)
@@ -80,6 +102,11 @@ class AirportRouteModify extends Component
             ['id' => $this->record?->id],
             $payload
         );
+
+        // ✅ Sync the pivot table (airline_routes)
+        if (!empty($this->selected_airlines)) {
+            $this->record->airlines()->sync($this->selected_airlines);
+        }
 
         session()->flash('notify', [
             'content' => 'Airport route saved successfully',

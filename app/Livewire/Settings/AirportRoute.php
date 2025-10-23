@@ -23,7 +23,8 @@ class AirportRoute extends Component
             ->with([
                 'origin:id,iata,city',
                 'destination:id,iata,city',
-            ])
+                'airlines:id,name,icao_code',
+        ])
             ->orderBy('id', 'asc')
             ->paginate($this->perPage); // change to ->get() to disable pagination
 

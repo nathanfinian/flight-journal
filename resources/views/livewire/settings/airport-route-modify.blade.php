@@ -1,7 +1,7 @@
 <div class="mx-auto max-w-2xl space-y-20 mt-20">
   <div>
     <x-ui.heading level="h1" size="xl">Airport Route</x-ui.heading>
-    <x-ui.text class="opacity-50">Update data kelengkapan bandara di sini</x-ui.text>
+    <x-ui.text class="opacity-50">Update data kelengkapan rute penerbangan di sini</x-ui.text>
 
     <x-ui.separator class="my-2"/>
     <x-ui.breadcrumbs>
@@ -51,6 +51,34 @@
                 </x-ui.select>
                 <x-ui.error name="destination_id" />
             </x-ui.field>
+
+            {{-- Airline --}}
+            <x-ui.field required>
+                <x-ui.label>Airline</x-ui.label>
+                <x-ui.select 
+                placeholder="Select airline..."
+                icon="ps:buildings"
+                wire:model="selected_airlines"
+                multiple
+                clearable
+                >
+                @foreach($airlines as $airline)
+                    <x-ui.select.option value="{{ $airline->id }}">
+                    {{ $airline->name }}
+                    </x-ui.select.option>
+                @endforeach
+                </x-ui.select>
+                <x-ui.error name="selected_airlines" />
+            </x-ui.field>
+
+            @if ($this->isEdit)
+                <span>Tersimpan:</span> <br>
+                @foreach ($selected_airlines_name as $airline)
+                    <span class="inline-block bg-gray-100 dark:bg-neutral-800 text-sm px-2 py-1 rounded">
+                        {{ $airline }}
+                    </span>
+                @endforeach
+            @endif
 
             {{-- Status --}}
             <x-ui.field required>
