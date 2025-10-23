@@ -1,49 +1,57 @@
 <?php
 
-use App\Actions\Auth\Logout;
 use App\Livewire;
-use App\Livewire\Auth\ConfirmPassword;
-use App\Livewire\Auth\ForgotPassword;
+use App\Livewire\Settings;
+use App\Livewire\Dashboard;
+use App\Actions\Auth\Logout;
 use App\Livewire\Auth\Login;
 use App\Livewire\Auth\Register;
-use App\Livewire\Auth\ResetPassword;
-use App\Livewire\Auth\VerifyEmail;
-use App\Livewire\Dashboard;
 use App\Livewire\FlightJournal;
 use App\Livewire\FlightSchedule;
-use App\Livewire\Settings;
-use App\Livewire\Settings\Account;
-use App\Livewire\Settings\Aircraft;
-use App\Livewire\Settings\AircraftModify;
-use App\Livewire\Settings\Airline;
-use App\Livewire\Settings\AirlineModify;
-use App\Livewire\Settings\Airport;
-use App\Livewire\Settings\AirportModify;
-use App\Livewire\Settings\AirportRoute;
-use App\Livewire\Settings\AirportRouteModify;
 use App\Livewire\Settings\Branch;
-use App\Livewire\Settings\BranchModify;
+use App\Livewire\Auth\VerifyEmail;
+use App\Livewire\Settings\Account;
+use App\Livewire\Settings\Airline;
+use App\Livewire\Settings\Airport;
+use App\Livewire\Settings\Aircraft;
+use App\Livewire\Auth\ResetPassword;
 use App\Livewire\Settings\Equipment;
-use App\Livewire\Settings\EquipmentModify;
-use Illuminate\Foundation\Auth\EmailVerificationRequest;
+use App\Livewire\Auth\ForgotPassword;
 use Illuminate\Support\Facades\Route;
+use App\Livewire\Auth\ConfirmPassword;
+use App\Livewire\FlightScheduleModify;
+use App\Livewire\Settings\AirportRoute;
+use App\Livewire\Settings\BranchModify;
+use App\Livewire\Settings\AirlineModify;
+use App\Livewire\Settings\AirportModify;
+use App\Livewire\Settings\AircraftModify;
+use App\Livewire\Settings\EquipmentModify;
+use App\Livewire\Settings\AirportRouteModify;
+use Illuminate\Foundation\Auth\EmailVerificationRequest;
 
-Route::get('/', Livewire\Home::class)->name('home');
+Route::get('/', Login::class)->name('login');
+// Route::get('/', Livewire\Home::class)->name('home');
 
 /** AUTH ROUTES */
-Route::get('/register', Register::class)->name('register');
+// Route::get('/register', Register::class)->name('register');
 
-Route::get('/login', Login::class)->name('login');
+// Route::get('/login', Login::class)->name('login');
 
-Route::get('/forgot-password', ForgotPassword::class)->name('forgot-password');
+// Route::get('/forgot-password', ForgotPassword::class)->name('forgot-password');
 
-Route::get('reset-password/{token}', ResetPassword::class)->name('password.reset');
+// Route::get('reset-password/{token}', ResetPassword::class)->name('password.reset');
 
 Route::middleware('auth')->group(function () {
     Route::get('/dashboard', Dashboard::class)->name('dashboard');
     Route::get('/flight-journal', FlightJournal::class)->name('flight-journal');
     
     Route::get('/flight-schedule', FlightSchedule::class)->name('flight-schedule');
+    Route::get('/flight-schedule/create', FlightScheduleModify::class)
+        ->name('flight-schedule.create');
+    Route::get('/flight-schedule/{flight-schedule:id}/edit', FlightScheduleModify::class)
+        ->whereNumber('flight-schedule') // optional safety
+        ->name('flight-schedule.edit');  // <-- {airline} matches the type-hint
+
 
     Route::get('/settings', Settings::class)->name('settings.index');
     Route::get('/settings/account', Account::class)->name('settings.account');
@@ -92,18 +100,18 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::middleware(['auth'])->group(function () {
-    Route::get('/auth/verify-email', VerifyEmail::class)
-        ->name('verification.notice');
+    // Route::get('/auth/verify-email', VerifyEmail::class)
+    //     ->name('verification.notice');
     Route::post('/logout', Logout::class)
         ->name('app.auth.logout');
-    Route::get('confirm-password', ConfirmPassword::class)
-        ->name('password.confirm');
+    // Route::get('confirm-password', ConfirmPassword::class)
+    //     ->name('password.confirm');
 });
 
 Route::middleware(['auth', 'signed'])->group(function () {
-    Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
-        $request->fulfill();
+    // Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
+    //     $request->fulfill();
 
-        return redirect(route('home'));
-    })->name('verification.verify');
+    //     return redirect(route('home'));
+    // })->name('verification.verify');
 });
