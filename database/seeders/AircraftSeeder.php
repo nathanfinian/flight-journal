@@ -19,17 +19,13 @@ class AircraftSeeder extends Seeder
         $rows = [
             // Regional turboprops
             ['type_name' => 'ATR 72-600',           'icao_code' => 'AT76', 'iata_code' => 'ATR', 'seat_capacity' => 70],
-            ['type_name' => 'ATR 42-500',           'icao_code' => 'AT45', 'iata_code' => 'ATR', 'seat_capacity' => 50],
 
             // Narrow-bodies
             ['type_name' => 'Airbus A320-200',      'icao_code' => 'A320', 'iata_code' => 'A32', 'seat_capacity' => 180],
             ['type_name' => 'Airbus A320neo',       'icao_code' => 'A20N', 'iata_code' => 'A32', 'seat_capacity' => 186],
             ['type_name' => 'Boeing 737-800',       'icao_code' => 'B738', 'iata_code' => 'B73', 'seat_capacity' => 189],
-
-            // Wide-bodies
-            ['type_name' => 'Airbus A330-300',      'icao_code' => 'A333', 'iata_code' => '333', 'seat_capacity' => 300],
-            ['type_name' => 'Airbus A350-900',      'icao_code' => 'A359', 'iata_code' => '359', 'seat_capacity' => 315],
-            ['type_name' => 'Boeing 787-9',         'icao_code' => 'B789', 'iata_code' => '789', 'seat_capacity' => 296],
+            ['type_name' => 'Boeing 737-900ER', 'icao_code' => 'B739', 'iata_code' => '739', 'seat_capacity' => 215],
+            ['type_name' => 'Boeing 737 MAX 8', 'icao_code' => 'B38M', 'iata_code' => 'M8',  'seat_capacity' => 178],
         ];
 
         foreach ($rows as $row) {

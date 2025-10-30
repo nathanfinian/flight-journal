@@ -40,6 +40,14 @@ class Cabang extends Seeder
                 'updated_at' => $now,
                 'created_by' => 1,
                 'updated_by' => 1,
+            ],
+            [
+                'name' => 'Sampit',
+                'status' => 'ACTIVE',
+                'created_at' => $now,
+                'updated_at' => $now,
+                'created_by' => 1,
+                'updated_by' => 1,
             ]
         ]);
     }
