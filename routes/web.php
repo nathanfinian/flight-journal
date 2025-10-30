@@ -48,8 +48,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/flight-schedule', FlightSchedule::class)->name('flight-schedule');
     Route::get('/flight-schedule/create', FlightScheduleModify::class)
         ->name('flight-schedule.create');
-    Route::get('/flight-schedule/{flight-schedule:id}/edit', FlightScheduleModify::class)
-        ->whereNumber('flight-schedule') // optional safety
+    Route::get('/flight-schedule/{scheduled:id}/edit', FlightScheduleModify::class)
+        ->whereNumber('scheduled') // optional safety
         ->name('flight-schedule.edit');  // <-- {airline} matches the type-hint
 
 
