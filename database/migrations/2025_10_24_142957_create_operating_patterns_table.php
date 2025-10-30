@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('operating_patterns', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('scheduled_flights_id')
+            $table->foreignId('scheduled_flight_id')
                 ->constrained('scheduled_flights')
                 ->cascadeOnDelete();
             $table->foreignId('day_id')
@@ -21,10 +21,10 @@ return new class extends Migration
                 ->cascadeOnDelete();
 
             // A flight can appear at most once per day
-            $table->unique(['scheduled_flights_id', 'day_id'], 'uniq_flight_day');
+            $table->unique(['scheduled_flight_id', 'day_id'], 'uniq_flight_day');
 
             // Helpful index for “all flights on a given day”
-            $table->index(['day_id', 'scheduled_flights_id'], 'idx_day_flight');
+            $table->index(['day_id', 'scheduled_flight_id'], 'idx_day_flight');
 
             $table->timestamps();
         });
