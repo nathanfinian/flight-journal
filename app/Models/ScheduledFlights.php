@@ -16,7 +16,6 @@ class ScheduledFlights extends Model
         'airline_route_id',
         'equipment_id',
         'branch_id',
-        'service_date',
         'sched_dep',
         'sched_arr',
         'created_by',
@@ -36,6 +35,11 @@ class ScheduledFlights extends Model
     public function branch()
     {
         return $this->belongsTo(Branch::class, 'branch_id');
+    }
+
+    public function days()
+    {
+        return $this->belongsToMany(Day::class, 'operating_patterns', 'scheduled_flight_id', 'day_id');
     }
 
     // Optional: Shortcut to airline via pivot
