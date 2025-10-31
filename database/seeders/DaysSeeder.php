@@ -11,13 +11,13 @@ class DaysSeeder extends Seeder
     {
         // 0 = Sunday .. 6 = Saturday
         $rows = [
-            ['day_name' => 'Sunday',    'dow' => 0],
-            ['day_name' => 'Monday',    'dow' => 1],
-            ['day_name' => 'Tuesday',   'dow' => 2],
-            ['day_name' => 'Wednesday', 'dow' => 3],
-            ['day_name' => 'Thursday',  'dow' => 4],
-            ['day_name' => 'Friday',    'dow' => 5],
-            ['day_name' => 'Saturday',  'dow' => 6],
+            ['day_name' => 'Senin',    'dow' => 1],
+            ['day_name' => 'Selasa',   'dow' => 2],
+            ['day_name' => 'Rabu', 'dow' => 3],
+            ['day_name' => 'Kamis',  'dow' => 4],
+            ['day_name' => 'Jumat',    'dow' => 5],
+            ['day_name' => 'Sabtu',  'dow' => 6],
+            ['day_name' => 'Minggu',    'dow' => 7],
         ];
 
         // Idempotent: insert new or update if exists (by unique keys)
