@@ -23,7 +23,7 @@
     x-bind:data-value="@js($value)"
     x-bind:data-label="@js($slot)"
 
-    x-show="isItemShown(@js($value))"
+    x-show="isItemShown(@js($slot))"
 
     x-on:mouseleave="handleMouseLeave($el)"
     

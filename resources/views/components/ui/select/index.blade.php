@@ -67,13 +67,22 @@
             });
 
             // Filter options based on search input
-            this.$watch('search', (val) => {
+            {{-- this.$watch('search', (val) => {
                 if (val.trim() === '') {
                     // Empty search → show all options 
                     this.filteredOptions = this.options;
                 } else {
                     // Filter by search query 
                     this.filteredOptions = this.options.filter(option => this.contains(option.value,val));
+                }
+            }) --}}
+            this.$watch('search', (val) => {
+                if (val.trim() === '') {
+                    // Empty search → show all options 
+                    this.filteredOptions = this.options;
+                } else {
+                    // Filter by search query 
+                    this.filteredOptions = this.options.filter(option => this.contains(option.label, val));
                 }
             })
         },
