@@ -183,33 +183,33 @@ class FlightScheduleModify extends Component
         }
     }
 
-    public function updatedBranchId($value)
-    {
-        $this->loadAirlineRoutes($value);
-    }
+    // public function updatedBranchId($value)
+    // {
+    //     $this->loadAirlineRoutes($value);
+    // }
 
-    protected function loadAirlineRoutes(?int $branchId = null)
-    {
-        $query = AirlineRoute::query()
-            ->with([
-                'airline:id,name',
-                'airportRoute.origin:id,iata,branch_id',
-                'airportRoute.destination:id,iata,branch_id',
-            ]);
+    // protected function loadAirlineRoutes(?int $branchId = null)
+    // {
+    //     $query = AirlineRoute::query()
+    //         ->with([
+    //             'airline:id,name',
+    //             'airportRoute.origin:id,iata,branch_id',
+    //             'airportRoute.destination:id,iata,branch_id',
+    //         ]);
 
-        // ✅ If branch selected → filter routes where origin or destination belongs to that branch
-        if ($branchId) {
-            $query->whereHas('airportRoute.origin', fn($q) => $q->where('branch_id', $branchId))
-                ->orWhereHas('airportRoute.destination', fn($q) => $q->where('branch_id', $branchId));
-        }
+    //     // ✅ If branch selected → filter routes where origin or destination belongs to that branch
+    //     if ($branchId) {
+    //         $query->whereHas('airportRoute.origin', fn($q) => $q->where('branch_id', $branchId))
+    //             ->orWhereHas('airportRoute.destination', fn($q) => $q->where('branch_id', $branchId));
+    //     }
 
-        $this->airlineRoutes = $query
-            ->get()
-            ->mapWithKeys(fn($r) => [
-                $r->id => "{$r->airline->name} - {$r->airportRoute->origin->iata} ➜ {$r->airportRoute->destination->iata}"
-            ])
-            ->toArray();
-    }
+    //     $this->airlineRoutes = $query
+    //         ->get()
+    //         ->mapWithKeys(fn($r) => [
+    //             $r->id => "{$r->airline->name} - {$r->airportRoute->origin->iata} ➜ {$r->airportRoute->destination->iata}"
+    //         ])
+    //         ->toArray();
+    // }
 
     private function formatTime(?string $time): ?string
     {
