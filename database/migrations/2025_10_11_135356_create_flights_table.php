@@ -14,12 +14,19 @@ return new class extends Migration
         Schema::create('flights', function (Blueprint $table) {
             $table->id();
             $table->string('flight_no', 20);  // ID-6200
-            $table->foreignId('airline_route_id')->constrained('airport_routes')
-                ->cascadeOnUpdate()->restrictOnDelete();
-            $table->foreignId('equipment_id')->constrained('equipments')
-                ->cascadeOnUpdate()->restrictOnDelete();
-            $table->foreignId('branch_id')->constrained('branches')
-                ->cascadeOnUpdate()->restrictOnDelete();
+            
+            $table->foreignId('airline_route_id')
+                ->constrained('airline_route')
+                ->cascadeOnUpdate()
+                ->restrictOnDelete();
+            $table->foreignId('equipment_id')
+                ->constrained('equipments')
+                ->cascadeOnUpdate()
+                ->restrictOnDelete();
+            $table->foreignId('branch_id')
+                ->constrained('branches')
+                ->cascadeOnUpdate()
+                ->restrictOnDelete();
 
             $table->date('service_date');     // 2025-07-01
             // Optional planned times
