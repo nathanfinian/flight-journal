@@ -27,6 +27,16 @@ class Branch extends Model
         return $this->belongsTo(User::class, 'updated_by');
     }
 
+    public function scheduledFlights()
+    {
+        return $this->hasMany(ScheduledFlights::class, 'airline_route_id');
+    }
+
+    public function flights()
+    {
+        return $this->hasMany(Flight::class, 'airline_route_id');
+    }
+
     public function getRouteKeyName()
     {
         return 'id'; //Assuming you are using 'id' as a unique field

@@ -29,4 +29,9 @@ class AirlineRoute extends Model
     {
         return $this->hasMany(ScheduledFlights::class, 'airline_route_id');
     }
+
+    public function flights()
+    {
+        return $this->hasMany(Flight::class, 'airline_route_id');
+    }
 }
