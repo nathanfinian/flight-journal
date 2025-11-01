@@ -62,7 +62,6 @@
                 <th class="px-4 py-3 text-left">Route</th>
                 <th class="px-4 py-3 text-left">Time (ETD - ETA)</th>
                 <th class="px-4 py-3 text-left">Days</th>
-                {{-- <th class="px-4 py-3 text-left"></th> --}}
             </tr>
         </thead>
 
@@ -95,17 +94,6 @@
                             </span>
                         @endforeach
                     </td>
-
-                    {{-- <td class="px-4 py-3 text-right">
-                        <x-ui.button
-                            wire:navigate
-                            :href="route('flight-schedule.edit', ['scheduled' => $flight->id])"
-                            size="sm"
-                            variant="soft"
-                        >
-                            Edit
-                        </x-ui.button>
-                    </td> --}}
                 </tr>
             @empty
                 <tr>
