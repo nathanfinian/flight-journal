@@ -39,7 +39,7 @@ class ScheduledFlights extends Model
 
     public function days()
     {
-        return $this->belongsToMany(Day::class, 'operating_patterns', 'scheduled_flight_id', 'day_id');
+        return $this->belongsToMany(Day::class, 'operating_patterns', 'scheduled_flight_id', 'day_id')->orderBy('days.id'); // ✅ ensures consistent ordering
     }
 
     // Optional: Shortcut to airline via pivot
