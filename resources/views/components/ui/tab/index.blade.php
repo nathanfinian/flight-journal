@@ -24,7 +24,7 @@
         ],
         'pills' => [
             'rounded-full h-8 whitespace-nowrap rounded-full text-sm font-medium',
-            'data-[active=true]:bg-primary data-[active=true]:text-primary-fg'
+            'data-[active=true]:bg-gray-200 dark:data-[active=true]:bg-neutral-800'
         ],
         default => [],
     };
