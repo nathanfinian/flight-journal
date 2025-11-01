@@ -17,7 +17,7 @@ class FlightScheduleModify extends Component
 {
     public $branches;
     public $equipments;
-    public $flightRoutes;
+    public $airlineRoutes;
     public $dayList;
 
     public ?ScheduledFlights $record = null;
@@ -36,13 +36,15 @@ class FlightScheduleModify extends Component
     {
         // Load dropdown choices
         $this->branches = Branch::where('status', 'ACTIVE')->orderBy('name')->get(['id', 'name']);
+
         $this->equipments = Equipment::with('airline:id,name')
             ->where('status', 'ACTIVE')
             ->orderBy('airline_id')
             ->get(['id', 'registration', 'airline_id']);
 
         // Load routes
-        $this->flightRoutes = AirlineRoute::query()
+        // $this->loadAirlineRoutes();
+        $this->airlineRoutes = AirlineRoute::query()
             ->with([
                 'airline:id,name',
                 'airportRoute.origin:id,iata',
@@ -50,7 +52,7 @@ class FlightScheduleModify extends Component
             ])
             ->get()
             ->mapWithKeys(fn($r) => [
-                $r->id => "{$r->airportRoute->origin->iata} ➜ {$r->airportRoute->destination->iata} - {$r->airline->name}"
+                $r->id => "{$r->airline->name} - {$r->airportRoute->origin->iata} ➜ {$r->airportRoute->destination->iata}"
             ])
             ->toArray();
 
@@ -78,13 +80,15 @@ class FlightScheduleModify extends Component
     {
         $this->sched_dep = $this->formatTime($this->sched_dep);
         $this->sched_arr = $this->formatTime($this->sched_arr);
+        // Convert empty string to null for optional foreign keys
+        $this->equipment_id = $this->equipment_id ?: null;
 
         // --- 1️⃣ Validation ---
         $this->validate([
             'flight_number'   => ['required', 'string', 'max:10', Rule::unique('scheduled_flights', 'flight_no')->ignore($this->record?->id)],
             'branch_id'       => ['required', 'integer', 'exists:branches,id'],
             'airline_route_id' => ['required', 'integer', 'exists:airline_route,id'], 
-            'equipment_id'    => ['integer', 'exists:equipments,id'],
+            'equipment_id'    => ['nullable', 'integer', 'exists:equipments,id'],
             'sched_dep'       => ['required'],
             'sched_arr'       => ['required'],
             'days'            => ['required', 'array', 'min:1'],
@@ -177,6 +181,34 @@ class FlightScheduleModify extends Component
             // Re-throw unexpected errors for visibility in logs
             throw $e;
         }
+    }
+
+    public function updatedBranchId($value)
+    {
+        $this->loadAirlineRoutes($value);
+    }
+
+    protected function loadAirlineRoutes(?int $branchId = null)
+    {
+        $query = AirlineRoute::query()
+            ->with([
+                'airline:id,name',
+                'airportRoute.origin:id,iata,branch_id',
+                'airportRoute.destination:id,iata,branch_id',
+            ]);
+
+        // ✅ If branch selected → filter routes where origin or destination belongs to that branch
+        if ($branchId) {
+            $query->whereHas('airportRoute.origin', fn($q) => $q->where('branch_id', $branchId))
+                ->orWhereHas('airportRoute.destination', fn($q) => $q->where('branch_id', $branchId));
+        }
+
+        $this->airlineRoutes = $query
+            ->get()
+            ->mapWithKeys(fn($r) => [
+                $r->id => "{$r->airline->name} - {$r->airportRoute->origin->iata} ➜ {$r->airportRoute->destination->iata}"
+            ])
+            ->toArray();
     }
 
     private function formatTime(?string $time): ?string

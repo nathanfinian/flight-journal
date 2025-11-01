@@ -28,7 +28,8 @@
                         <x-ui.error name="flight_number" />
                     </x-ui.field>
                     </div>
-                    <div class="col-span-6">    
+                    <div class="col-span-6">
+                        {{-- Empty --}}
                     </div>
                 </div>
                 <div class="flex justify-items-center gap-6">
@@ -49,13 +50,14 @@
                     </x-ui.field>
 
                     <x-ui.field required>
-                        <x-ui.label>Flight Route and Airline</x-ui.label>
+                        <x-ui.label>Airlines and Flight Routes</x-ui.label>
                         <x-ui.select 
                             placeholder="Select flight route..."
                             icon="ps:airplane-takeoff"
                             wire:model="airline_route_id"
+                            searchable
                         >
-                            @foreach($flightRoutes as $id => $label)
+                            @foreach($airlineRoutes as $id => $label)
                                 <x-ui.select.option value="{{ $id }}">
                                     {{ $label }}
                                 </x-ui.select.option>
@@ -73,6 +75,8 @@
                             placeholder="Select equipment..."
                             icon="ps:airplane-takeoff"
                             wire:model="equipment_id"
+                            clearable
+                            searchable
                             >
                             @foreach($equipments as $eqp)
                                 <x-ui.select.option value="{{ $eqp->id }}">
