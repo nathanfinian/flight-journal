@@ -16,40 +16,37 @@
 
     <x-ui.separator class="my-2"/>
 
-    <div class="flex items-center gap-4 mt-4">
-        <div>
-            <x-ui.label>
-                Cabang
-            </x-ui.label>
-            <x-ui.select
-                placeholder="Semua Cabang"
-                wire:model.live="selectedBranch"
-                class="mt-1 block w-48 sm:text-sm"
-            >
-                <x-ui.select.option value="">Semua Cabang</x-ui.select.option>
-                @foreach($branches as $branch)
-                    <x-ui.select.option value="{{ $branch->id }}">{{ $branch->name }}</x-ui.select.option>
-                @endforeach
-            </x-ui.select>
-        </div>
+    <div class="flex items-center gap-4">
+        <x-ui.label>
+            Cabang
+        </x-ui.label>
+        <x-ui.select
+            placeholder="Semua Cabang"
+            wire:model.live="selectedBranch"
+            class="mt-1 block w-48 sm:text-sm"
+        >
+            <x-ui.select.option value="">Semua Cabang</x-ui.select.option>
+            @foreach($branches as $branch)
+                <x-ui.select.option value="{{ $branch->id }}">{{ $branch->name }}</x-ui.select.option>
+            @endforeach
+        </x-ui.select>
 
-        <div>
-            <x-ui.label>
-                Airline
-            </x-ui.label>
-            <x-ui.select
-                placeholder="Semua Airline"
-                wire:model.live="selectedAirline"
-                class="mt-1 block w-48 sm:text-sm"
-            >
-                <x-ui.select.option value="">Semua Airline</x-ui.select.option>
-                @foreach($airlines as $airline)
-                    <x-ui.select.option value="{{ $airline->id }}">{{ $airline->name }}</x-ui.select.option>
-                @endforeach
-            </x-ui.select>
-        </div>
+        <x-ui.label>
+            Airline
+        </x-ui.label>
+        <x-ui.select
+            placeholder="Semua Airline"
+            wire:model.live="selectedAirline"
+            class="mt-1 block w-48 sm:text-sm"
+        >
+            <x-ui.select.option value="">Semua Airline</x-ui.select.option>
+            @foreach($airlines as $airline)
+                <x-ui.select.option value="{{ $airline->id }}">{{ $airline->name }}</x-ui.select.option>
+            @endforeach
+        </x-ui.select>
     </div>
     {{-- 🔼 End filters --}}
+    <x-ui.separator class="my-2"/>
 
     <table class="border border-collapse min-w-full text-sm rounded-xl overflow-hidden mt-4 shadow-lg">
         <thead class="bg-gray-200 dark:bg-neutral-800">
