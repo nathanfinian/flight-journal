@@ -14,13 +14,27 @@ class AirportRouteFactory extends Factory
 
     public function definition(): array
     {
-        // Ensure two distinct airports
-        $origin = Airport::inRandomOrder()->first();
-        $destination = Airport::where('id', '!=', $origin?->id)->inRandomOrder()->first();
+        // Fetch all airport IDs once
+        $airportIds = Airport::pluck('id')->toArray();
+
+        // Return early if not enough airports
+        if (count($airportIds) < 2) {
+            throw new \Exception('Need at least 2 airports to create routes.');
+        }
+
+        // Keep generating unique pairs
+        do {
+            $originId = $this->faker->randomElement($airportIds);
+            $destinationId = $this->faker->randomElement(array_diff($airportIds, [$originId]));
+        } while (
+            AirportRoute::where('origin_id', $originId)
+            ->where('destination_id', $destinationId)
+            ->exists()
+        );
 
         return [
-            'origin_id'      => $origin?->id ?? Airport::factory(),
-            'destination_id' => $destination?->id ?? Airport::factory(),
+            'origin_id'      => $originId,
+            'destination_id' => $destinationId,
             'status'         => $this->faker->randomElement(['ACTIVE', 'INACTIVE']),
             'created_by'     => User::inRandomOrder()->value('id') ?? null,
             'updated_by'     => User::inRandomOrder()->value('id') ?? null,
@@ -29,17 +43,12 @@ class AirportRouteFactory extends Factory
         ];
     }
 
-    /**
-     * Configure the factory to attach airlines automatically.
-     */
     public function configure(): static
     {
         return $this->afterCreating(function (AirportRoute $route) {
-            // Get 1–3 random airlines
             $airlines = Airline::inRandomOrder()->take(rand(1, 3))->pluck('id');
 
             if ($airlines->isEmpty()) {
-                // create at least one airline if none exist
                 $airlines = collect([Airline::factory()->create()->id]);
             }
 
