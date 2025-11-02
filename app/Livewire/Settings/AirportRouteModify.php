@@ -2,15 +2,18 @@
 
 namespace App\Livewire\Settings;
 
+use App\Livewire\Traits\HandlesSafeActions;
 use App\Models\Airline;
 use Livewire\Component;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Auth;
-use App\Models\Airport;        // has id, city/name/iata/icao
+use Illuminate\Database\QueryException;
 use App\Models\AirportRoute;   // table: airport_routes
+use App\Models\Airport;        // has id, city/name/iata/icao
 
 class AirportRouteModify extends Component
 {
+    use HandlesSafeActions;
     public ?AirportRoute $record = null;
 
     /** @var \Illuminate\Support\Collection<int, Airport> */
@@ -98,20 +101,18 @@ class AirportRouteModify extends Component
             $payload['updated_by'] = $userId;
         }
 
-        $this->record = AirportRoute::updateOrCreate(
-            ['id' => $this->record?->id],
-            $payload
+        //Use trait have a try catch operation
+        $this->safeAction(
+            fn() => $this->record = AirportRoute::updateOrCreate(
+                ['id' => $this->record?->id],
+                $payload
+            ),
+            'Airport route saved successfully!'
         );
 
-        // ✅ Sync the pivot table (airline_routes)
         if (!empty($this->selected_airlines)) {
             $this->record->airlines()->sync($this->selected_airlines);
         }
-
-        session()->flash('notify', [
-            'content' => 'Airport route saved successfully',
-            'type' => 'success',
-        ]);
 
         return redirect()->route('settings.airport-route');
     }
@@ -119,13 +120,8 @@ class AirportRouteModify extends Component
     public function delete()
     {
         if ($this->record) {
-            $rute = 'Rute ' . $this->record->origin->iata . ' → ' . $this->record->destination->iata;
-            $this->record->delete();
-
-            session()->flash('notify', [
-                'content' => $rute . ' successfully deleted',
-                'type' => 'success',
-            ]);
+            $success = 'Rute ' . $this->record->origin->iata . ' → ' . $this->record->destination->iata . ' successfully deleted';
+            $this->safeAction(fn() => $this->record->delete(), $success);
 
             return redirect()->route('settings.airport-route');
         }

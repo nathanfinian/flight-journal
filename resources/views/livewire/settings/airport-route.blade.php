@@ -25,7 +25,6 @@
             <tr>
             <th class="px-4 py-3 text-left">#</th>
             <th class="px-4 py-3 text-left">Route (IATA)</th>
-            {{-- <th class="px-4 py-3 text-left">Route (Kota)</th> --}}
             <th class="px-4 py-3 text-left">Airlines</th>
             <th class="px-4 py-3 text-left">Status</th>
             </tr>
