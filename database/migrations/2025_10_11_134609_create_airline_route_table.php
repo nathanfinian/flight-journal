@@ -15,10 +15,10 @@ return new class extends Migration
             $table->id();
 
             $table->foreignId('airline_id')
-                ->constrained('airlines')->cascadeOnUpdate()->restrictOnDelete();
+                ->constrained('airlines')->cascadeOnUpdate()->cascadeOnDelete();
 
             $table->foreignId('airport_route_id')
-                ->constrained('airport_routes')->cascadeOnUpdate()->restrictOnDelete();
+                ->constrained('airport_routes')->cascadeOnUpdate()->cascadeOnDelete();
 
             $table->string('notes')->nullable();
 
