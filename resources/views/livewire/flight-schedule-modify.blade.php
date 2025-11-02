@@ -18,6 +18,29 @@
                 <div class="grid grid-cols-12 gap-6">
                     <div class="col-span-6">
                         <x-ui.field required>
+                            <x-ui.label>Airline</x-ui.label>
+                            <x-ui.select 
+                                placeholder="Select airline..."
+                                icon="ps:airplane-takeoff"
+                                wire:model.live="airline_id"
+                                >
+                                @foreach($airlines as $airline)
+                                    <x-ui.select.option value="{{ $airline->id }}">
+                                    {{ $airline->name }}
+                                    </x-ui.select.option>
+                                @endforeach
+                            </x-ui.select>
+                            <x-ui.error name="airline_id" />
+                        </x-ui.field>
+                    </div>
+                    <div class="col-span-6">
+                        {{-- Empty --}}
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-12 gap-6">
+                    <div class="col-span-6">
+                    <x-ui.field required>
                         <x-ui.label>Flight Number</x-ui.label>
                             <x-ui.input
                                 x-mask="******"
@@ -38,7 +61,7 @@
                         <x-ui.select 
                             placeholder="Select branch..."
                             icon="ps:airplane-takeoff"
-                            wire:model="branch_id"
+                            wire:model.live="branch_id"
                             >
                             @foreach($branches as $branch)
                                 <x-ui.select.option value="{{ $branch->id }}">
@@ -50,11 +73,11 @@
                     </x-ui.field>
 
                     <x-ui.field required>
-                        <x-ui.label>Airlines and Flight Routes</x-ui.label>
+                        <x-ui.label>Flight Routes</x-ui.label>
                         <x-ui.select 
                             placeholder="Select flight route..."
                             icon="ps:airplane-takeoff"
-                            wire:model="airline_route_id"
+                            wire:model.live="airline_route_id"
                             searchable
                         >
                             @foreach($airlineRoutes as $id => $label)

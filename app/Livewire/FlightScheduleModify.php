@@ -5,17 +5,21 @@ namespace App\Livewire;
 use Carbon\Carbon;
 use App\Models\Day;
 use App\Models\Branch;
+use App\Models\Airline;
 use Livewire\Component;
 use App\Models\Equipment;
+use Illuminate\Support\Str;
 use App\Models\AirlineRoute;
 use Illuminate\Validation\Rule;
 use App\Models\ScheduledFlights;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\QueryException;
+use Illuminate\Validation\ValidationException;
 
 class FlightScheduleModify extends Component
 {
     public $branches;
+    public $airlines;
     public $equipments;
     public $airlineRoutes;
     public $dayList;
@@ -26,16 +30,20 @@ class FlightScheduleModify extends Component
     // Form properties
     public ?string $flight_number = null;
     public ?string $branch_id = '';
+    public ?string $airline_id = '1';
     public ?string $airline_route_id = '';
     public ?string $equipment_id = '';
     public ?string $sched_dep = '';
     public ?string $sched_arr = '';
     public array $days = [];
 
+    public ?string $airlineIata = null;    // e.g. "JT"
+
     public function mount(?int $scheduled = null)
     {
         // Load dropdown choices
         $this->branches = Branch::where('status', 'ACTIVE')->orderBy('name')->get(['id', 'name']);
+        $this->airlines = Airline::where('status', 'ACTIVE')->orderBy('name')->get(['id', 'name']);
 
         $this->equipments = Equipment::with('airline:id,name')
             ->where('status', 'ACTIVE')
@@ -43,7 +51,6 @@ class FlightScheduleModify extends Component
             ->get(['id', 'registration', 'airline_id']);
 
         // Load routes
-        // $this->loadAirlineRoutes();
         $this->airlineRoutes = AirlineRoute::query()
             ->with([
                 'airline:id,name',
@@ -62,7 +69,8 @@ class FlightScheduleModify extends Component
         if ($scheduled) {
             $this->record = ScheduledFlights::with('days')->findOrFail($scheduled);
             $this->isEdit = true;
-
+            
+            $this->airline_id = $this->record->airline->id;
             $this->flight_number = $this->record->flight_no;
             $this->branch_id = $this->record->branch_id;
             $this->airline_route_id = $this->record->airline_route_id;
@@ -78,8 +86,8 @@ class FlightScheduleModify extends Component
 
     public function saveChanges()
     {
-        $this->sched_dep = $this->formatTime($this->sched_dep);
-        $this->sched_arr = $this->formatTime($this->sched_arr);
+        $this->checkFormat($this->sched_dep);
+        $this->checkFormat($this->sched_arr);
         // Convert empty string to null for optional foreign keys
         $this->equipment_id = $this->equipment_id ?: null;
 
@@ -87,13 +95,32 @@ class FlightScheduleModify extends Component
         $this->validate([
             'flight_number'   => ['required', 'string', 'max:10', Rule::unique('scheduled_flights', 'flight_no')->ignore($this->record?->id)],
             'branch_id'       => ['required', 'integer', 'exists:branches,id'],
-            'airline_route_id' => ['required', 'integer', 'exists:airline_route,id'], 
+            'airline_id'      => ['required', 'integer', 'exists:airlines,id'],
+            'airline_route_id'=> ['required', 'integer', 'exists:airline_route,id'], 
             'equipment_id'    => ['nullable', 'integer', 'exists:equipments,id'],
             'sched_dep'       => ['required'],
             'sched_arr'       => ['required'],
             'days'            => ['required', 'array', 'min:1'],
             'days.*'          => ['integer', 'exists:days,id'],
         ]);
+
+        // --- Extra check: verify that airline_route belongs to airline_id ---
+        //Possible to use ValidationRule instead
+        $airlineRoute = AirlineRoute::with('airline')->find($this->airline_route_id);
+        $equipment    = Equipment::with('airline')->find($this->equipment_id);
+
+        if (!$airlineRoute || $airlineRoute->airline_id != $this->airline_id) {
+            throw ValidationException::withMessages([
+                'airline_route_id' => 'Airline belum terdaftar di rute yang dipilih',
+            ]);
+        }
+
+        // Validate equipment-airline match
+        if ($equipment && $equipment->airline_id != $this->airline_id) {
+            throw ValidationException::withMessages([
+                'equipment_id' => 'Peralatan tidak terdaftar pada airline yang dipilih',
+            ]);
+        }
 
         // --- 2️⃣ Composite uniqueness ---
         $this->validate([
@@ -110,6 +137,9 @@ class FlightScheduleModify extends Component
         ], [
             'airline_route_id.unique' => 'This flight schedule already exists for the same branch, equipment, and ETD.',
         ]);
+
+        $this->sched_dep = $this->formatTime($this->sched_dep);
+        $this->sched_arr = $this->formatTime($this->sched_arr);
 
         // --- 3️⃣ Audit fields ---
         $userId = Auth::id();
@@ -183,45 +213,66 @@ class FlightScheduleModify extends Component
         }
     }
 
-    // public function updatedBranchId($value)
-    // {
-    //     $this->loadAirlineRoutes($value);
-    // }
-
-    // protected function loadAirlineRoutes(?int $branchId = null)
-    // {
-    //     $query = AirlineRoute::query()
-    //         ->with([
-    //             'airline:id,name',
-    //             'airportRoute.origin:id,iata,branch_id',
-    //             'airportRoute.destination:id,iata,branch_id',
-    //         ]);
-
-    //     // ✅ If branch selected → filter routes where origin or destination belongs to that branch
-    //     if ($branchId) {
-    //         $query->whereHas('airportRoute.origin', fn($q) => $q->where('branch_id', $branchId))
-    //             ->orWhereHas('airportRoute.destination', fn($q) => $q->where('branch_id', $branchId));
-    //     }
-
-    //     $this->airlineRoutes = $query
-    //         ->get()
-    //         ->mapWithKeys(fn($r) => [
-    //             $r->id => "{$r->airline->name} - {$r->airportRoute->origin->iata} ➜ {$r->airportRoute->destination->iata}"
-    //         ])
-    //         ->toArray();
-    // }
-
-    private function formatTime(?string $time): ?string
+    public function updatedAirlineId($value)
     {
-        if (empty($time)) {
-            return null;
-        }
+        $this->loadEquipmentRoute($value);
 
+        // if ($this->isEdit) {
+        //     $this->reset(['equipment_id', 'airline_route_id']);
+        // }
+    }
+
+    protected function loadEquipmentRoute(?int $airlineId = null)
+    {
+        // 2.1 Re-query equipments for this airline
+        $this->equipments = Equipment::query()
+            ->with('airline:id,name')
+            ->where('status', 'ACTIVE')
+            ->when($airlineId, fn($q) => $q->where('airline_id', $airlineId))
+            ->orderBy('registration')
+            ->get(['id', 'registration', 'airline_id'])
+            ->all(); // array for easy foreach
+
+        // 2.2 Re-query routes for this airline
+        $this->airlineRoutes = AirlineRoute::query()
+            ->when($airlineId, fn($q) => $q->where('airline_id', $airlineId))
+            ->with([
+                'airportRoute.origin:id,iata',
+                'airportRoute.destination:id,iata',
+            ])
+            ->get()
+            ->mapWithKeys(fn($r) => [
+                $r->id => "{$r->airportRoute->origin->iata} ➜ {$r->airportRoute->destination->iata}",
+            ])
+            ->toArray();
+
+        // 2.3 Fetch IATA for masking/prefixing the flight number
+        $this->airlineIata = $airlineId
+            ? Airline::whereKey($airlineId)->value('iata_code')
+            : null;
+
+        // Optional: prefill/normalize the flight number prefix
+        if ($this->airlineIata) {
+            // keep only digits after the prefix
+            $digits = preg_replace('/\D/', '', $this->flight_number);
+            $this->flight_number = Str::upper($this->airlineIata) . $digits;
+        }
+    }
+
+    private function checkFormat(?string $time)
+    {
         // Match HH:MM exactly (00–23 : 00–59)
         if (!preg_match('/^(?:[01]\d|2[0-3]):[0-5]\d$/', $time)) {
             throw \Illuminate\Validation\ValidationException::withMessages([
                 'time_format' => 'Invalid format waktu: harus 24-jam HH:MM (00:00–23:59)',
             ]);
+        }
+    }
+
+    private function formatTime(?string $time): ?string
+    {
+        if (empty($time)) {
+            return null;
         }
 
         try {
