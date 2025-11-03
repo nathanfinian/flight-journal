@@ -28,6 +28,10 @@ return new class extends Migration
                 ->cascadeOnUpdate()
                 ->restrictOnDelete();
 
+            $table->unsignedSmallInteger('pax')->nullable(); // adjust placement
+            $table->unsignedInteger('ground_time')->nullable(); // minutes
+            $table->string('pic')->nullable(); // pilot in command name/code
+
             $table->date('service_date');     // 2025-07-01
             // Optional planned times
             $table->time('sched_dep')->nullable();
