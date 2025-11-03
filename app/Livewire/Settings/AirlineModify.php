@@ -123,7 +123,7 @@ class AirlineModify extends Component
         $this->airlineId = $airline->id;
 
         session()->flash('notify', [
-            'content' => 'Airline saved successfully!',
+            'content' => 'Airline berhasil disimpan!',
             'type' => 'success'
         ]);
 
@@ -146,7 +146,7 @@ class AirlineModify extends Component
             $row->delete();
 
             session()->flash('notify', [
-                'content' => $name . ' deleted successfully!',
+                'content' => $name . ' berhasil dihapus!',
                 'type' => 'success'
             ]);
             $this->redirectRoute('settings.airline', navigate: true);

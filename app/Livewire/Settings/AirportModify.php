@@ -114,7 +114,7 @@ class AirportModify extends Component
         $this->airportId = $airport->id;
 
         session()->flash('notify', [
-            'content' => 'Airport saved successfully!',
+            'content' => 'Airport berhasil disimpan!',
             'type' => 'success'
         ]);
 
@@ -139,7 +139,7 @@ class AirportModify extends Component
             $row->delete();
 
             session()->flash('notify', [
-                'content' => $airportName . ' deleted successfully!',
+                'content' => $airportName . ' berhasil dihapus!',
                 'type' => 'success'
             ]);
 

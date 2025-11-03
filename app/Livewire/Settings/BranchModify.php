@@ -66,7 +66,7 @@ class BranchModify extends Component
         $this->branchId = $branch->id;
 
         session()->flash('notify', [
-            'content' => 'Branch saved successfully!',
+            'content' => 'Branch berhasil disimpan!',
             'type' => 'success'
         ]);
 
@@ -89,7 +89,7 @@ class BranchModify extends Component
             $row->delete();
 
             session()->flash('notify', [
-                'content' => $name . ' deleted successfully!',
+                'content' => $name . ' berhasil dihapus!',
                 'type' => 'success'
             ]);
             $this->redirectRoute('settings.branch', navigate: true);

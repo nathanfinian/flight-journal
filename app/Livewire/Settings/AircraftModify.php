@@ -118,7 +118,7 @@ class AircraftModify extends Component
             $row->delete();
 
             session()->flash('notify', [
-                'content' => $name . ' deleted successfully!',
+                'content' => $name . ' berhasil dihapus!',
                 'type' => 'success'
             ]);
             $this->redirectRoute('settings.aircraft', navigate: true);

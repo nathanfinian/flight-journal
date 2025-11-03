@@ -107,7 +107,7 @@ class AirportRouteModify extends Component
                 ['id' => $this->record?->id],
                 $payload
             ),
-            'Airport route saved successfully!'
+            'Airport route berhasil disimpan!'
         );
 
         if (!empty($this->selected_airlines)) {
