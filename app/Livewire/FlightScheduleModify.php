@@ -30,7 +30,7 @@ class FlightScheduleModify extends Component
     // Form properties
     public ?string $flight_number = null;
     public ?string $branch_id = '';
-    public ?string $airline_id = '1';
+    public ?string $airline_id = '';
     public ?string $airline_route_id = '';
     public ?string $equipment_id = '';
     public ?string $sched_dep = '';
@@ -172,7 +172,7 @@ class FlightScheduleModify extends Component
 
         // --- 6️⃣ Flash message ---
         session()->flash('notify', [
-            'content' => 'Flight schedule saved successfully!',
+            'content' => 'Flight schedule berhasil disimpan!',
             'type'    => 'success',
         ]);
 
@@ -195,7 +195,7 @@ class FlightScheduleModify extends Component
             $row->delete();
 
             session()->flash('notify', [
-                'content' => $name . ' deleted successfully!',
+                'content' => $name . ' berhasil dihapus!',
                 'type' => 'success'
             ]);
             $this->redirectRoute('flight-schedule', navigate: true);
