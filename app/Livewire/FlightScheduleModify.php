@@ -96,7 +96,7 @@ class FlightScheduleModify extends Component
             'flight_number'   => ['required', 'string', 'max:10', Rule::unique('scheduled_flights', 'flight_no')->ignore($this->record?->id)],
             'branch_id'       => ['required', 'integer', 'exists:branches,id'],
             'airline_id'      => ['required', 'integer', 'exists:airlines,id'],
-            'airline_route_id'=> ['required', 'integer', 'exists:airline_route,id'], 
+            'airline_route_id'=> ['required', 'integer', 'exists:airline_routes,id'], 
             'equipment_id'    => ['nullable', 'integer', 'exists:equipments,id'],
             'sched_dep'       => ['required'],
             'sched_arr'       => ['required'],
@@ -217,9 +217,7 @@ class FlightScheduleModify extends Component
     {
         $this->loadEquipmentRoute($value);
 
-        // if ($this->isEdit) {
-        //     $this->reset(['equipment_id', 'airline_route_id']);
-        // }
+        $this->reset(['equipment_id', 'airline_route_id']);
     }
 
     protected function loadEquipmentRoute(?int $airlineId = null)

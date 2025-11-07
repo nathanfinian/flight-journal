@@ -133,7 +133,7 @@ class FlightJournalModify extends Component
         $this->validate([
             'flight_number'   => ['required', 'string', 'max:10'],
             'branch_id'       => ['required', 'integer', 'exists:branches,id'],
-            'airline_route_id'=> ['required', 'integer', 'exists:airline_route,id'], 
+            'airline_route_id'=> ['required', 'integer', 'exists:airline_routes,id'], 
             'equipment_id'    => ['required', 'integer', 'exists:equipments,id'],
             'sched_dep'       => ['required'],
             'sched_arr'       => ['required', 'after_or_equal:sched_dep'],
