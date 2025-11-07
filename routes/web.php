@@ -17,8 +17,10 @@ use App\Livewire\Settings\Aircraft;
 use App\Livewire\Auth\ResetPassword;
 use App\Livewire\Settings\Equipment;
 use App\Livewire\Auth\ForgotPassword;
+use App\Livewire\FlightJournalModify;
 use Illuminate\Support\Facades\Route;
 use App\Livewire\Auth\ConfirmPassword;
+use App\Livewire\FlightJournalActual;
 use App\Livewire\FlightScheduleModify;
 use App\Livewire\Settings\AirportRoute;
 use App\Livewire\Settings\BranchModify;
@@ -43,8 +45,20 @@ Route::get('/', Login::class)->name('login');
 
 Route::middleware('auth')->group(function () {
     Route::get('/dashboard', Dashboard::class)->name('dashboard');
+
+    //Flight Journal Scheduled, create and edit from scheduled to actual
     Route::get('/flight-journal', FlightJournal::class)->name('flight-journal');
-    
+    Route::get('/flight-journal/create', FlightJournalModify::class)
+        ->name('flight-journal.create');
+    Route::get('/flight-journal/{id:id}/edit', FlightJournalModify::class)
+        ->whereNumber('id') // optional safety
+        ->name('flight-journal.edit');  // <-- {airline} matches the type-hint
+
+    //Flight Journal Actual and its modify page
+    Route::get('/flight-journal/actual', FlightJournalActual::class)
+        ->name('flight-journal.actual');
+
+    //Flight scheduling pages CRUD
     Route::get('/flight-schedule', FlightSchedule::class)->name('flight-schedule');
     Route::get('/flight-schedule/create', FlightScheduleModify::class)
         ->name('flight-schedule.create');
@@ -52,7 +66,7 @@ Route::middleware('auth')->group(function () {
         ->whereNumber('scheduled') // optional safety
         ->name('flight-schedule.edit');  // <-- {airline} matches the type-hint
 
-
+    //Settings pages start
     Route::get('/settings', Settings::class)->name('settings.index');
     Route::get('/settings/account', Account::class)->name('settings.account');
     
@@ -97,6 +111,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/settings/branch/{branch}/edit', BranchModify::class)
         ->whereNumber('branch') // optional safety
         ->name('settings.branch.edit');  // <-- {branch} matches the type-hint
+    //Settings pages end
 });
 
 Route::middleware(['auth'])->group(function () {
