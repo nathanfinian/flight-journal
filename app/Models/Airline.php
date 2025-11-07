@@ -34,6 +34,6 @@ class Airline extends Model
 
     public function routes()
     {
-        return $this->belongsToMany(AirportRoute::class, 'airline_route')->withTimestamps();
+        return $this->belongsToMany(AirportRoute::class, 'airline_routes')->withTimestamps();
     }
 }

@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('flight_no', 20);  // ID-6200
             
             $table->foreignId('airline_route_id')
-                ->constrained('airline_route')
+                ->constrained('airline_routes')
                 ->cascadeOnUpdate()
                 ->restrictOnDelete();
             $table->foreignId('equipment_id')

@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class AirlineRoute extends Model
 {
-    protected $table = 'airline_route';
+    protected $table = 'airline_routes';
 
     protected $fillable = [
         'airport_route_id',

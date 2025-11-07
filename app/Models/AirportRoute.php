@@ -38,7 +38,7 @@ class AirportRoute extends Model
 
     public function airlines()
     {
-        return $this->belongsToMany(Airline::class, 'airline_route')->withTimestamps();
+        return $this->belongsToMany(Airline::class, 'airline_routes')->withTimestamps();
     }
 
     // Optional: nice label like "CGK → DPS"

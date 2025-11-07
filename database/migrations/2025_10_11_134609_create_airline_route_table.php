@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('airline_route', function (Blueprint $table) {
+        Schema::create('airline_routes', function (Blueprint $table) {
             $table->id();
 
             $table->foreignId('airline_id')
@@ -37,6 +37,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('airline_route');
+        Schema::dropIfExists('airline_routes');
     }
 };
