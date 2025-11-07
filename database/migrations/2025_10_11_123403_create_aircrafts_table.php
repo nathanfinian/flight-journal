@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('type_name', 40)->unique();   // e.g., ATR 72-600
             $table->string('icao_code', 4)->unique()->nullable();  // e.g., AT76
-            $table->string('iata_code', 3)->unique()->nullable();  // e.g., ATR
+            $table->string('iata_code', 3)->nullable();  // e.g., ATR
             $table->unsignedSmallInteger('seat_capacity')->nullable();
 
             $table->foreignId('created_by')->nullable()
