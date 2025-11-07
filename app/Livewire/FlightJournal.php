@@ -83,7 +83,7 @@ class FlightJournal extends Component
             )
             ->whereNotExists(function ($sq) use ($today) {
                 $sq->select(DB::raw(1))
-                    ->from('flights')
+                    ->from('actual_flights')
                     ->whereColumn('flights.flight_no', 'scheduled_flights.flight_no')
                     // add this if you want same route too:
                     // ->whereColumn('flights.airline_route_id', 'scheduled_flights.airline_route_id')
@@ -96,7 +96,7 @@ class FlightJournal extends Component
 
     public function openEdit(int $id)
     {
-        return $this->redirectRoute('flight-journal.edit', ['actual' => $id], navigate: true);
+        return $this->redirectRoute('flight-journal.edit', ['id' => $id, 'type' => 'scheduled'], navigate: true);
     }
 
     public function render()

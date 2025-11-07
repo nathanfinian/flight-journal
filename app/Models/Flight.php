@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Flight extends Model
 {
-    protected $table = 'flights';
+    protected $table = 'actual_flights';
 
     protected $guarded = ['id'];
 

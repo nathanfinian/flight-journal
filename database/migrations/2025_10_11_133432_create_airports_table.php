@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('airports', function (Blueprint $table) {
             $table->id();
             $table->char('iata', 3)->unique();         // CGK, PKY
-            $table->char('icao', 4)->nullable();        // WIII, WAOO, etc.
+            $table->char('icao', 4)->unique()->nullable();     // WIII, WAOO, etc.
             $table->string('city', 120)->nullable();
             $table->string('country', 80)->nullable();
             $table->string('tz', 40)->default('Asia/Jakarta'); // IANA tz
