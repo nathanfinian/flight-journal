@@ -84,10 +84,8 @@ class FlightJournal extends Component
             ->whereNotExists(function ($sq) use ($today) {
                 $sq->select(DB::raw(1))
                     ->from('actual_flights')
-                    ->whereColumn('flights.flight_no', 'scheduled_flights.flight_no')
-                    // add this if you want same route too:
-                    // ->whereColumn('flights.airline_route_id', 'scheduled_flights.airline_route_id')
-                    ->whereDate('flights.service_date', $today);
+                    ->whereColumn('actual_flights.flight_no', 'scheduled_flights.flight_no')
+                    ->whereDate('actual_flights.service_date', $today);
             })
             ->orderBy('branch_id')
             ->orderBy('sched_dep')
