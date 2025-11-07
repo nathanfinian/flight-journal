@@ -22,10 +22,10 @@ class AircraftSeeder extends Seeder
 
             // Narrow-bodies
             ['type_name' => 'Airbus A320-200',      'icao_code' => 'A320', 'iata_code' => 'A32', 'seat_capacity' => 180],
-            ['type_name' => 'Airbus A320neo',       'icao_code' => 'A20N', 'iata_code' => 'A32', 'seat_capacity' => 186],
-            ['type_name' => 'Boeing 737-800',       'icao_code' => 'B738', 'iata_code' => 'B73', 'seat_capacity' => 189],
+            ['type_name' => 'Airbus A320neo',       'icao_code' => 'A20N', 'iata_code' => '32N', 'seat_capacity' => 186],
+            ['type_name' => 'Boeing 737-800',       'icao_code' => 'B738', 'iata_code' => '738', 'seat_capacity' => 189],
             ['type_name' => 'Boeing 737-900ER', 'icao_code' => 'B739', 'iata_code' => '739', 'seat_capacity' => 215],
-            ['type_name' => 'Boeing 737 MAX 8', 'icao_code' => 'B38M', 'iata_code' => 'M8',  'seat_capacity' => 178],
+            ['type_name' => 'Boeing 737 MAX 8', 'icao_code' => 'B38M', 'iata_code' => '7M8',  'seat_capacity' => 178],
         ];
 
         foreach ($rows as $row) {
