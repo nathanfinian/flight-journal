@@ -9,7 +9,12 @@
         <x-ui.separator class="my-2"/>
      
         <x-ui.breadcrumbs>
-            <x-ui.breadcrumbs.item wire:navigate.hover :href="route('flight-journal')">Journal</x-ui.breadcrumbs.item>
+            @if ($this->type === 'scheduled')
+                <x-ui.breadcrumbs.item wire:navigate.hover :href="route('flight-journal')">Journal</x-ui.breadcrumbs.item>
+            @elseif ($this->type === 'actual')
+                <x-ui.breadcrumbs.item wire:navigate.hover :href="route('flight-journal.actual')">Journal</x-ui.breadcrumbs.item>
+            @endif
+            
             <x-ui.breadcrumbs.item>Flight Journal</x-ui.breadcrumbs.item>
         </x-ui.breadcrumbs>
 
@@ -18,6 +23,28 @@
                 wire:submit="saveChanges"
                 class="mt-8 space-y-4 rounded-lg bg-white p-6 dark:bg-neutral-800/10"
             >
+                <div class="grid grid-cols-12 gap-6">
+                    <div class="col-span-6">
+                        <x-ui.field required>
+                            <x-ui.label>Airline</x-ui.label>
+                            <x-ui.select 
+                                placeholder="Select airline..."
+                                icon="ps:airplane-takeoff"
+                                wire:model.live="airline_id"
+                                >
+                                @foreach($airlines as $airline)
+                                    <x-ui.select.option value="{{ $airline->id }}">
+                                    {{ $airline->name }}
+                                    </x-ui.select.option>
+                                @endforeach
+                            </x-ui.select>
+                            <x-ui.error name="airline_id" />
+                        </x-ui.field>
+                    </div>
+                    <div class="col-span-6">
+                        {{-- Empty --}}
+                    </div>
+                </div>
                 <div class="grid grid-cols-12 gap-6">
                     <div class="col-span-6">
                         <x-ui.field required>
@@ -196,7 +223,7 @@
 
                 <div class="flex items-center justify-between mt-6">
                     <x-ui.button type="submit">Save changes</x-ui.button>
-                    @if ($this->isEdit)
+                    @if ($this->isEdit && $this->type === 'actual')
                         <x-ui.modal.trigger id="delete-modal">
                             <x-ui.button variant="ghost">
                             <x-ui.icon name="ps:trash" variant="thin" class="text-red-600 dark:text-red-500"/>
