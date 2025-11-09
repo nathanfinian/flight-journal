@@ -92,7 +92,7 @@ class FlightJournalModify extends Component
             $this->sched_dep = substr($this->scheduledFlight->sched_dep, 0, 5);
             $this->sched_arr = substr($this->scheduledFlight->sched_arr, 0, 5);
 
-        }else if($this->type === 'actual')//Data from flights table
+        }else if($this->type === 'actual' || $this->type === 'history')//Data from flights table
         {
             $this->record = Flight::findOrFail($id);
 
@@ -210,7 +210,15 @@ class FlightJournalModify extends Component
             'type'    => 'success',
         ]);
 
-        return redirect()->route('flight-journal.actual');
+        if ($this->type === 'scheduled') {
+            return redirect()->route('flight-journal');
+        } 
+        else if($this->type === 'actual') {
+            return redirect()->route('flight-journal.actual');
+        }
+        else {
+            return redirect()->route('flight-history');
+        }
     }
 
     public function delete()
