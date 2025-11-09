@@ -20,6 +20,7 @@ use App\Livewire\Auth\ForgotPassword;
 use App\Livewire\FlightJournalModify;
 use Illuminate\Support\Facades\Route;
 use App\Livewire\Auth\ConfirmPassword;
+use App\Livewire\FlightHistory;
 use App\Livewire\FlightJournalActual;
 use App\Livewire\FlightScheduleModify;
 use App\Livewire\Settings\AirportRoute;
@@ -65,6 +66,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/flight-schedule/{scheduled:id}/edit', FlightScheduleModify::class)
         ->whereNumber('scheduled') // optional safety
         ->name('flight-schedule.edit');  // <-- {airline} matches the type-hint
+
+    //Flight History
+    Route::get('/flight-history', FlightHistory::class)->name('flight-history');
 
     //Settings pages start
     Route::get('/settings', Settings::class)->name('settings.index');
