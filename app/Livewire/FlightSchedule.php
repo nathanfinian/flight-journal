@@ -14,8 +14,8 @@ class FlightSchedule extends Component
     public $branches = [];
     public $airlines = [];
 
-    public ?int $selectedBranch = null;
-    public ?int $selectedAirline = null;
+    public ?string $selectedBranch = '';
+    public ?string $selectedAirline = '';
 
     public function mount()
     {

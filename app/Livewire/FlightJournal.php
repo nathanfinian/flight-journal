@@ -16,8 +16,8 @@ class FlightJournal extends Component
     public $branches = [];
     public $airlines = [];
 
-    public ?int $selectedBranch = null;
-    public ?int $selectedAirline = null;
+    public ?string $selectedBranch = '';
+    public ?string $selectedAirline = '';
 
     public string $activeTab = 'scheduled';
 
