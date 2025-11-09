@@ -105,17 +105,15 @@ class FlightScheduleModify extends Component
         ]);
 
         // --- Extra check: verify that airline_route belongs to airline_id ---
-        //Possible to use ValidationRule instead
         $airlineRoute = AirlineRoute::with('airline')->find($this->airline_route_id);
-        $equipment    = Equipment::with('airline')->find($this->equipment_id);
-
         if (!$airlineRoute || $airlineRoute->airline_id != $this->airline_id) {
             throw ValidationException::withMessages([
                 'airline_route_id' => 'Airline belum terdaftar di rute yang dipilih',
             ]);
         }
-
+        
         // Validate equipment-airline match
+        $equipment    = Equipment::with('airline')->find($this->equipment_id);
         if ($equipment && $equipment->airline_id != $this->airline_id) {
             throw ValidationException::withMessages([
                 'equipment_id' => 'Peralatan tidak terdaftar pada airline yang dipilih',
