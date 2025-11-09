@@ -1,7 +1,7 @@
 <div>
     <x-ui.heading level="h1" size="xl" class="flex items-center justify-between">
         <div class="flex items-center">
-           Scheduled Flight Hari {{ $this->hari }}
+           Scheduled Flight Hari Ini ({{ $this->hari }})
         </div>
         <div class="flex items-center">
             <x-ui.button 
