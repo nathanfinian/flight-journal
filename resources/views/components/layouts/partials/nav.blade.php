@@ -105,6 +105,14 @@
                     />
                     <x-ui.navbar.item 
                         wire:navigate.hover
+                        icon="document-text"
+                        icon:class="w-5 h-5" 
+                        label="History" 
+                        :href="route('flight-history')"
+                        :active="request()->is('flight-history*')"
+                    />
+                    <x-ui.navbar.item 
+                        wire:navigate.hover
                         icon="cog-6-tooth" 
                         icon:class="w-5 h-5"
                         label="Settings" 
