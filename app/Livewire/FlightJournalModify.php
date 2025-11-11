@@ -10,7 +10,6 @@ use Livewire\Component;
 use App\Models\Equipment;
 use Illuminate\Support\Str;
 use App\Models\AirlineRoute;
-use Illuminate\Validation\Rule;
 use App\Models\ScheduledFlights;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\QueryException;
@@ -49,7 +48,7 @@ class FlightJournalModify extends Component
     public ?string $airlineIata = null;
     public ?string $airline_id = '';
 
-    public ?string $type;
+    public ?string $type = '';
 
     public function mount(?int $id = null)
     {
