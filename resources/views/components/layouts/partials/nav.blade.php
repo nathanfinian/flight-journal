@@ -115,7 +115,7 @@
                         wire:navigate.hover
                         icon="cog-6-tooth" 
                         icon:class="w-5 h-5"
-                        label="Settings" 
+                        label="Settings Test" 
                         :href="route('settings.index')" 
                         :active="request()->is('settings*')"
                     />
