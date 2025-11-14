@@ -1,0 +1,17 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+
+class Role extends Model
+{
+    protected $table = 'Roles';
+
+    protected $guarded = ['id'];
+
+    protected $fillable = [
+        'name',
+        'label',
+    ];
+}
