@@ -1,25 +1,19 @@
 <?php
 
-use App\Livewire;
 use App\Livewire\Settings;
 use App\Livewire\Dashboard;
 use App\Actions\Auth\Logout;
 use App\Livewire\Auth\Login;
-use App\Livewire\Auth\Register;
 use App\Livewire\FlightJournal;
 use App\Livewire\FlightSchedule;
 use App\Livewire\Settings\Branch;
-use App\Livewire\Auth\VerifyEmail;
 use App\Livewire\Settings\Account;
 use App\Livewire\Settings\Airline;
 use App\Livewire\Settings\Airport;
 use App\Livewire\Settings\Aircraft;
-use App\Livewire\Auth\ResetPassword;
 use App\Livewire\Settings\Equipment;
-use App\Livewire\Auth\ForgotPassword;
 use App\Livewire\FlightJournalModify;
 use Illuminate\Support\Facades\Route;
-use App\Livewire\Auth\ConfirmPassword;
 use App\Livewire\FlightHistory;
 use App\Livewire\FlightJournalActual;
 use App\Livewire\FlightScheduleModify;
@@ -30,19 +24,13 @@ use App\Livewire\Settings\AirportModify;
 use App\Livewire\Settings\AircraftModify;
 use App\Livewire\Settings\EquipmentModify;
 use App\Livewire\Settings\AirportRouteModify;
-use Illuminate\Foundation\Auth\EmailVerificationRequest;
 
 Route::get('/', Login::class)->name('login');
 // Route::get('/', Livewire\Home::class)->name('home');
 
 /** AUTH ROUTES */
-// Route::get('/register', Register::class)->name('register');
 
 // Route::get('/login', Login::class)->name('login');
-
-// Route::get('/forgot-password', ForgotPassword::class)->name('forgot-password');
-
-// Route::get('reset-password/{token}', ResetPassword::class)->name('password.reset');
 
 Route::middleware('auth')->group(function () {
     Route::get('/dashboard', Dashboard::class)->name('dashboard');
@@ -119,18 +107,6 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::middleware(['auth'])->group(function () {
-    // Route::get('/auth/verify-email', VerifyEmail::class)
-    //     ->name('verification.notice');
     Route::post('/logout', Logout::class)
         ->name('app.auth.logout');
-    // Route::get('confirm-password', ConfirmPassword::class)
-    //     ->name('password.confirm');
-});
-
-Route::middleware(['auth', 'signed'])->group(function () {
-    // Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
-    //     $request->fulfill();
-
-    //     return redirect(route('home'));
-    // })->name('verification.verify');
 });

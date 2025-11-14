@@ -55,11 +55,6 @@ class Account extends Component
 
         $user->fill($validated);
 
-        // If the username changed we need to make it unverified, for security reasons 
-        // if ($user->isDirty('username')) {
-        //     $user->email_verified_at = null;
-        // }
-
         $user->save();
 
         $this->toastSuccess('Your account has been updated.');
