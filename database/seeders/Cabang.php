@@ -22,32 +22,24 @@ class Cabang extends Seeder
                 'status' => 'ACTIVE',
                 'created_at' => $now,
                 'updated_at' => $now,
-                'created_by' => 1,
-                'updated_by' => 1,
             ],
             [
                 'name' => 'Singkawang',
                 'status' => 'ACTIVE',
                 'created_at' => $now,
                 'updated_at' => $now,
-                'created_by' => 1,
-                'updated_by' => 1,
             ],
             [
                 'name' => 'Pontianak',
                 'status' => 'ACTIVE',
                 'created_at' => $now,
                 'updated_at' => $now,
-                'created_by' => 1,
-                'updated_by' => 1,
             ],
             [
                 'name' => 'Sampit',
                 'status' => 'ACTIVE',
                 'created_at' => $now,
                 'updated_at' => $now,
-                'created_by' => 1,
-                'updated_by' => 1,
             ]
         ]);
     }
