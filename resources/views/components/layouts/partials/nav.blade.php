@@ -1,80 +1,13 @@
 {{-- this navbar used in app pages (when the user authenticated)  --}}
+ @php
+     $user = Auth::user();
+ @endphp
+
 <header 
     x-data="{ open: false }"
     x-on:keydown.window.escape="open = false"
     class="border-b-neutral-100 dark:border-b-neutral-800 dark:bg-neutral-900 bg-neutral-50 fixed inset-x-0 top-0 z-50 border-b"
 >
-    {{-- <nav 
-        class="mx-auto flex items-center justify-between px-6 py-3 text-base-100 lg:px-8"
-        aria-label="global"
-    >
-        <div class="flex items-center pr-7">
-            <x-app.logo />
-            <div class="flex gap-4 ml-8">
-                <x-ui.link
-                    wire:navigate.hover
-                    :href="route('dashboard')" 
-                    :attributes="$attributes->when(Request::routeIs('dashboard'), fn($attr)=> $attr->class('dark:!text-white text-neutral-900'))"
-                    variant="soft"
-                >
-                    dashboard
-                </x-ui.link>
-                <x-ui.link 
-                    wire:navigate.hover
-                    :href="route('flight-journal')" 
-                    :attributes="$attributes->when(Request::routeIs('flight-journal'), fn($attr)=> $attr->class('dark:!text-white text-neutral-900'))"
-                    variant="soft"
-                >
-                    flight journal
-                </x-ui.link> --}}
-                {{-- This link set below is modified --}}
-                {{-- <x-ui.link 
-                    wire:navigate.hover
-                    :href="route('flight-schedule')" 
-                    variant="soft"
-                >
-                    <div class="flex items-center {{ Request::routeIs('flight-schedule') ? 'dark:!text-white text-neutral-900' : '' }}">
-                        <x-ui.icon name="ps:calendar-dots" class="size-5 mr-2"/>
-                        <span>Scheduling</span>
-                    </div>
-                </x-ui.link>
-                <x-ui.link 
-                    wire:navigate.hover
-                    :href="route('settings.index')" 
-                    :attributes="$attributes->when(Request::routeIs('settings.*'), fn($attr)=> $attr->class('dark:!text-white text-neutral-900'))"
-                    variant="soft"
-                >
-                    settings
-                </x-ui.link>
-            </div>
-        </div>
-
-        <div class="flex lg:hidden gap-4 items-center">
-            <form
-                action="{{ route('app.auth.logout') }}"
-                method="post"
-                class="contents"
-            >
-                @csrf
-                <x-ui.dropdown.item as="button" type="submit">
-                    <x-ui.icon name="arrow-left-start-on-rectangle" variant="solid" class="text-white"/> 
-                </x-ui.dropdown.item>
-            </form>
-        </div>
-
-        <div class="hidden gap-4 lg:flex lg:items-center lg:justify-end">
-            @auth
-                <x-user-dropdown/>
-            @endauth
-
-            <x-ui.separator 
-                class="my-2" 
-                vertical
-            />
-
-            <x-ui.theme-switcher variant="inline"/>
-        </div>
-    </nav> --}}
     <x-ui.navbar class="mx-auto flex items-center justify-between px-6 py-3 text-base-100 lg:px-8" aria-label="global">
             <div class="flex items-center pr-7">
                 <x-app.logo />
@@ -119,6 +52,15 @@
                         :href="route('settings.index')" 
                         :active="request()->is('settings*')"
                     />
+                    @if ($user->role_id == 1)
+                        <x-ui.navbar.item 
+                            wire:navigate.hover
+                            icon="user-circle" 
+                            label="Admin" 
+                            :href="route('admin')" 
+                            :active="request()->is('admin*')"
+                        />
+                    @endif
                 </div>
             </div>
             <div class="flex lg:hidden gap-4 items-center">
