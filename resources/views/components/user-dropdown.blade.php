@@ -15,7 +15,7 @@
     <x-slot:menu class="w-56">
         <x-ui.dropdown.group label="Signed in as">
             <x-ui.dropdown.item>
-                {{ $user->email }}
+                {{ $user->name }}
             </x-ui.dropdown.item>
         </x-ui.dropdown.group>
 
