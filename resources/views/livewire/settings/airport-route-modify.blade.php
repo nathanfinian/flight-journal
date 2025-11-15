@@ -58,7 +58,7 @@
                 <x-ui.select 
                 placeholder="Select airline..."
                 icon="ps:buildings"
-                wire:model="selected_airlines"
+                wire:model.live="selected_airlines"
                 multiple
                 clearable
                 >
