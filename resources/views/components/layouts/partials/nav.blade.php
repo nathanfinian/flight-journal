@@ -57,7 +57,7 @@
                             wire:navigate.hover
                             icon="user-circle" 
                             label="Admin" 
-                            :href="route('admin')" 
+                            :href="route('admin.index')" 
                             :active="request()->is('admin*')"
                         />
                     @endif
