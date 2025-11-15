@@ -25,9 +25,11 @@ class DatabaseSeeder extends Seeder
             'name' => 'Nathanael Finian',
             'username' => 'nathan',
             'role_id' => 1,
-            // 'branch_id' => 1,
+            'branch_id' => 1,
             'password' => bcrypt('2525'),
         ]);
+
+        User::factory()->count(10)->create();
 
         $this->call([
             DaysSeeder::class,
