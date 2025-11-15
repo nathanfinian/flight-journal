@@ -2,8 +2,10 @@
 
 namespace App\Providers;
 
+use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Auth;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -27,6 +29,15 @@ class AppServiceProvider extends ServiceProvider
 
         Validator::replacer('username', function ($message, $attribute, $rule, $parameters) {
             return 'The ' . $attribute . ' may only contain letters, numbers, and underscores, and must be 3–20 characters long.';
+        });
+
+        Blade::if('role', function ($role) {
+            $user = Auth::user();
+
+            return $user &&
+                method_exists($user, 'role') &&
+                $user->role &&
+                $user->role->name === $role;
         });
     }
 }

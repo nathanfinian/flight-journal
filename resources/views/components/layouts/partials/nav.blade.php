@@ -52,7 +52,7 @@
                         :href="route('settings.index')" 
                         :active="request()->is('settings*')"
                     />
-                    @if ($user->role_id == 1)
+                    @role('admin')
                         <x-ui.navbar.item 
                             wire:navigate.hover
                             icon="user-circle" 
@@ -60,7 +60,7 @@
                             :href="route('admin.index')" 
                             :active="request()->is('admin*')"
                         />
-                    @endif
+                    @endrole
                 </div>
             </div>
             <div class="flex lg:hidden gap-4 items-center">
