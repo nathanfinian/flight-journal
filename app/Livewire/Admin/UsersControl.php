@@ -76,7 +76,7 @@ class UsersControl extends Component
 
             $this->user->delete();
             session()->flash('notify', [
-                'content' => $nama . 'telah dihapus',
+                'content' => $nama . ' telah dihapus',
                 'type'    => 'error',
             ]);
         }

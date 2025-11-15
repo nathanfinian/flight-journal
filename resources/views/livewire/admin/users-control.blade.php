@@ -115,8 +115,8 @@
 <x-ui.modal 
     id="delete-modal"
     position="center"
-    heading="Delete Branch"
-    description="Yakin ingin menghapus maskapai ini?"
+    heading="Delete User"
+    description="Yakin ingin menghapus user ini?"
 >
     <div class="mt-4 flex justify-end space-x-2">
         <x-ui.button 
