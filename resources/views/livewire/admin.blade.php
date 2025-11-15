@@ -22,7 +22,7 @@
             </x-ui.link>
             <x-ui.link 
                 wire:navigate.hover
-                {{-- :href="route('admin.roles')"  --}}
+                :href="route('admin.roles')" 
                 variant="ghost"
             >
                 <x-ui.card class="flex items-center justify-between mb-4" size="xl">
