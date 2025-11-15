@@ -4,6 +4,8 @@ use App\Livewire\Admin;
 use App\Livewire\Settings;
 use App\Livewire\Dashboard;
 use App\Actions\Auth\Logout;
+use App\Livewire\Admin\Role;
+use App\Livewire\Admin\RoleModify;
 use App\Livewire\Auth\Login;
 use App\Livewire\Admin\Users;
 use App\Livewire\FlightHistory;
@@ -36,15 +38,6 @@ Route::get('/', Login::class)->name('login');
 
 Route::middleware('auth')->group(function () {
     Route::get('/dashboard', Dashboard::class)->name('dashboard');
-
-    Route::get('/admin', Admin::class)->name('admin.index');
-
-    Route::get('/admin/users', Users::class)->name('admin.users');
-    Route::get('/admin/users/create', UsersControl::class)
-        ->name('admin.users.create');
-    Route::get('/admin/users/{userid:id}/edit', UsersControl::class)
-        ->whereNumber('userid') // optional safety
-        ->name('admin.users.edit');  // <-- {airline} matches the type-hint
 
     //Flight Journal Scheduled, create and edit from scheduled to actual
     Route::get('/flight-journal', FlightJournal::class)->name('flight-journal');
@@ -120,4 +113,22 @@ Route::middleware('auth')->group(function () {
 Route::middleware(['auth'])->group(function () {
     Route::post('/logout', Logout::class)
         ->name('app.auth.logout');
+});
+
+Route::middleware(['auth', 'role:admin'])->group(function () {
+    Route::get('/admin', Admin::class)->name('admin.index');
+
+    Route::get('/admin/users', Users::class)->name('admin.users');
+    Route::get('/admin/users/create', UsersControl::class)
+        ->name('admin.users.create');
+    Route::get('/admin/users/{userid:id}/edit', UsersControl::class)
+        ->whereNumber('userid') // optional safety
+        ->name('admin.users.edit');
+
+    Route::get('/admin/roles', Role::class)->name('admin.roles');
+    Route::get('/admin/roles/create', RoleModify::class)
+        ->name('admin.roles.create');
+    Route::get('/admin/roles/{roleid:id}/edit', RoleModify::class)
+        ->whereNumber('roleid') // optional safety
+        ->name('admin.roles.edit');
 });
