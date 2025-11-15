@@ -1,9 +1,12 @@
 <?php
 
+use App\Livewire\Admin;
 use App\Livewire\Settings;
 use App\Livewire\Dashboard;
 use App\Actions\Auth\Logout;
 use App\Livewire\Auth\Login;
+use App\Livewire\Admin\Users;
+use App\Livewire\FlightHistory;
 use App\Livewire\FlightJournal;
 use App\Livewire\FlightSchedule;
 use App\Livewire\Settings\Branch;
@@ -11,11 +14,11 @@ use App\Livewire\Settings\Account;
 use App\Livewire\Settings\Airline;
 use App\Livewire\Settings\Airport;
 use App\Livewire\Settings\Aircraft;
+use App\Livewire\Admin\UsersControl;
 use App\Livewire\Settings\Equipment;
+use App\Livewire\FlightJournalActual;
 use App\Livewire\FlightJournalModify;
 use Illuminate\Support\Facades\Route;
-use App\Livewire\FlightHistory;
-use App\Livewire\FlightJournalActual;
 use App\Livewire\FlightScheduleModify;
 use App\Livewire\Settings\AirportRoute;
 use App\Livewire\Settings\BranchModify;
@@ -29,11 +32,19 @@ Route::get('/', Login::class)->name('login');
 // Route::get('/', Livewire\Home::class)->name('home');
 
 /** AUTH ROUTES */
-
 // Route::get('/login', Login::class)->name('login');
 
 Route::middleware('auth')->group(function () {
     Route::get('/dashboard', Dashboard::class)->name('dashboard');
+
+    Route::get('/admin', Admin::class)->name('admin.index');
+
+    Route::get('/admin/users', Users::class)->name('admin.users');
+    Route::get('/admin/users/create', UsersControl::class)
+        ->name('admin.users.create');
+    Route::get('/admin/users/{userid:id}/edit', UsersControl::class)
+        ->whereNumber('userid') // optional safety
+        ->name('admin.users.edit');  // <-- {airline} matches the type-hint
 
     //Flight Journal Scheduled, create and edit from scheduled to actual
     Route::get('/flight-journal', FlightJournal::class)->name('flight-journal');
