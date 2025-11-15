@@ -33,12 +33,4 @@
     >
         Log in
     </x-ui.button>
-
-    {{-- <x-ui.link
-        variant="soft" 
-        href="{{ route('register') }}"
-    >
-        I dont have an account? 
-        <span class="underline">Sign up</span>
-    </x-ui.link> --}}
 </form>
