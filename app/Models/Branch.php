@@ -37,6 +37,11 @@ class Branch extends Model
         return $this->hasMany(Flight::class, 'airline_route_id');
     }
 
+    public function users()
+    {
+        return $this->hasMany(User::class, 'branch_id');
+    }
+
     public function getRouteKeyName()
     {
         return 'id'; //Assuming you are using 'id' as a unique field
