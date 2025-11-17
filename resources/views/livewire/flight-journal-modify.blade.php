@@ -42,23 +42,6 @@
                         </x-ui.field>
                     </div>
                     <div class="col-span-6">
-                        {{-- Empty --}}
-                    </div>
-                </div>
-                <div class="grid grid-cols-12 gap-6">
-                    <div class="col-span-6">
-                        <x-ui.field required>
-                        <x-ui.label>Flight Number</x-ui.label>
-                            <x-ui.input
-                                x-mask="******"
-                                placeholder="JT660"
-                                wire:model="flight_number"
-                                x-on:input="$el.value=$el.value.toUpperCase()"
-                            />
-                        <x-ui.error name="flight_number" />
-                    </x-ui.field>
-                    </div>
-                    <div class="col-span-6">
                         <x-ui.field>
                             <x-ui.label>Tanggal</x-ui.label>
                                 <x-ui.input 
@@ -69,8 +52,49 @@
                         </x-ui.field>
                     </div>
                 </div>
+                <div class="grid grid-cols-12 gap-6">
+                    <div class="col-span-6">
+                        <x-ui.field required>
+                            <x-ui.label>Flight Number Arrival</x-ui.label>
+                                <x-ui.input
+                                    x-mask="******"
+                                    placeholder="JT660"
+                                    wire:model="flight_number"
+                                    x-on:input="$el.value=$el.value.toUpperCase()"
+                                />
+                            <x-ui.error name="flight_number" />
+                        </x-ui.field>
+                    </div>
+                    <div class="col-span-6">
+                        <x-ui.field required>
+                            <x-ui.label>Flight Number Departure</x-ui.label>
+                                <x-ui.input
+                                    x-mask="******"
+                                    placeholder="JT660"
+                                    wire:model="flight_number"
+                                    x-on:input="$el.value=$el.value.toUpperCase()"
+                                />
+                            <x-ui.error name="flight_number" />
+                        </x-ui.field>
+                    </div>
+                </div>
+                {{-- <x-ui.field required>
+                    <x-ui.label>Cabang</x-ui.label>
+                    <x-ui.select 
+                        placeholder="Select branch..."
+                        icon="ps:airplane-takeoff"
+                        wire:model="branch_id"
+                        >
+                        @foreach($branches as $branch)
+                            <x-ui.select.option value="{{ $branch->id }}">
+                            {{ $branch->name }}
+                            </x-ui.select.option>
+                        @endforeach
+                    </x-ui.select>
+                    <x-ui.error name="branch_id" />
+                </x-ui.field> --}}
                 <div class="flex justify-items-center gap-6">
-                    <x-ui.field required>
+                    {{-- <x-ui.field required>
                         <x-ui.label>Cabang</x-ui.label>
                         <x-ui.select 
                             placeholder="Select branch..."
@@ -84,10 +108,26 @@
                             @endforeach
                         </x-ui.select>
                         <x-ui.error name="branch_id" />
-                    </x-ui.field>
+                    </x-ui.field> --}}
 
                     <x-ui.field required>
-                        <x-ui.label>Airlines and Flight Routes</x-ui.label>
+                        <x-ui.label>Flight Routes Arrival</x-ui.label>
+                        <x-ui.select 
+                            placeholder="Select flight route..."
+                            icon="ps:airplane-takeoff"
+                            wire:model="airline_route_id"
+                            searchable
+                        >
+                            @foreach($airlineRoutes as $id => $label)
+                                <x-ui.select.option value="{{ $id }}">
+                                    {{ $label }}
+                                </x-ui.select.option>
+                            @endforeach
+                        </x-ui.select>
+                        <x-ui.error name="airline_route_id" />
+                    </x-ui.field>
+                    <x-ui.field required>
+                        <x-ui.label>Flight Routes Departure</x-ui.label>
                         <x-ui.select 
                             placeholder="Select flight route..."
                             icon="ps:airplane-takeoff"
