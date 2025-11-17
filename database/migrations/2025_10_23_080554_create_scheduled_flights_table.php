@@ -13,11 +13,18 @@ return new class extends Migration
     {
         Schema::create('scheduled_flights', function (Blueprint $table) {
             $table->id();
-            $table->string('flight_no', 10)->unique();  // ID-6200
-            $table->foreignId('airline_route_id')
+            $table->string('origin_flight_no', 10)->unique();  // ID-6200
+            $table->string('departure_flight_no', 10)->unique();  // ID-6201
+
+            $table->foreignId('origin_route_id')
                 ->constrained('airline_routes')
                 ->cascadeOnUpdate()
                 ->restrictOnDelete();
+            $table->foreignId('departure_route_id')
+                ->constrained('airline_routes')
+                ->cascadeOnUpdate()
+                ->restrictOnDelete();
+
             $table->foreignId('equipment_id')
                 ->nullable()
                 ->constrained('equipments')
@@ -29,14 +36,17 @@ return new class extends Migration
                 ->restrictOnDelete();
 
             // Optional planned times
-            $table->time('sched_dep')->nullable();
             $table->time('sched_arr')->nullable();
+            $table->time('sched_dep')->nullable();
 
             $table->foreignId('created_by')->nullable()
                 ->constrained('users')->nullOnDelete()->cascadeOnUpdate();
             $table->foreignId('updated_by')->nullable()
                 ->constrained('users')->nullOnDelete()->cascadeOnUpdate();
             $table->timestamps();
+
+            //Soft Delete
+            $table->softDeletes();
         });
     }
 
