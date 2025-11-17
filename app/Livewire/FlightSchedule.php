@@ -5,11 +5,14 @@ namespace App\Livewire;
 use App\Models\Branch;
 use App\Models\Airline;
 use Livewire\Component;
+use Livewire\WithPagination;
 use App\Models\ScheduledFlights;
 
 class FlightSchedule extends Component
 {
-    public $flights;
+    use WithPagination;
+
+    private int $perPage = 10;
 
     public $branches = [];
     public $airlines = [];
@@ -22,24 +25,26 @@ class FlightSchedule extends Component
         // Load filters
         $this->branches = Branch::orderBy('name')->get(['id', 'name']);
         $this->airlines = Airline::orderBy('name')->get(['id', 'name']);
-
-        // Load all flights initially
-        $this->loadFlights();
     }
 
     public function updatedSelectedBranch($value)
     {
-        $this->loadFlights();
+        $this->resetPage(); // reset pagination when filtering
     }
 
     public function updatedSelectedAirline($value)
     {
-        $this->loadFlights();
+        $this->resetPage(); // reset pagination when filtering
     }
 
-    protected function loadFlights()
+    public function openEdit(int $id)
     {
-        $this->flights = ScheduledFlights::query()
+        return $this->redirectRoute('flight-schedule.edit', ['scheduled' => $id], navigate: true);
+    }
+
+    public function render()
+    {
+        $flights = ScheduledFlights::query()
             ->with([
                 'branch:id,name',
                 'equipment:id,registration',
@@ -60,16 +65,10 @@ class FlightSchedule extends Component
             )
             ->orderBy('branch_id')
             ->orderBy('sched_dep')
-            ->get();
-    }
-
-    public function openEdit(int $id)
-    {
-        return $this->redirectRoute('flight-schedule.edit', ['scheduled' => $id], navigate: true);
-    }
-
-    public function render()
-    {
-        return view('livewire.flight-schedule');
+            ->paginate($this->perPage);
+        
+        return view('livewire.flight-schedule', [
+            'flights' => $flights,
+        ]);
     }
 }

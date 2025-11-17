@@ -15,10 +15,29 @@
     </x-ui.heading>
 
     <x-ui.separator class="my-2"/>
-     <x-ui.breadcrumbs>
-        <x-ui.breadcrumbs.item wire:navigate.hover :href="route('settings.index')">Settings</x-ui.breadcrumbs.item>
-        <x-ui.breadcrumbs.item>Airport Route List</x-ui.breadcrumbs.item>
-    </x-ui.breadcrumbs>
+    
+    <div class="flex justify-between gap-3">
+        <x-ui.breadcrumbs>
+            <x-ui.breadcrumbs.item wire:navigate.hover :href="route('settings.index')">Settings</x-ui.breadcrumbs.item>
+            <x-ui.breadcrumbs.item>Airport Route List</x-ui.breadcrumbs.item>
+        </x-ui.breadcrumbs>
+        <div class="flex items-center gap-3">
+            <x-ui.label>
+                Airport
+            </x-ui.label>
+            <x-ui.select
+                placeholder="Semua Airport"
+                wire:model.live="selectedAirport"
+                class="mt-1 block w-72 sm:text-sm"
+                searchable
+            >
+                <x-ui.select.option value="">Semua Airport</x-ui.select.option>
+                @foreach($airports as $airport)
+                    <x-ui.select.option value="{{ $airport->id }}">{{ $airport->city }} - {{ $airport->iata }}</x-ui.select.option>
+                @endforeach
+            </x-ui.select>
+        </div>
+    </div>
 
     <table class="border border-collapse min-w-full text-sm rounded-xl overflow-hidden mt-4 shadow-lg">
         <thead class="bg-gray-200 dark:bg-neutral-800">
@@ -65,5 +84,8 @@
             @endforelse
         </tbody>
     </table>
+    <div class="mt-4 dark:text-neutral-200 dark:bg-neutral-900 dark:border-neutral-700">
+        {{ $routes->links() }}
+    </div>
 </div>
 

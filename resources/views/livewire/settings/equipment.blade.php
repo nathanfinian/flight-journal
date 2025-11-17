@@ -15,11 +15,30 @@
     </x-ui.heading>
 
     <x-ui.separator class="my-2"/>
-     <x-ui.breadcrumbs>
-        <x-ui.breadcrumbs.item wire:navigate.hover :href="route('settings.index')">Settings</x-ui.breadcrumbs.item>
-        <x-ui.breadcrumbs.item>Equipment List</x-ui.breadcrumbs.item>
-    </x-ui.breadcrumbs>
 
+    <div class="flex justify-between gap-3">
+        <x-ui.breadcrumbs>
+            <x-ui.breadcrumbs.item wire:navigate.hover :href="route('settings.index')">Settings</x-ui.breadcrumbs.item>
+            <x-ui.breadcrumbs.item>Equipment List</x-ui.breadcrumbs.item>
+        </x-ui.breadcrumbs>
+        <div class="flex items-center gap-3">
+            <x-ui.label>
+                Airline
+            </x-ui.label>
+            <x-ui.select
+                placeholder="Semua Airline"
+                wire:model.live="selectedAirline"
+                class="mt-1 block w-72 sm:text-sm"
+                searchable
+            >
+                <x-ui.select.option value="">Semua Airline</x-ui.select.option>
+                @foreach($airlines as $airline)
+                    <x-ui.select.option value="{{ $airline->id }}">{{ $airline->name }}</x-ui.select.option>
+                @endforeach
+            </x-ui.select>
+        </div>
+    </div>
+    
     <table class="border border-collapse min-w-full text-sm rounded-xl overflow-hidden mt-4 shadow-lg">
         <thead class="bg-gray-200 dark:bg-neutral-800">
             <tr>
@@ -32,7 +51,7 @@
         </thead>
 
         <tbody class="divide-y divide-gray-400 dark:divide-neutral-800">
-            @forelse ($equipment as $equipment)
+            @forelse ($equipments as $equipment)
             <tr 
                 class="hover:bg-gray-50 dark:hover:bg-neutral-800/60 cursor-pointer"
                 wire:click="openEdit({{ $equipment->id }})"
@@ -59,4 +78,7 @@
             @endforelse
         </tbody>
     </table>
+    <div class="mt-4 dark:text-neutral-200 dark:bg-neutral-900 dark:border-neutral-700">
+        {{ $equipments->links() }}
+    </div>
 </div>

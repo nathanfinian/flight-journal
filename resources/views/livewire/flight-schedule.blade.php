@@ -24,6 +24,7 @@
             placeholder="Semua Cabang"
             wire:model.live="selectedBranch"
             class="mt-1 block w-48 sm:text-sm"
+            searchable
         >
             <x-ui.select.option value="">Semua Cabang</x-ui.select.option>
             @foreach($branches as $branch)
@@ -37,7 +38,8 @@
         <x-ui.select
             placeholder="Semua Airline"
             wire:model.live="selectedAirline"
-            class="mt-1 block w-48 sm:text-sm"
+            class="mt-1 block w-72 sm:text-sm"
+            searchable
         >
             <x-ui.select.option value="">Semua Airline</x-ui.select.option>
             @foreach($airlines as $airline)
@@ -101,4 +103,7 @@
             @endforelse
         </tbody>
     </table>
+    <div class="mt-4 dark:text-neutral-200 dark:bg-neutral-900 dark:border-neutral-700">
+        {{ $flights->links() }}
+    </div>
 </div>
