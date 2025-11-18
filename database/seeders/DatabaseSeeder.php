@@ -47,7 +47,7 @@ class DatabaseSeeder extends Seeder
         Equipment::factory()->count(10)->active()->create();
 
         AirportRoute::factory()
-            ->count(10)
+            ->count(6)
             ->active()
             ->create();
     }
