@@ -52,6 +52,18 @@ class ScheduledFlights extends Model
         return $this->belongsToMany(Day::class, 'operating_patterns', 'scheduled_flight_id', 'day_id')->orderBy('days.id'); // ✅ ensures consistent ordering
     }
 
+    public function airline()
+    {
+        return $this->hasOneThrough(
+            Airline::class,
+            AirlineRoute::class,
+            'id',                // Foreign key on airline_routes
+            'id',                // Foreign key on airlines
+            'origin_route_id',  // Local key on scheduled_flights
+            'airline_id'         // Local key on airline_routes
+        );
+    }
+
     // Optional: Shortcut to airport route via pivot
     public function originAirportRoute()
     {
