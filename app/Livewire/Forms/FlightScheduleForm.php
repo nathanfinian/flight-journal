@@ -9,10 +9,13 @@ use Illuminate\Validation\Rule;
 use App\Models\ScheduledFlights;
 use App\Models\AirlineRoute;
 use App\Models\Equipment;
+use App\TimeValidation;
 use Illuminate\Validation\ValidationException;
 
 class FlightScheduleForm extends Form
 {
+    use TimeValidation;
+
     public ?ScheduledFlights $record = null;
 
     #[Validate('required|integer|exists:airlines,id')]
@@ -74,32 +77,6 @@ class FlightScheduleForm extends Form
                                                 ->toArray();
         }
     }
-
-    # --------------------------------------------------------
-    # TIME FORMAT VALIDATION
-    # --------------------------------------------------------
-    private function checkTimeFormat(?string $time)
-    {
-        if (!preg_match('/^(?:[01]\d|2[0-3]):[0-5]\d$/', $time)) {
-            throw ValidationException::withMessages([
-                'time_format' => 'Invalid format waktu: harus 24-jam HH:MM (00:00–23:59)',
-            ]);
-        }
-    }
-
-    private function formatTime(?string $time): ?string
-    {
-        if (!$time) return null;
-
-        try {
-            return Carbon::createFromFormat('H:i', $time)->format('H:i:s');
-        } catch (\Exception $e) {
-            throw ValidationException::withMessages([
-                'time_format' => 'Invalid format waktu: harus 24-jam HH:MM (00:00–23:59)',
-            ]);
-        }
-    }
-
 
     # --------------------------------------------------------
     # UNIQUE + CUSTOM VALIDATION
