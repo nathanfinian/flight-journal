@@ -25,7 +25,7 @@ return new class extends Migration
                 ->cascadeOnUpdate()
                 ->restrictOnDelete();
 
-            $table->foreignId('equipment_id')
+            $table->foreignId('origin_equipment_id')
                 ->constrained('equipments')
                 ->cascadeOnUpdate()
                 ->restrictOnDelete();
