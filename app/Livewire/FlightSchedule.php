@@ -48,9 +48,11 @@ class FlightSchedule extends Component
             ->with([
                 'branch:id,name',
                 'equipment:id,registration',
-                'airlineRoute.airline:id,name',
-                'airlineRoute.airportRoute.origin:id,iata',
-                'airlineRoute.airportRoute.destination:id,iata',
+                'originAirlineRoute.airline:id,name',
+                'originAirportRoute.origin:id,iata',
+                'originAirportRoute.destination:id,iata',
+                'departureAirportRoute.origin:id,iata',
+                'departureAirportRoute.destination:id,iata',
                 'days:id,day_name',
             ])
             ->when($this->selectedBranch, fn($q) => $q->where('branch_id', $this->selectedBranch))
@@ -58,7 +60,7 @@ class FlightSchedule extends Component
                 $this->selectedAirline,
                 fn($q) =>
                 $q->whereHas(
-                    'airlineRoute',
+                    'originAirlineRoute',
                     fn($r) =>
                     $r->where('airline_id', $this->selectedAirline)
                 )

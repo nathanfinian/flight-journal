@@ -55,10 +55,12 @@
             <tr>
                 <th class="px-4 py-3 text-left">#</th>
                 <th class="px-4 py-3 text-left">Branch</th>
-                <th class="px-4 py-3 text-left">Flight No</th>
+                <th class="px-4 py-3 text-left">Origin</th>
+                <th class="px-4 py-3 text-left">Departure</th>
                 <th class="px-4 py-3 text-left">Equipment</th>
                 <th class="px-4 py-3 text-left">Airline</th>
-                <th class="px-4 py-3 text-left">Route</th>
+                <th class="px-4 py-3 text-left">Origin Route</th>
+                <th class="px-4 py-3 text-left">Departure Route</th>
                 <th class="px-4 py-3 text-left">Time (ETD - ETA)</th>
                 <th class="px-4 py-3 text-left">Days</th>
             </tr>
@@ -71,15 +73,22 @@
 
                     <td class="px-4 py-3">{{ $flight->branch->name ?? '—' }}</td>
 
-                    <td class="px-4 py-3 font-semibold">{{ $flight->flight_no }}</td>
+                    <td class="px-4 py-3 font-semibold">{{ $flight->origin_flight_no }}</td>
+                    <td class="px-4 py-3 font-semibold">{{ $flight->departure_flight_no }}</td>
                     <td class="px-4 py-3 font-semibold">{{ $flight->equipment->registration ?? '—' }}</td>
 
-                    <td class="px-4 py-3">{{ $flight->airlineRoute->airline->name ?? '—' }}</td>
+                    <td class="px-4 py-3">{{ $flight->originAirlineRoute->airline->name ?? '—' }}</td>
 
                     <td class="px-4 py-3">
-                        {{ $flight->airlineRoute->airportRoute->origin->iata ?? '---' }}
+                        {{ $flight->originAirportRoute->origin->iata ?? '---' }}
                         →
-                        {{ $flight->airlineRoute->airportRoute->destination->iata ?? '---' }}
+                        {{ $flight->originAirportRoute->destination->iata ?? '---' }}
+                    </td>
+
+                    <td class="px-4 py-3">
+                        {{ $flight->departureAirportRoute->origin->iata ?? '---' }}
+                        →
+                        {{ $flight->departureAirportRoute->destination->iata ?? '---' }}
                     </td>
 
                     <td class="px-4 py-3">

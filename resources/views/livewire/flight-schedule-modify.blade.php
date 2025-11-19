@@ -49,6 +49,7 @@
                                     x-on:input="$el.value=$el.value.toUpperCase()"
                                 />
                             <x-ui.error name="form.arrival_flight_number" />
+                            <x-ui.error name="same_flight_no" />
                         </x-ui.field>
                     </div>
                     <div class="col-span-6">
@@ -72,7 +73,7 @@
                             <x-ui.select 
                                 placeholder="Select flight route..."
                                 icon="ps:airplane-takeoff"
-                                wire:model.live="arrival_route"
+                                wire:model.live="form.origin_route"
                                 searchable
                             >
                                 @foreach($airlineRoutes as $id => $label)
@@ -81,7 +82,9 @@
                                     </x-ui.select.option>
                                 @endforeach
                             </x-ui.select>
-                            <x-ui.error name="arrival_route" />
+                            <x-ui.error name="form.origin_route" />
+                            <x-ui.error name="origin_route" />
+                            <x-ui.error name="same_route" />
                         </x-ui.field>
                     </div>
                     <div class="col-span-6">
@@ -90,7 +93,7 @@
                             <x-ui.select 
                                 placeholder="Select flight route..."
                                 icon="ps:airplane-takeoff"
-                                wire:model.live="departure_route"
+                                wire:model.live="form.departure_route"
                                 searchable
                             >
                                 @foreach($airlineRoutes as $id => $label)
@@ -99,6 +102,7 @@
                                     </x-ui.select.option>
                                 @endforeach
                             </x-ui.select>
+                            <x-ui.error name="form.departure_route" />
                             <x-ui.error name="departure_route" />
                         </x-ui.field>
                     </div>
@@ -110,7 +114,7 @@
                         <x-ui.select 
                             placeholder="Select branch..."
                             icon="ps:airplane-takeoff"
-                            wire:model.live="branch_id"
+                            wire:model.live="form.branch_id"
                             >
                             @foreach($branches as $branch)
                                 <x-ui.select.option value="{{ $branch->id }}">
@@ -118,18 +122,17 @@
                                 </x-ui.select.option>
                             @endforeach
                         </x-ui.select>
-                        <x-ui.error name="branch_id" />
+                        <x-ui.error name="form.branch_id" />
                     </x-ui.field>
                 </div>
 
                 <div class="flex justify-items-center items-center mt-6 gap-6">
-
                     <x-ui.field>
                         <x-ui.label>Equipment</x-ui.label>
                         <x-ui.select 
                             placeholder="Select equipment..."
                             icon="ps:airplane-takeoff"
-                            wire:model="equipment_id"
+                            wire:model="form.equipment_id"
                             clearable
                             searchable
                             >
@@ -139,38 +142,39 @@
                                 </x-ui.select.option>
                             @endforeach
                         </x-ui.select>
-                        <x-ui.error name="equipment_id" />
                     </x-ui.field>
                     <x-ui.field required>
                         <x-ui.label>ETD</x-ui.label>
                             <x-ui.input 
                                 x-mask="99:99"
                                 placeholder="14:25"
-                                wire:model="sched_dep"
+                                wire:model="form.sched_dep"
                             />
-                        <x-ui.error name="sched_dep" />
+                        <x-ui.error name="form.sched_dep" />
                     </x-ui.field>
                     <x-ui.field required>
                         <x-ui.label>ETA</x-ui.label>
                             <x-ui.input 
                                 x-mask="99:99"
                                 placeholder="15:25"
-                                wire:model="sched_arr"
+                                wire:model="form.sched_arr"
                             />
-                        <x-ui.error name="sched_arr" />
+                        <x-ui.error name="form.sched_arr" />
                     </x-ui.field>
                 </div>
+                <x-ui.error name="form.equipment_id" />
+                <x-ui.error name="equipment_id" />
                 <x-ui.error name="time_format" />
 
                 <div class="mt-6 gap-6">
                     <!-- Group manages array state - bind model to GROUP only -->
                     <x-ui.label class="my-2">Pilih hari</x-ui.label>
-                    <x-ui.checkbox.group wire:model="days" variant="pills" class="flex flex-wrap gap-2">
+                    <x-ui.checkbox.group wire:model="form.days" variant="pills" class="flex flex-wrap gap-2">
                        @foreach($dayList as $day)
                             <x-ui.checkbox label="{{ $day->day_name }}" value="{{ $day->id }}" />
                         @endforeach
                     </x-ui.checkbox.group>
-                    <x-ui.error name="days" />
+                    <x-ui.error name="form.days" />
                 </div>
                 <div class="flex items-center justify-between mt-6">
                     <x-ui.button type="submit">Save changes</x-ui.button>
