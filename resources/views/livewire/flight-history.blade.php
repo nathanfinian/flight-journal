@@ -66,11 +66,13 @@
             <tr>
                 <th class="px-4 py-3 text-left">#</th>
                 <th class="px-4 py-3 text-left">Branch</th>
-                <th class="px-4 py-3 text-left">Flight No</th>
-                <th class="px-4 py-3 text-left">Equipment</th>
+                <th class="px-4 py-3 text-left">Tanggal</th>
+                <th class="px-4 py-3 text-left">Arrival</th>
+                <th class="px-4 py-3 text-left">Departure</th>
                 <th class="px-4 py-3 text-left">Airline</th>
-                <th class="px-4 py-3 text-left">Route</th>
-                <th class="px-4 py-3 text-left">Time (ATD - ATA)</th>
+                <th class="px-4 py-3 text-left">Origin</th>
+                <th class="px-4 py-3 text-left">Departure</th>
+                <th class="px-4 py-3 text-left">Time (ATA - ATD)</th>
             </tr>
         </thead>
 
@@ -81,25 +83,31 @@
 
                     <td class="px-4 py-3">{{ $flight->branch->name ?? '—' }}</td>
 
-                    <td class="px-4 py-3 font-semibold">{{ $flight->flight_no }}</td>
-                    <td class="px-4 py-3 font-semibold">{{ $flight->equipment->registration ?? '—' }}</td>
+                    <td class="px-4 py-3 font-semibold">{{ $flight->service_date->format('Y-m-d') }}</td>
+                    <td class="px-4 py-3 font-semibold">{{ $flight->origin_flight_no ?? '—' }}</td>
+                    <td class="px-4 py-3 font-semibold">{{ $flight->departure_flight_no ?? '—' }}</td>
 
-                    <td class="px-4 py-3">{{ $flight->airlineRoute->airline->name ?? '—' }}</td>
+                    <td class="px-4 py-3">{{ $flight->originAirlineRoute->airline->name ?? '—' }}</td>
 
                     <td class="px-4 py-3">
-                        {{ $flight->airlineRoute->airportRoute->origin->iata ?? '---' }}
+                        {{ $flight->originAirlineRoute->airportRoute->origin->iata ?? '---' }}
                         →
-                        {{ $flight->airlineRoute->airportRoute->destination->iata ?? '---' }}
+                        {{ $flight->originAirlineRoute->airportRoute->destination->iata ?? '---' }}
+                    </td>
+                    <td class="px-4 py-3">
+                        {{ $flight->departureAirlineRoute->airportRoute->origin->iata ?? '---' }}
+                        →
+                        {{ $flight->departureAirlineRoute->airportRoute->destination->iata ?? '---' }}
                     </td>
 
                     <td class="px-4 py-3">
-                        {{ substr($flight->actual_dep, 0, 5) }} – {{ substr($flight->actual_arr, 0, 5) }}
+                        {{ substr($flight->actual_arr, 0, 5) }} – {{ substr($flight->actual_dep, 0, 5) }}
                     </td>
                 </tr>
             @empty
                 <tr>
                     <td colspan="8" class="px-4 py-4 text-center text-gray-400 dark:text-neutral-500">
-                        No scheduled flights found.
+                        No flights found.
                     </td>
                 </tr>
             @endforelse

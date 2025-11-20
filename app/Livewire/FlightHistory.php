@@ -63,17 +63,20 @@ class FlightHistory extends Component
         $this->actualFlights = Flight::query()
             ->with([
                 'branch:id,name',
-                'equipment:id,registration',
-                'airlineRoute.airline:id,name',
-                'airlineRoute.airportRoute.origin:id,iata',
-                'airlineRoute.airportRoute.destination:id,iata',
+                'originEquipment:id,registration',
+                'departureEquipment:id,registration',
+                'originAirlineRoute.airline:id,name',
+                'originAirlineRoute.airportRoute.origin:id,iata',
+                'originAirlineRoute.airportRoute.destination:id,iata',
+                'departureAirlineRoute.airportRoute.origin:id,iata',
+                'departureAirlineRoute.airportRoute.destination:id,iata',
             ])
             ->when($this->selectedBranch, fn($q) => $q->where('branch_id', $this->selectedBranch))
             ->when(
                 $this->selectedAirline,
                 fn($q) =>
                 $q->whereHas(
-                    'airlineRoute',
+                    'originAirlineRoute',
                     fn($r) =>
                     $r->where('airline_id', $this->selectedAirline)
                 )
@@ -94,8 +97,7 @@ class FlightHistory extends Component
                 fn($q) =>
                 $q->whereDate('service_date', '<=', $to)
             )
-            ->orderBy('branch_id')
-            ->orderBy('sched_dep')
+            ->orderBy('service_date', 'asc')
             ->get();
     }
 
