@@ -19,8 +19,6 @@ class FlightJournal extends Component
     public ?string $selectedBranch = '';
     public ?string $selectedAirline = '';
 
-    public string $activeTab = 'scheduled';
-
     public string $hari;
 
     public $indoDays = [
@@ -62,16 +60,18 @@ class FlightJournal extends Component
             ->with([
                 'branch:id,name',
                 'equipment:id,registration',
-                'airlineRoute.airline:id,name',
-                'airlineRoute.airportRoute.origin:id,iata',
-                'airlineRoute.airportRoute.destination:id,iata',
+                'originAirlineRoute.airline:id,name',
+                'originAirportRoute.origin:id,iata',
+                'originAirportRoute.destination:id,iata',
+                'departureAirportRoute.origin:id,iata',
+                'departureAirportRoute.destination:id,iata',
             ])
             ->when($this->selectedBranch, fn($q) => $q->where('branch_id', $this->selectedBranch))
             ->when(
                 $this->selectedAirline,
                 fn($q) =>
                 $q->whereHas(
-                    'airlineRoute',
+                    'originAirlineRoute',
                     fn($r) =>
                     $r->where('airline_id', $this->selectedAirline)
                 )
@@ -84,7 +84,7 @@ class FlightJournal extends Component
             ->whereNotExists(function ($sq) use ($today) {
                 $sq->select(DB::raw(1))
                     ->from('actual_flights')
-                    ->whereColumn('actual_flights.flight_no', 'scheduled_flights.flight_no')
+                    ->whereColumn('actual_flights.origin_flight_no', 'scheduled_flights.origin_flight_no')
                     ->whereDate('actual_flights.service_date', $today);
             })
             ->orderBy('branch_id')
