@@ -90,10 +90,12 @@ class ActualFlightsForm extends Form
             $this->notes = $record->notes ?? '';
 
             //Set date for historic flights
-            $this->service_date = $record->service_date;
+            $this->service_date = $record->service_date->format('Y-m-d');
         }else if($scheduled){
             $record = $scheduled;
             $this->setDate();
+            $this->origin_equipment        = $record->equipment_id;
+            $this->departure_equipment     = $record->equipment_id;
         }
 
         if ($record) {
@@ -103,8 +105,6 @@ class ActualFlightsForm extends Form
             $this->branch_id               = $record->branch_id;
             $this->origin_route            = $record->origin_route_id;
             $this->departure_route         = $record->departure_route_id;
-            $this->origin_equipment        = $record->equipment_id;
-            $this->departure_equipment     = $record->equipment_id;
             $this->sched_dep = $record->sched_dep ? substr($record->sched_dep, 0, 5) : '';
             $this->sched_arr = $record->sched_arr ? substr($record->sched_arr, 0, 5) : '';
         }
@@ -241,10 +241,11 @@ class ActualFlightsForm extends Form
 
         if ($isEdit && $this->record) {
             $flight = $this->record->update($payload);
+            return;
         } else {
             $flight = Flight::create($payload);
+            return $flight->airline->name;
         }
-
-        return $flight->airline->name;
+        
     }
 }
