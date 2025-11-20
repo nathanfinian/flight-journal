@@ -79,8 +79,7 @@ class FlightJournalActual extends Component
                 )
             )
             ->where('service_date', $today)
-            ->orderBy('branch_id')
-            ->orderBy('sched_dep')
+            ->orderBy('actual_dep', 'asc')
             ->get();
     }
 
