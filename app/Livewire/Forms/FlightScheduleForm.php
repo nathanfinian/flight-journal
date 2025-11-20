@@ -66,10 +66,10 @@ class FlightScheduleForm extends Form
             $this->arrival_flight_number   = $record->origin_flight_no;
             $this->departure_flight_number = $record->departure_flight_no;
             $this->branch_id               = $record->branch_id;
-            $this->airline_id              = $record->airline->id; // Gotta change the id
+            $this->airline_id              = $record->airline->id;
             $this->origin_route            = $record->origin_route_id;
             $this->departure_route         = $record->departure_route_id;
-            $this->equipment_id            = $record->equipment_id;
+            $this->equipment_id            = $record->equipment_id ?? '';
             $this->sched_dep               = substr($record->sched_dep, 0, 5);
             $this->sched_arr               = substr($record->sched_arr, 0, 5);
             $this->days                    = $record->days->pluck('id')
@@ -165,10 +165,9 @@ class FlightScheduleForm extends Form
                 'origin_flight_no'      => strtoupper($this->arrival_flight_number),
                 'departure_flight_no'   => strtoupper($this->departure_flight_number),
                 'branch_id'             => $this->branch_id,
-                'airline_id'            => $this->airline_id,
                 'origin_route_id'       => $this->origin_route,
                 'departure_route_id'    => $this->departure_route,
-                'equipment_id'          => $this->equipment_id,
+                'equipment_id'          => $this->equipment_id ?: null,
                 'sched_dep'             => $this->sched_dep,
                 'sched_arr'             => $this->sched_arr,
             ]
