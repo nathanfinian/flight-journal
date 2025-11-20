@@ -34,6 +34,8 @@ class Flight extends Model
         'updated_by',
     ];
 
+    protected $casts = ['service_date' => 'date'];
+
     public function originAirlineRoute()
     {
         return $this->belongsTo(AirlineRoute::class, 'origin_route_id');
