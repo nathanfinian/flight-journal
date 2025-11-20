@@ -58,7 +58,8 @@ class FlightJournalModify extends Component
             ->toArray();
 
         if($id == null){
-            $this->airline_id = 1; // go to create, when no data retrieved
+            $this->form->setDate();
+            return; // go to create, when no data retrieved
         }
         else if($this->type === 'scheduled') //Data from scheduled flight
         {
@@ -97,7 +98,7 @@ class FlightJournalModify extends Component
 
         // --- 6️⃣ Flash message ---
         session()->flash('notify', [
-            'content' => 'Journal Flight ' . $airline . ' recorded successfully!',
+            'content' => 'Flight ' . $airline . ' recorded successfully!',
             'type'    => 'success',
         ]);
 
