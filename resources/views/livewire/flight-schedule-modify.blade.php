@@ -143,15 +143,7 @@
                             @endforeach
                         </x-ui.select>
                     </x-ui.field>
-                    <x-ui.field required>
-                        <x-ui.label>ETD</x-ui.label>
-                            <x-ui.input 
-                                x-mask="99:99"
-                                placeholder="14:25"
-                                wire:model="form.sched_dep"
-                            />
-                        <x-ui.error name="form.sched_dep" />
-                    </x-ui.field>
+                    {{-- ETA and ETD --}}
                     <x-ui.field required>
                         <x-ui.label>ETA</x-ui.label>
                             <x-ui.input 
@@ -160,6 +152,15 @@
                                 wire:model="form.sched_arr"
                             />
                         <x-ui.error name="form.sched_arr" />
+                    </x-ui.field>
+                    <x-ui.field required>
+                        <x-ui.label>ETD</x-ui.label>
+                            <x-ui.input 
+                                x-mask="99:99"
+                                placeholder="14:25"
+                                wire:model="form.sched_dep"
+                            />
+                        <x-ui.error name="form.sched_dep" />
                     </x-ui.field>
                 </div>
                 <x-ui.error name="form.equipment_id" />

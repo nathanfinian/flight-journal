@@ -61,7 +61,7 @@
                 <th class="px-4 py-3 text-left">Airline</th>
                 <th class="px-4 py-3 text-left">Origin Route</th>
                 <th class="px-4 py-3 text-left">Departure Route</th>
-                <th class="px-4 py-3 text-left">Time (ETD - ETA)</th>
+                <th class="px-4 py-3 text-left">Time (ETA - ETD)</th>
                 <th class="px-4 py-3 text-left">Days</th>
             </tr>
         </thead>
@@ -92,7 +92,7 @@
                     </td>
 
                     <td class="px-4 py-3">
-                        {{ substr($flight->sched_dep, 0, 5) }} – {{ substr($flight->sched_arr, 0, 5) }}
+                        {{ substr($flight->sched_arr, 0, 5) }} – {{ substr($flight->sched_dep, 0, 5) }}
                     </td>
 
                     <td class="px-4 py-3">
