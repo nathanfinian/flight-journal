@@ -47,7 +47,7 @@
                 </td>
                 <td class="px-4 py-3">{{ $branch->name }}</td>
                 <td class="px-4 py-3">{{ $branch->status }}</td>
-                <td class="px-4 py-3">{{ $branch->createdBy->name }}</td>
+                <td class="px-4 py-3">{{ $branch->createdBy->name ?? '-' }}</td>
             </tr>
             @empty
             <tr>
