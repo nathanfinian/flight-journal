@@ -29,26 +29,26 @@ class DatabaseSeeder extends Seeder
             'password' => bcrypt('2525'),
         ]);
 
-        User::factory()->count(10)->create();
+        // User::factory()->count(10)->create();
 
         $this->call([
             DaysSeeder::class,
         ]);
-        $this->call([
-            AircraftSeeder::class,
-        ]);
-        $this->call([
-            AirlineSeeder::class,
-        ]);
-        $this->call([
-            AirportSeeder::class,
-        ]);
+        // $this->call([
+        //     AircraftSeeder::class,
+        // ]);
+        // $this->call([
+        //     AirlineSeeder::class,
+        // ]);
+        // $this->call([
+        //     AirportSeeder::class,
+        // ]);
 
-        Equipment::factory()->count(10)->active()->create();
+        // Equipment::factory()->count(10)->active()->create();
 
-        AirportRoute::factory()
-            ->count(6)
-            ->active()
-            ->create();
+        // AirportRoute::factory()
+        //     ->count(6)
+        //     ->active()
+        //     ->create();
     }
 }
