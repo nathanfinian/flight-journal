@@ -191,11 +191,13 @@ class ActualFlightsForm extends Form
             'origin_flight_number' => [
                 Rule::unique('actual_flights', 'origin_flight_no')
                     ->where(fn($q) => $q->whereDate('service_date', $this->service_date))
+                    ->whereNull('deleted_at')   // ⬅️ ignore soft-deleted rows
                     ->ignore($this->record?->id),
             ],
             'departure_flight_number' => [
                 Rule::unique('actual_flights', 'departure_flight_no')
-                    ->where(fn($q) => $q->whereDate('service_date', $this->service_date)) 
+                    ->where(fn($q) => $q->whereDate('service_date', $this->service_date))
+                    ->whereNull('deleted_at')   // ⬅️ ignore soft-deleted rows
                     ->ignore($this->record?->id),
             ],
         ]);
