@@ -80,8 +80,8 @@ class ActualFlightsForm extends Form
             $record = $flight;
             $this->record = $record;
 
-            $this->origin_equipment = $record->origin_equipment_id;
-            $this->departure_equipment = $record->departure_equipment_id;
+            $this->origin_equipment = $record->origin_equipment_id ?? '';
+            $this->departure_equipment = $record->departure_equipment_id ?? '';
             $this->actual_departure = substr($record->actual_dep, 0, 5);
             $this->actual_arrival = substr($record->actual_arr, 0, 5);
             $this->pax = $record->pax ?? '';
@@ -94,8 +94,8 @@ class ActualFlightsForm extends Form
         }else if($scheduled){
             $record = $scheduled;
             $this->setDate();
-            $this->origin_equipment        = $record->equipment_id;
-            $this->departure_equipment     = $record->equipment_id;
+            $this->origin_equipment        = $record->equipment_id ?? '';
+            $this->departure_equipment     = $record->equipment_id ?? '';
         }
 
         if ($record) {
