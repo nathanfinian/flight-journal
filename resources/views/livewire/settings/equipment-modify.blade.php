@@ -25,6 +25,7 @@
               placeholder="Select airline"
               icon="ps:notebook"
               wire:model="airline_id"
+              searchable
             >
               @foreach($airlines as $airline)
                 <x-ui.select.option value="{{ $airline->id }}">
@@ -56,6 +57,7 @@
               placeholder="Select aircraft type..."
               icon="ps:airplane"
               wire:model="aircraft_id"
+              searchable
             >
               @foreach($aircrafts as $aircraft)
                 <x-ui.select.option icon="ps:airplane" value="{{ $aircraft->id }}">

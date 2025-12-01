@@ -25,6 +25,7 @@
                 placeholder="Select origin..."
                 icon="ps:airplane-takeoff"
                 wire:model="origin_id"
+                searchable
                 >
                 @foreach($cities as $city)
                     <x-ui.select.option value="{{ $city->id }}">
@@ -42,6 +43,7 @@
                 placeholder="Select destination..."
                 icon="ps:airplane-landing"
                 wire:model="destination_id"
+                searchable
                 >
                 @foreach($cities as $city)
                     <x-ui.select.option value="{{ $city->id }}">
@@ -59,6 +61,7 @@
                 placeholder="Select airline..."
                 icon="ps:buildings"
                 wire:model.live="selected_airlines"
+                searchable
                 multiple
                 clearable
                 >
