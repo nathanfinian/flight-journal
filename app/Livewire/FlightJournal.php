@@ -8,6 +8,7 @@ use App\Models\Airline;
 use Livewire\Component;
 use App\Models\ScheduledFlights;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 
 class FlightJournal extends Component
 {
@@ -37,6 +38,8 @@ class FlightJournal extends Component
         // Load filters
         $this->branches = Branch::orderBy('name')->get(['id', 'name']);
         $this->airlines = Airline::orderBy('name')->get(['id', 'name']);
+
+        $this->selectedBranch = Auth::user()->branch_id;
 
         // Load all flights initially
         $this->loadFlights();

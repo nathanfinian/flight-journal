@@ -7,6 +7,7 @@ use App\Models\Airline;
 use Livewire\Component;
 use Livewire\WithPagination;
 use App\Models\ScheduledFlights;
+use Illuminate\Support\Facades\Auth;
 
 class FlightSchedule extends Component
 {
@@ -25,6 +26,8 @@ class FlightSchedule extends Component
         // Load filters
         $this->branches = Branch::orderBy('name')->get(['id', 'name']);
         $this->airlines = Airline::orderBy('name')->get(['id', 'name']);
+
+        $this->selectedBranch = Auth::user()->branch_id;
     }
 
     public function updatedSelectedBranch($value)

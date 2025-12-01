@@ -2,12 +2,13 @@
 
 namespace App\Livewire;
 
-use Livewire\Component;
-
 use Carbon\Carbon;
+
 use App\Models\Branch;
 use App\Models\Flight;
 use App\Models\Airline;
+use Livewire\Component;
+use Illuminate\Support\Facades\Auth;
 
 class FlightHistory extends Component
 {
@@ -31,6 +32,8 @@ class FlightHistory extends Component
         // Load filters
         $this->branches = Branch::orderBy('name')->get(['id', 'name']);
         $this->airlines = Airline::orderBy('name')->get(['id', 'name']);
+
+        $this->selectedBranch = Auth::user()->branch_id;
 
         // Load all flights initially
         $this->loadActualFlights();
