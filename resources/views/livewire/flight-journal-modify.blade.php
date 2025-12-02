@@ -45,7 +45,8 @@
                         <x-ui.field>
                             <x-ui.label>Tanggal</x-ui.label>
                             <x-ui.input 
-                                disabled
+                                x-mask="9999-99-99"
+                                placeholder="YYYY/MM/DD"
                                 wire:model="form.service_date"
                             />
                         </x-ui.field>
