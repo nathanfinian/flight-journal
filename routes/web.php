@@ -4,6 +4,7 @@ use App\Livewire\Admin;
 use App\Livewire\Settings;
 use App\Livewire\Dashboard;
 use App\Actions\Auth\Logout;
+use App\Http\Controllers\Export\FlightExportController;
 use App\Livewire\Admin\Role;
 use App\Livewire\Admin\RoleModify;
 use App\Livewire\Auth\Login;
@@ -39,6 +40,8 @@ Route::get('/', Login::class)->name('login');
 Route::middleware('auth')->group(function () {
     Route::get('/dashboard', Dashboard::class)->name('dashboard');
 
+    Route::get('/invoice', Dashboard::class)->name('invoice.create');
+
     //Flight Journal Scheduled, create and edit from scheduled to actual
     Route::get('/flight-journal', FlightJournal::class)->name('flight-journal');
     Route::get('/flight-journal/create', FlightJournalModify::class)
@@ -61,11 +64,15 @@ Route::middleware('auth')->group(function () {
 
     //Flight History
     Route::get('/flight-history', FlightHistory::class)->name('flight-history');
+    Route::get('/exportfh', [FlightExportController::class, 'export'])->name('export-flight-history');
+    Route::get('/exportfhpdf', [FlightExportController::class, 'exportPdf'])->name('export-flight-pdf');
+    Route::get('/printfh', [FlightExportController::class, 'exportPdf'])->name('export-flight-print');
 
     //Settings pages start
     Route::get('/settings', Settings::class)->name('settings.index');
     Route::get('/settings/account', Account::class)->name('settings.account');
     
+    //Airlines
     Route::get('/settings/airline', Airline::class)->name('settings.airline');
     Route::get('/settings/airline/create', AirlineModify::class)
         ->name('settings.airline.create');
@@ -73,6 +80,7 @@ Route::middleware('auth')->group(function () {
         ->whereNumber('airline') // optional safety
         ->name('settings.airline.edit');  // <-- {airline} matches the type-hint
 
+    //Aircraft Settings
     Route::get('/settings/aircraft', Aircraft::class)->name('settings.aircraft');
     Route::get('/settings/aircraft/create', AircraftModify::class)
         ->name('settings.aircraft.create');
@@ -80,6 +88,7 @@ Route::middleware('auth')->group(function () {
         ->whereNumber('aircraft') // optional safety
         ->name('settings.aircraft.edit');  // <-- {aircraft} matches the type-hint
 
+    //Equipments
     Route::get('/settings/equipment', Equipment::class)->name('settings.equipment');
     Route::get('/settings/equipment/create', EquipmentModify::class)
         ->name('settings.equipment.create');
