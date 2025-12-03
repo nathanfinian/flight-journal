@@ -4,10 +4,14 @@
                 <th class="px-4 py-3 text-left" rowspan="2">#</th>
                 <th class="px-4 py-3 text-left" rowspan="2">Branch</th>
                 <th class="px-4 py-3 text-left" rowspan="2">Tanggal</th>
+                <th class="px-4 py-3 text-left" rowspan="2">Flight Number</th>
                 <th class="px-4 py-3 text-left" rowspan="2">Registration</th>
                 <th class="px-4 py-3 text-left" rowspan="2">Route</th>
                 <th class="px-4 py-3 text-left">Landing</th>
                 <th class="px-4 py-3 text-left">Departure</th>
+                <th class="px-4 py-3 text-left" rowspan="2">PIC</th>
+                <th class="px-4 py-3 text-left" rowspan="2">PAX</th>
+                <th class="px-4 py-3 text-left" rowspan="2">Notes</th>
             </tr>
             <tr>
                 <th class="px-4 py-3 text-left">WIB</th>
@@ -24,6 +28,8 @@
 
                     <td class="px-4 py-3 font-semibold" rowspan="2">{{ $flight->service_date->format('Y-m-d') }}</td>
 
+                    <td class="px-4 py-3 font-semibold">{{ $flight->origin_flight_no ?? '—' }}</td>
+
                     <td class="px-4 py-3 font-semibold">{{ $flight->originEquipment->registration ?? '—' }}</td>
                     
                     {{-- Origin route and Departure Route--}}
@@ -37,8 +43,13 @@
                         {{ substr($flight->actual_arr, 0, 5) }}
                     </td>
                     <td class="px-4 py-3"></td>
+
+                    <td class="px-4 py-3" rowspan="2">{{ $flight->pic }}</td>
+                    <td class="px-4 py-3" rowspan="2">{{ $flight->pax}}</td>
+                    <td class="px-4 py-3" rowspan="2">{{ $flight->notes}}</td>
                 </tr>
                 <tr>
+                    <td class="px-4 py-3 font-semibold">{{ $flight->departure_flight_no ?? '—' }}</td>
                     <td class="px-4 py-3 font-semibold">{{ $flight->departureEquipment->registration ?? '—' }}</td>
 
                     <td class="px-4 py-3">
