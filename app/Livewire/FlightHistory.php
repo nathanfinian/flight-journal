@@ -20,7 +20,9 @@ class FlightHistory extends Component
     public $branches = [];
     public $airlines = [];
 
+    public ?string $branchName = '';
     public ?string $selectedBranch = '';
+    public ?string $airlineName = '';
     public ?string $selectedAirline = '';
 
     public function mount()
@@ -102,6 +104,11 @@ class FlightHistory extends Component
             )
             ->orderBy('service_date', 'asc')
             ->get();
+
+            $this->branchName = Branch::where('id', $this->selectedBranch)
+                                ->value('name');
+            $this->airlineName = Airline::where('id', $this->selectedAirline)
+                                ->value('name');
     }
 
     protected function normalizedDates(): array
