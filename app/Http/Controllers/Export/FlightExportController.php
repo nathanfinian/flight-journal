@@ -136,6 +136,7 @@ class FlightExportController extends Controller
             )
 
             ->orderBy('service_date', 'asc')
+            ->orderBy('actual_arr', 'asc')
             ->get();
     }
 }

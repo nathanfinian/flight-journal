@@ -69,7 +69,7 @@ class FlightSchedule extends Component
                 )
             )
             ->orderBy('branch_id')
-            ->orderBy('sched_dep')
+            ->orderBy('sched_arr', 'asc')
             ->paginate($this->perPage);
         
         return view('livewire.flight-schedule', [

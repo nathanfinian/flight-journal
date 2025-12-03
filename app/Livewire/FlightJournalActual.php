@@ -82,7 +82,7 @@ class FlightJournalActual extends Component
                 )
             )
             ->where('service_date', $today)
-            ->orderBy('actual_dep', 'asc')
+            ->orderBy('actual_arr', 'asc')
             ->get();
     }
 

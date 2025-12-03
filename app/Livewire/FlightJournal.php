@@ -91,7 +91,7 @@ class FlightJournal extends Component
                     ->whereDate('actual_flights.service_date', $today);
             })
             ->orderBy('branch_id')
-            ->orderBy('sched_dep')
+            ->orderBy('sched_arr', 'asc')
             ->get();
     }
 

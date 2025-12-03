@@ -103,6 +103,7 @@ class FlightHistory extends Component
                 $q->whereDate('service_date', '<=', $to)
             )
             ->orderBy('service_date', 'asc')
+            ->orderBy('actual_arr', 'asc')
             ->get();
 
             $this->branchName = Branch::where('id', $this->selectedBranch)
