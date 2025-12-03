@@ -66,7 +66,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/flight-history', FlightHistory::class)->name('flight-history');
     Route::get('/exportfh', [FlightExportController::class, 'export'])->name('export-flight-history');
     Route::get('/exportfhpdf', [FlightExportController::class, 'exportPdf'])->name('export-flight-pdf');
-    Route::get('/printfh', [FlightExportController::class, 'exportPdf'])->name('export-flight-print');
+    Route::get('/printfh', [FlightExportController::class, 'print'])->name('export-flight-print');
 
     //Settings pages start
     Route::get('/settings', Settings::class)->name('settings.index');
