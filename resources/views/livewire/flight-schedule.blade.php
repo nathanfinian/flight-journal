@@ -55,12 +55,12 @@
             <tr>
                 <th class="px-4 py-3 text-left">#</th>
                 <th class="px-4 py-3 text-left">Branch</th>
-                <th class="px-4 py-3 text-left">Origin</th>
+                <th class="px-4 py-3 text-left">Arrival</th>
                 <th class="px-4 py-3 text-left">Departure</th>
                 <th class="px-4 py-3 text-left">Equipment</th>
                 <th class="px-4 py-3 text-left">Airline</th>
-                <th class="px-4 py-3 text-left">Origin Route</th>
-                <th class="px-4 py-3 text-left">Departure Route</th>
+                <th class="px-4 py-3 text-left">Origin</th>
+                <th class="px-4 py-3 text-left">Departure</th>
                 <th class="px-4 py-3 text-left">Time (ETA - ETD)</th>
                 <th class="px-4 py-3 text-left">Days</th>
             </tr>

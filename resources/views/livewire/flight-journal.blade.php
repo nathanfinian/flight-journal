@@ -72,8 +72,8 @@
             <tr>
                 <th class="px-4 py-3 text-left">#</th>
                 <th class="px-4 py-3 text-left">Branch</th>
-                <th class="px-4 py-3 text-left">Arrival Flight</th>
-                <th class="px-4 py-3 text-left">Departure Flight</th>
+                <th class="px-4 py-3 text-left">Arrival</th>
+                <th class="px-4 py-3 text-left">Departure</th>
                 <th class="px-4 py-3 text-left">Airline</th>
                 <th class="px-4 py-3 text-left">Origin</th>
                 <th class="px-4 py-3 text-left">Departure</th>
