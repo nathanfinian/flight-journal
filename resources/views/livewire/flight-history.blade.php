@@ -31,7 +31,7 @@
                     'airlineName' => $airlineName,
                 ]) }}', '_blank')"
             >
-            </x-ui.button>
+            </x-ui.button>--}}
             <x-ui.button 
                 size="sm"
                 variant="outline"
@@ -45,7 +45,7 @@
                     'airlineName' => $airlineName,
                 ]) }}', '_blank')"
             >
-            </x-ui.button> --}}
+            </x-ui.button> 
             <x-ui.button 
                 wire:navigate.hover
                 size="sm"
