@@ -3,7 +3,58 @@
         <div class="flex items-center">
            History
         </div>
-        <div class="flex items-center">
+        <div class="flex items-center  gap-2">
+            <x-ui.button 
+                size="sm"
+                variant="outline"
+                icon="ps:microsoft-excel-logo"
+                onclick="window.open('{{ route('export-flight-history', [
+                    'dateFrom' => $dateFrom,
+                    'dateTo' => $dateTo,
+                    'branch' => $selectedBranch,
+                    'branchName' => $branchName,
+                    'airline' => $selectedAirline,
+                    'airlineName' => $airlineName,
+                ]) }}', '_blank')"
+            >
+            </x-ui.button>
+            {{-- <x-ui.button 
+                size="sm"
+                variant="outline"
+                icon="ps:file-pdf"
+                onclick="window.open('{{ route('export-flight-pdf', [
+                    'dateFrom' => $dateFrom,
+                    'dateTo' => $dateTo,
+                    'branch' => $selectedBranch,
+                    'branchName' => $branchName,
+                    'airline' => $selectedAirline,
+                    'airlineName' => $airlineName,
+                ]) }}', '_blank')"
+            >
+            </x-ui.button>
+            <x-ui.button 
+                size="sm"
+                variant="outline"
+                icon="ps:printer"
+                onclick="window.open('{{ route('export-flight-print', [
+                    'dateFrom' => $dateFrom,
+                    'dateTo' => $dateTo,
+                    'branch' => $selectedBranch,
+                    'branchName' => $branchName,
+                    'airline' => $selectedAirline,
+                    'airlineName' => $airlineName,
+                ]) }}', '_blank')"
+            >
+            </x-ui.button> --}}
+            <x-ui.button 
+                wire:navigate.hover
+                size="sm"
+                variant="outline"
+                icon="ps:invoice"
+                :href="route('invoice.create')"
+            >
+                Create Invoice
+            </x-ui.button>
         </div>
     </x-ui.heading>
 
@@ -60,8 +111,7 @@
         </div>
     </div>
 
-
-   <table class="border border-collapse min-w-full text-sm rounded-xl overflow-hidden mt-4 shadow-lg">
+    <table class="border border-collapse min-w-full text-sm rounded-xl overflow-hidden mt-4 shadow-lg">
         <thead class="bg-gray-200 dark:bg-neutral-800">
             <tr>
                 <th class="px-4 py-3 text-left">#</th>
@@ -113,5 +163,4 @@
             @endforelse
         </tbody>
     </table>
-    
 </div>
