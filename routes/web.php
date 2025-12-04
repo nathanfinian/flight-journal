@@ -30,6 +30,8 @@ use App\Livewire\Settings\AirportModify;
 use App\Livewire\Settings\AircraftModify;
 use App\Livewire\Settings\EquipmentModify;
 use App\Livewire\Settings\AirportRouteModify;
+use App\Livewire\Settings\FlightType;
+use App\Livewire\Settings\FlightTypeModify;
 
 Route::get('/', Login::class)->name('login');
 // Route::get('/', Livewire\Home::class)->name('home');
@@ -79,6 +81,14 @@ Route::middleware('auth')->group(function () {
     Route::get('/settings/airline/{airline:id}/edit', AirlineModify::class)
         ->whereNumber('airline') // optional safety
         ->name('settings.airline.edit');  // <-- {airline} matches the type-hint
+
+    //Flight Type
+    Route::get('/settings/flight-type', FlightType::class)->name('settings.flight-type');
+    Route::get('/settings/flight-type/create', FlightTypeModify::class)
+        ->name('settings.flight-type.create');
+    Route::get('/settings/flight-type/{typeId:id}/edit', FlightTypeModify::class)
+        ->whereNumber('typeId') // optional safety
+        ->name('settings.flight-type.edit');  // <-- {airline} matches the type-hint
 
     //Aircraft Settings
     Route::get('/settings/aircraft', Aircraft::class)->name('settings.aircraft');
