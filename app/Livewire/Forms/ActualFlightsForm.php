@@ -11,7 +11,6 @@ use Illuminate\Support\Carbon;
 use Illuminate\Validation\Rule;
 use App\Models\ScheduledFlights;
 use Livewire\Attributes\Validate;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
 
 class ActualFlightsForm extends Form
@@ -232,22 +231,12 @@ class ActualFlightsForm extends Form
             'notes'                 => $this->notes ?: null,
         ];
 
-        $userId = Auth::id();
-
-        if ($isEdit) {
-            $payload['updated_by'] = $userId;
-        } else {
-            $payload['created_by'] = $userId;
-            $payload['updated_by'] = $userId;
-        }
-
         if ($isEdit && $this->record) {
             $flight = $this->record->update($payload);
             return;
-        } else {
-            $flight = Flight::create($payload);
-            return $flight->airline->name;
         }
-        
+
+        $flight = Flight::create($payload);
+        return $flight->airline->name;
     }
 }

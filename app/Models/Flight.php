@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Auth;
 
 class Flight extends Model
 {
@@ -30,11 +31,21 @@ class Flight extends Model
         'ground_time',
         'pic',
         'notes',
-        'created_by',
-        'updated_by',
     ];
 
     protected $casts = ['service_date' => 'date'];
+
+    protected static function booted()
+    {
+        static::creating(function ($model) {
+            $model->created_by = Auth::id();
+            $model->updated_by = Auth::id();
+        });
+
+        static::updating(function ($model) {
+            $model->updated_by = Auth::id();
+        });
+    }
 
     public function originAirlineRoute()
     {
