@@ -48,6 +48,19 @@
             </x-ui.link>
             <x-ui.link 
                 wire:navigate.hover
+                :href="route('settings.flight-type')" 
+                variant="ghost"
+            >
+                <x-ui.card class="flex items-center justify-between mb-4" size="xl">
+                    <div class="flex">
+                        <x-ui.icon name="ps:rows" variant="light" class="text-gray-800 dark:text-white mr-2"/>
+                        <span>tipe flight</span>
+                    </div>
+                    <x-ui.icon name="arrow-up-right" class="text-gray-800 dark:text-white size-4" />
+                </x-ui.card>
+            </x-ui.link>
+            <x-ui.link 
+                wire:navigate.hover
                 :href="route('settings.airline')"
                 variant="ghost"
             >
