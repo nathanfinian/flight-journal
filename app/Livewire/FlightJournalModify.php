@@ -11,6 +11,7 @@ use Illuminate\Support\Str;
 use App\Models\AirlineRoute;
 use App\Models\ScheduledFlights;
 use App\Livewire\Forms\ActualFlightsForm;
+use App\Models\FlightType;
 
 class FlightJournalModify extends Component
 {
@@ -20,6 +21,7 @@ class FlightJournalModify extends Component
     public ?ScheduledFlights $scheduledFlight = null;
 
     public $branches;
+    public $flightTypes;
     public $equipments;
     public $airlineRoutes;
     public $airlines;
@@ -37,6 +39,7 @@ class FlightJournalModify extends Component
 
         // Load dropdown choices
         $this->branches = Branch::where('status', 'ACTIVE')->orderBy('name')->get(['id', 'name']);
+        $this->flightTypes = FlightType::orderBy('id')->get(['id', 'name']);
         $this->airlines = Airline::where('status', 'ACTIVE')->orderBy('name')->get(['id', 'name']);
 
         $this->equipments = Equipment::with('airline:id,name')

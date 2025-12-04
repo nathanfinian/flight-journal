@@ -17,6 +17,7 @@ class Flight extends Model
     protected $fillable = [
         'origin_flight_no',
         'departure_flight_no',
+        'flight_type_id',
         'origin_route_id',
         'departure_route_id',
         'origin_equipment_id',
@@ -70,6 +71,11 @@ class Flight extends Model
     public function branch()
     {
         return $this->belongsTo(Branch::class, 'branch_id');
+    }
+
+    public function flightType()
+    {
+        return $this->belongsTo(FlightType::class, 'flight_type_id');
     }
 
     public function airline()

@@ -37,6 +37,9 @@ class ActualFlightsForm extends Form
     #[Validate('required|integer|exists:branches,id')]
     public string $branch_id = '';
 
+    #[Validate('required|integer|exists:flight_types,id')]
+    public string $flight_type_id = '1';
+
     #[Validate('required|integer|exists:equipments,id')]
     public string $origin_equipment = '';
 
@@ -67,7 +70,7 @@ class ActualFlightsForm extends Form
     #[Validate('nullable|string|max:255')]
     public string $notes = '';
 
-    #[Validate('nullable|string|max:11')]
+    #[Validate('required|string|max:11')]
     public string $service_date = '';
 
     # --------------------------------------------------------
@@ -79,6 +82,7 @@ class ActualFlightsForm extends Form
             $record = $flight;
             $this->record = $record;
 
+            $this->flight_type_id = $record->flight_type_id;
             $this->origin_equipment = $record->origin_equipment_id ?? '';
             $this->departure_equipment = $record->departure_equipment_id ?? '';
             $this->actual_departure = substr($record->actual_dep, 0, 5);
@@ -216,6 +220,7 @@ class ActualFlightsForm extends Form
             'origin_flight_no'      => strtoupper($this->origin_flight_number),
             'departure_flight_no'   => strtoupper($this->departure_flight_number),
             'branch_id'             => $this->branch_id,
+            'flight_type_id'        => $this->flight_type_id,
             'origin_route_id'       => $this->origin_route,
             'departure_route_id'    => $this->departure_route,
             'origin_equipment_id'   => $this->origin_equipment,

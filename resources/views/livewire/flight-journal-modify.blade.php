@@ -7,16 +7,19 @@
         <x-ui.text class="opacity-50">konfirmasi input flight harian</x-ui.text>
 
         <x-ui.separator class="my-2"/>
-     
-        <x-ui.breadcrumbs>
-            @if ($this->type === 'scheduled')
-                <x-ui.breadcrumbs.item wire:navigate.hover :href="route('flight-journal')">Journal</x-ui.breadcrumbs.item>
-            @elseif ($this->type === 'actual')
-                <x-ui.breadcrumbs.item wire:navigate.hover :href="route('flight-journal.actual')">Journal</x-ui.breadcrumbs.item>
-            @endif
-            
-            <x-ui.breadcrumbs.item>Flight Journal</x-ui.breadcrumbs.item>
-        </x-ui.breadcrumbs>
+
+        <div class="flex justify-between">
+            <x-ui.breadcrumbs>
+                @if ($this->type === 'scheduled')
+                    <x-ui.breadcrumbs.item wire:navigate.hover :href="route('flight-journal')">Journal</x-ui.breadcrumbs.item>
+                @elseif ($this->type === 'actual')
+                    <x-ui.breadcrumbs.item wire:navigate.hover :href="route('flight-journal.actual')">Journal</x-ui.breadcrumbs.item>
+                @endif
+                
+                <x-ui.breadcrumbs.item>Flight Journal</x-ui.breadcrumbs.item>
+            </x-ui.breadcrumbs>
+            <x-ui.text class="opacity-50 text-xs text-end">Bertanda <span class="text-red-500 font-bold">*</span> wajib di isi!</x-ui.text>
+        </div>
 
         <div class="grow">
             <form 
@@ -42,7 +45,7 @@
                         </x-ui.field>
                     </div>
                     <div class="col-span-6">
-                        <x-ui.field>
+                        <x-ui.field required>
                             <x-ui.label>Tanggal</x-ui.label>
                             <x-ui.input 
                                 x-mask="9999-99-99"
@@ -227,7 +230,21 @@
                         </x-ui.field>
                     </div>
                     <div class="col-span-6">
-                        {{-- Empty --}}
+                        <x-ui.field required>
+                            <x-ui.label>Tipe Flight</x-ui.label>
+                            <x-ui.select 
+                                placeholder="Select tipe..."
+                                icon="ps:seal"
+                                wire:model="form.flight_type_id"
+                                >
+                                @foreach($flightTypes as $type)
+                                    <x-ui.select.option value="{{ $type->id }}">
+                                    {{ $type->name }}
+                                    </x-ui.select.option>
+                                @endforeach
+                            </x-ui.select>
+                            <x-ui.error name="form.flight_type_id" />
+                        </x-ui.field>
                     </div>
                 </div>
                 

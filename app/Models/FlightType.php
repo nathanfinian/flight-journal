@@ -38,19 +38,9 @@ class FlightType extends Model
         return $this->belongsTo(User::class, 'updated_by');
     }
 
-    public function scheduledFlights()
-    {
-        return $this->hasMany(ScheduledFlights::class, 'airline_route_id');
-    }
-
     public function flights()
     {
         return $this->hasMany(Flight::class, 'airline_route_id');
-    }
-
-    public function users()
-    {
-        return $this->hasMany(User::class, 'branch_id');
     }
 
     public function getRouteKeyName()
