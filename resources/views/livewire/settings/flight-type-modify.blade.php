@@ -34,6 +34,7 @@
                 <x-ui.label>Code Tipe</x-ui.label>
                 <x-ui.input
                 wire:model.defer="type_code"
+                x-mask="****"
                 maxlength="4"
                 placeholder="RGLR"
                 x-on:input="$el.value=$el.value.toUpperCase()"
