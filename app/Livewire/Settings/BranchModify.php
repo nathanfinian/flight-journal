@@ -15,6 +15,9 @@ class BranchModify extends Component
 
     // Form fields
     public string  $name       = '';
+    public string  $address    = '';
+    public string  $phone_number   = '';
+    public string  $email      = '';
     public string  $status     = 'ACTIVE'; // ACTIVE | INACTIVE these selects are automatically selected when passed with livewire
 
     public function mount(?int $branch = null): void
@@ -29,8 +32,11 @@ class BranchModify extends Component
                 return;
             }
 
-            $this->branchId  = $row->getKey();
+            $this->branchId   = $row->getKey();
             $this->name       = (string) $row->name;
+            $this->address    = (string) $row->address;
+            $this->phone_number   = (string) $row->phone_number;
+            $this->email      = (string) $row->email;
             $this->status     = $row->status ?: 'ACTIVE';
         }
     }
@@ -39,6 +45,9 @@ class BranchModify extends Component
     {
         return [
             'name' => ['required', 'string', 'max:120'],
+            'address'      => ['required', 'string', 'max:255'],
+            'phone_number' => ['required', 'string', 'max:20'],
+            'email'        => ['required', 'email:rfc,dns', 'max:120'],
             'status'   => ['required', Rule::in(['ACTIVE', 'INACTIVE'])],
         ];
     }
@@ -46,17 +55,6 @@ class BranchModify extends Component
     public function saveChanges()
     {
         $data = $this->validate();
-
-        // Stamp who did it
-        $userId = Auth::id();
-        if ($this->isEdit) {
-            // editing existing row → only updated_by
-            $data['updated_by'] = $userId;
-        } else {
-            // creating new row → set both created_by & updated_by
-            $data['created_by'] = $userId;
-            $data['updated_by'] = $userId;
-        }
 
         $branch = Branch::updateOrCreate(
             ['id' => $this->branchId],
@@ -66,7 +64,7 @@ class BranchModify extends Component
         $this->branchId = $branch->id;
 
         session()->flash('notify', [
-            'content' => 'Branch berhasil disimpan!',
+            'content' => 'Cabang berhasil disimpan!',
             'type' => 'success'
         ]);
 
@@ -76,11 +74,11 @@ class BranchModify extends Component
     public function delete()
     {
         $row = Branch::find($this->branchId);
-        $name = $row?->name ?? 'Unknown';
+        $name = 'Cabang ' . $row?->name ?? 'Unknown';
 
         if (!$row) {
             session()->flash('notify', [
-                'content' => 'Branch not found',
+                'content' => 'Cabang tidak ditemukan',
                 'type' => 'error'
             ]);
         }
@@ -97,7 +95,7 @@ class BranchModify extends Component
             // 23000 => integrity constraint violation (FK in use, etc.)
             if ($e->getCode() === '23000') {
                 session()->flash('notify', [
-                    'content' => 'Branch ini ada di catatan penerbangan dan tidak dapat dihapus.',
+                    'content' => 'Cabang ini dipakai catatan penerbangan dan tidak dapat dihapus.',
                     'type' => 'warning'
                 ]);
                 return;

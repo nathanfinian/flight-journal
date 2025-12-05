@@ -20,7 +20,6 @@ class Branch extends Component
     public function render()
     {
         $branches = BranchModel::query()
-            ->with('createdBy:id,name')
             ->orderBy('name', 'asc')
             ->paginate($this->perPage); // change to ->get() to disable pagination
             

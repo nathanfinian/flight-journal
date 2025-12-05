@@ -25,9 +25,38 @@
                 wire:model.defer="name"
                 maxlength="80"
                 placeholder="Palangkaraya"
-                clearable
                 />
                 <x-ui.error name="name" />
+            </x-ui.field>
+
+            <x-ui.field required>
+                <x-ui.label>Address</x-ui.label>
+                <x-ui.input
+                wire:model.defer="address"
+                maxlength="100"
+                placeholder="Jl. Ahmad Yani No. 55"
+                />
+                <x-ui.error name="address" />
+            </x-ui.field>
+
+            <x-ui.field required>
+                <x-ui.label>Phone Number</x-ui.label>
+                <x-ui.input
+                wire:model.defer="phone_number"
+                maxlength="15"
+                placeholder="081234556"
+                />
+                <x-ui.error name="phone_number" />
+            </x-ui.field>
+
+            <x-ui.field required>
+                <x-ui.label>Email</x-ui.label>
+                <x-ui.input
+                wire:model.defer="email"
+                placeholder="Enter email..."
+                type="enail"
+                />
+                <x-ui.error name="email" />
             </x-ui.field>
 
             {{-- Status --}}
