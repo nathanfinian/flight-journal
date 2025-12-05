@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Model;
 
 class Branch extends Model
@@ -13,9 +14,22 @@ class Branch extends Model
     protected $fillable = [
         'name',
         'status',
-        'created_by',
-        'updated_by',
+        'address',
+        'phone_number',
+        'email',
     ];
+
+    protected static function booted()
+    {
+        static::creating(function ($model) {
+            $model->created_by = Auth::id();
+            $model->updated_by = Auth::id();
+        });
+
+        static::updating(function ($model) {
+            $model->updated_by = Auth::id();
+        });
+    }
 
     public function createdBy()
     {
