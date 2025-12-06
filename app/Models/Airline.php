@@ -36,4 +36,9 @@ class Airline extends Model
     {
         return $this->belongsToMany(AirportRoute::class, 'airline_routes')->withTimestamps();
     }
+
+    public function rates()
+    {
+        return $this->hasMany(AirlineRate::class);
+    }
 }
