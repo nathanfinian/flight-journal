@@ -4,15 +4,14 @@ use App\Livewire\Admin;
 use App\Livewire\Settings;
 use App\Livewire\Dashboard;
 use App\Actions\Auth\Logout;
-use App\Http\Controllers\Export\FlightExportController;
 use App\Livewire\Admin\Role;
-use App\Livewire\Admin\RoleModify;
 use App\Livewire\Auth\Login;
 use App\Livewire\Admin\Users;
 use App\Livewire\FlightHistory;
 use App\Livewire\FlightJournal;
 use App\Livewire\FlightSchedule;
 use App\Livewire\Settings\Branch;
+use App\Livewire\Admin\RoleModify;
 use App\Livewire\Settings\Account;
 use App\Livewire\Settings\Airline;
 use App\Livewire\Settings\Airport;
@@ -21,17 +20,21 @@ use App\Livewire\Admin\UsersControl;
 use App\Livewire\Settings\Equipment;
 use App\Livewire\FlightJournalActual;
 use App\Livewire\FlightJournalModify;
+use App\Livewire\Settings\FlightType;
 use Illuminate\Support\Facades\Route;
 use App\Livewire\FlightScheduleModify;
+use App\Livewire\Settings\AirlineRates;
 use App\Livewire\Settings\AirportRoute;
 use App\Livewire\Settings\BranchModify;
 use App\Livewire\Settings\AirlineModify;
 use App\Livewire\Settings\AirportModify;
 use App\Livewire\Settings\AircraftModify;
 use App\Livewire\Settings\EquipmentModify;
-use App\Livewire\Settings\AirportRouteModify;
-use App\Livewire\Settings\FlightType;
 use App\Livewire\Settings\FlightTypeModify;
+use App\Livewire\Settings\AirlineRatesModify;
+use App\Livewire\Settings\AirportRouteModify;
+use App\Livewire\Invoice\Create as CreateInvoice;
+use App\Http\Controllers\Export\FlightExportController;
 
 Route::get('/', Login::class)->name('login');
 // Route::get('/', Livewire\Home::class)->name('home');
@@ -42,7 +45,7 @@ Route::get('/', Login::class)->name('login');
 Route::middleware('auth')->group(function () {
     Route::get('/dashboard', Dashboard::class)->name('dashboard');
 
-    Route::get('/invoice', Dashboard::class)->name('invoice.create');
+    Route::get('/invoice', CreateInvoice::class)->name('invoice.create');
 
     //Flight Journal Scheduled, create and edit from scheduled to actual
     Route::get('/flight-journal', FlightJournal::class)->name('flight-journal');
@@ -81,6 +84,14 @@ Route::middleware('auth')->group(function () {
     Route::get('/settings/airline/{airline:id}/edit', AirlineModify::class)
         ->whereNumber('airline') // optional safety
         ->name('settings.airline.edit');  // <-- {airline} matches the type-hint
+
+    //Airlines
+    Route::get('/settings/airlineRates', AirlineRates::class)->name('settings.airlineRates');
+    Route::get('/settings/airlineRates/create', AirlineRatesModify::class)
+        ->name('settings.airlineRates.create');
+    Route::get('/settings/airlineRates/{airlineRate:id}/edit', AirlineRatesModify::class)
+        ->whereNumber('airlineRates') // optional safety
+        ->name('settings.airlineRates.edit');  // <-- {airline} matches the type-hint
 
     //Flight Type
     Route::get('/settings/flight-type', FlightType::class)->name('settings.flight-type');
