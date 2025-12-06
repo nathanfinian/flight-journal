@@ -7,7 +7,6 @@ use App\Models\Airline;
 use Livewire\Component;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Database\QueryException;
 use App\Models\AirportRoute;   // table: airport_routes
 use App\Models\Airport;        // has id, city/name/iata/icao
 
