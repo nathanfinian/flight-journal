@@ -55,10 +55,10 @@
                     {{ $airlineRate->charge_code }}
                 </td>
                 <td class="px-4 py-3">
-                    {{ $airlineRate->ground_fee }}
+                    Rp. {{ number_format($airlineRate->ground_fee) }}
                 </td>
                 <td class="px-4 py-3">
-                    {{ $airlineRate->cargo_fee }}
+                    Rp. {{ number_format($airlineRate->cargo_fee) }} / KG
                 </td>
             </tr>
             @empty
