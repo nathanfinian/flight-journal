@@ -6,7 +6,7 @@
     <x-ui.separator class="my-2"/>
     <x-ui.breadcrumbs>
       <x-ui.breadcrumbs.item wire:navigate.hover :href="route('settings.index')">Settings</x-ui.breadcrumbs.item>
-      <x-ui.breadcrumbs.item wire:navigate.hover :href="route('settings.flight-type')">Flight TypeList</x-ui.breadcrumbs.item>
+      <x-ui.breadcrumbs.item wire:navigate.hover :href="route('settings.flight-type')">List Tipe Flight</x-ui.breadcrumbs.item>
       <x-ui.breadcrumbs.item>Modify Tipe Flight</x-ui.breadcrumbs.item>
     </x-ui.breadcrumbs>
 

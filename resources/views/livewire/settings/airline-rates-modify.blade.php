@@ -6,8 +6,9 @@
         <x-ui.separator class="my-2"/>
      
         <x-ui.breadcrumbs>
-            <x-ui.breadcrumbs.item wire:navigate.hover :href="route('flight-schedule')">Scheduling</x-ui.breadcrumbs.item>
-            <x-ui.breadcrumbs.item>Flight Scheduling</x-ui.breadcrumbs.item>
+            <x-ui.breadcrumbs.item wire:navigate.hover :href="route('settings.index')">Settings</x-ui.breadcrumbs.item>
+            <x-ui.breadcrumbs.item wire:navigate.hover :href="route('settings.airlineRates')">List Rate Airline</x-ui.breadcrumbs.item>
+            <x-ui.breadcrumbs.item>Modify Rate Airline</x-ui.breadcrumbs.item>
         </x-ui.breadcrumbs>
 
         <div class="grow">
