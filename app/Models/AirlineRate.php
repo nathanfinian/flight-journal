@@ -41,6 +41,11 @@ class AirlineRate extends Model
         return $this->belongsTo(Airline::class);
     }
 
+    public function invoices()
+    {
+        return $this->hasMany(Invoice::class, 'airline_rates_id');
+    }
+
     public function getRouteKeyName()
     {
         return 'id'; //Assuming you are using 'id' as a unique field
