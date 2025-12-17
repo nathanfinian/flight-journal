@@ -21,7 +21,7 @@ class AirlineRatesModify extends Component
 
     public bool $isEdit = false;
 
-    public function mount(?int $airlineRate = null): void
+    public function mount(?AirlineRate $airlineRate): void
     {
         //  Load choices
         $this->airlines = Airline::query()
@@ -29,21 +29,20 @@ class AirlineRatesModify extends Component
             ->get(['id', 'name', 'icao_code']);
 
         if ($airlineRate) {
-            $row = AirlineRate::find($airlineRate);
-            if (!$row) {
-                session()->flash('notify', [
-                    'content' => 'Rate airline tidak ditemukan!',
-                    'type' => 'error'
+            $this->airlineRateId   = $airlineRate->getKey();
+            $this->airline_id      = $airlineRate->airline_id;
+            $this->charge_name     = (string) $airlineRate->charge_name;
+            $this->charge_code     = (string) $airlineRate->charge_code;
+            $this->ground_fee      = $this->toMoneyFormat($airlineRate->ground_fee);
+            $this->cargo_fee       = $this->toMoneyFormat($airlineRate->cargo_fee);
+        }else{
+            session()->flash(
+                'notify',
+                [
+                    'content' => 'Buat Rate Airline Baru!',
+                    'type' => 'warning'
                 ]);
                 return;
-            }
-
-            $this->airlineRateId   = $row->getKey();
-            $this->airline_id      = $row->airline_id;
-            $this->charge_name     = (string) $row->charge_name;
-            $this->charge_code     = (string) $row->charge_code;
-            $this->ground_fee      = $this->toMoneyFormat($row->ground_fee);
-            $this->cargo_fee       = $this->toMoneyFormat($row->cargo_fee);
         }
     }
 

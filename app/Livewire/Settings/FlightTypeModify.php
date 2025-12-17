@@ -15,21 +15,18 @@ class FlightTypeModify extends Component
     public string  $name       = '';
     public string  $type_code       = '';
 
-    public function mount(?int $typeId = null): void
+    public function mount(?FlightType $flightType = null): void
     {
-        if ($typeId) {
-            $row = FlightType::find($typeId);
-            if (!$row) {
-                session()->flash('notify', [
-                    'content' => 'Tipe flight tidak ditemukan!',
-                    'type' => 'error'
-                ]);
-                return;
-            }
-
-            $this->typeId  = $row->getKey();
-            $this->name       = (string) $row->name;
-            $this->type_code  = (string) $row->type_code;
+        if ($flightType) {
+            $this->typeId     = $flightType->getKey();
+            $this->name       = (string) $flightType->name;
+            $this->type_code  = (string) $flightType->type_code;
+        }else{
+            session()->flash('notify', [
+                'content' => 'Buat Tipe flight baru!',
+                'type' => 'success'
+            ]);
+            return;
         }
     }
 

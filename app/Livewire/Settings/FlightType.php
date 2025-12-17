@@ -14,7 +14,7 @@ class FlightType extends Component
 
     public function openEdit(int $id)
     {
-        return $this->redirectRoute('settings.flight-type.edit', ['typeId' => $id], navigate: true);
+        return $this->redirectRoute('settings.flight-type.edit', ['flightType' => $id], navigate: true);
     }
 
     public function render()

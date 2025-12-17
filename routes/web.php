@@ -67,7 +67,7 @@ Route::middleware('auth')->group(function () {
         ->whereNumber('scheduled') // optional safety
         ->name('flight-schedule.edit');  // <-- {airline} matches the type-hint
 
-    //Flight History
+    //Flight History Exports
     Route::get('/flight-history', FlightHistory::class)->name('flight-history');
     Route::get('/exportfh', [FlightExportController::class, 'export'])->name('export-flight-history');
     Route::get('/exportfhpdf', [FlightExportController::class, 'exportPdf'])->name('export-flight-pdf');
@@ -81,7 +81,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/settings/airline', Airline::class)->name('settings.airline');
     Route::get('/settings/airline/create', AirlineModify::class)
         ->name('settings.airline.create');
-    Route::get('/settings/airline/{airline:id}/edit', AirlineModify::class)
+    Route::get('/settings/airline/{airline}/edit', AirlineModify::class)
         ->whereNumber('airline') // optional safety
         ->name('settings.airline.edit');  // <-- {airline} matches the type-hint
 
@@ -89,7 +89,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/settings/airlineRates', AirlineRates::class)->name('settings.airlineRates');
     Route::get('/settings/airlineRates/create', AirlineRatesModify::class)
         ->name('settings.airlineRates.create');
-    Route::get('/settings/airlineRates/{airlineRate:id}/edit', AirlineRatesModify::class)
+    Route::get('/settings/airlineRates/{airlineRate}/edit', AirlineRatesModify::class)
         ->whereNumber('airlineRates') // optional safety
         ->name('settings.airlineRates.edit');  // <-- {airline} matches the type-hint
 
@@ -97,7 +97,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/settings/flight-type', FlightType::class)->name('settings.flight-type');
     Route::get('/settings/flight-type/create', FlightTypeModify::class)
         ->name('settings.flight-type.create');
-    Route::get('/settings/flight-type/{typeId:id}/edit', FlightTypeModify::class)
+    Route::get('/settings/flight-type/{flightType}/edit', FlightTypeModify::class)
         ->whereNumber('typeId') // optional safety
         ->name('settings.flight-type.edit');  // <-- {airline} matches the type-hint
 

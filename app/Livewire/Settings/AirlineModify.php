@@ -21,25 +21,24 @@ class AirlineModify extends Component
     public ?string $country    = null;   // optional
     public string  $status     = 'ACTIVE'; // ACTIVE | INACTIVE these selects are automatically selected when passed with livewire
 
-    public function mount(?int $airline = null): void
+    public function mount(?Airline $airline): void
     {
         if ($airline) {
-            $row = Airline::find($airline);
-            if (!$row) {
-                session()->flash('notify', [
-                    'content' => 'Airline tidak ditemukan!',
-                    'type' => 'error'
+            $this->airlineId  = $airline->getKey();
+            $this->name       = (string) $airline->name;
+            $this->iata_code  = $airline->iata_code;
+            $this->icao_code  = $airline->icao_code;
+            $this->callsign   = $airline->callsign;
+            $this->country    = $airline->country;
+            $this->status     = $airline->status ?: 'ACTIVE';
+        }else{
+            session()->flash(
+                'notify',
+                [
+                    'content' => 'Buat Airline Baru!',
+                    'type' => 'warning'
                 ]);
                 return;
-            }
-
-            $this->airlineId  = $row->getKey();
-            $this->name       = (string) $row->name;
-            $this->iata_code  = $row->iata_code;
-            $this->icao_code  = $row->icao_code;
-            $this->callsign   = $row->callsign;
-            $this->country    = $row->country;
-            $this->status     = $row->status ?: 'ACTIVE';
         }
     }
 
