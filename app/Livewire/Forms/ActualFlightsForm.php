@@ -4,7 +4,7 @@ namespace App\Livewire\Forms;
 
 use Livewire\Form;
 use App\Models\Flight;
-use App\TimeValidation;
+use App\Traits\TimeValidation;
 use App\Models\Equipment;
 use App\Models\AirlineRoute;
 use Illuminate\Support\Carbon;

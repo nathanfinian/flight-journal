@@ -9,7 +9,7 @@ use Illuminate\Validation\Rule;
 use App\Models\ScheduledFlights;
 use App\Models\AirlineRoute;
 use App\Models\Equipment;
-use App\TimeValidation;
+use App\Traits\TimeValidation;
 use Illuminate\Validation\ValidationException;
 
 class FlightScheduleForm extends Form
