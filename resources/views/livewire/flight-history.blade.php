@@ -18,20 +18,6 @@
                 ]) }}', '_blank')"
             >
             </x-ui.button>
-            {{-- <x-ui.button 
-                size="sm"
-                variant="outline"
-                icon="ps:file-pdf"
-                onclick="window.open('{{ route('export-flight-pdf', [
-                    'dateFrom' => $dateFrom,
-                    'dateTo' => $dateTo,
-                    'branch' => $selectedBranch,
-                    'branchName' => $branchName,
-                    'airline' => $selectedAirline,
-                    'airlineName' => $airlineName,
-                ]) }}', '_blank')"
-            >
-            </x-ui.button>--}}
             <x-ui.button 
                 size="sm"
                 variant="outline"
@@ -47,11 +33,10 @@
             >
             </x-ui.button> 
             <x-ui.button 
-                wire:navigate.hover
                 size="sm"
                 variant="outline"
                 icon="ps:invoice"
-                :href="route('invoice.create')"
+                wire:click="generateInvoice"
             >
                 Create Invoice
             </x-ui.button>
@@ -92,16 +77,13 @@
         {{-- Right group: date range --}}
         <div class="ml-auto flex items-center gap-2">
             <x-ui.label class="whitespace-nowrap">Tanggal</x-ui.label>
-
             <x-ui.input
                 type="date"
                 wire:model.live="dateFrom"
                 class="w-40"
                 placeholder="Dari"
             />
-
             <span class="text-gray-400">–</span>
-
             <x-ui.input
                 type="date"
                 wire:model.live="dateTo"

@@ -129,6 +129,18 @@ class FlightHistory extends Component
         $this->reset(['dateFrom', 'dateTo']);
     }
 
+    public function generateInvoice()
+    {
+        //Set session data for invoice setup
+        session([
+            'invoice.branch'  => $this->selectedBranch,
+            'invoice.from'    => $this->dateFrom,
+            'invoice.to'      => $this->dateTo,
+        ]);
+
+        return redirect()->route('invoice.create');
+    }
+
     public function openEdit(int $id)
     {
         //Change edit routes
