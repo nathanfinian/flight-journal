@@ -13,6 +13,7 @@ class Branch extends Model
 
     protected $fillable = [
         'name',
+        'airport_id',
         'status',
         'address',
         'phone_number',

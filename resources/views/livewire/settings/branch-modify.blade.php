@@ -28,6 +28,23 @@
                 />
                 <x-ui.error name="name" />
             </x-ui.field>
+            {{-- Airport --}}
+            <x-ui.field required>
+                <x-ui.label>Airport</x-ui.label>
+                <x-ui.select 
+                placeholder="Select airport..."
+                icon="ps:airplane-takeoff"
+                wire:model="airport_id"
+                searchable
+                >
+                @foreach($airports as $airport)
+                    <x-ui.select.option value="{{ $airport->id }}">
+                    {{ $airport->city }}
+                    </x-ui.select.option>
+                @endforeach
+                </x-ui.select>
+                <x-ui.error name="airport_id" />
+            </x-ui.field>
 
             <x-ui.field required>
                 <x-ui.label>Address</x-ui.label>

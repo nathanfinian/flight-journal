@@ -3,6 +3,7 @@
 namespace App\Livewire\Settings;
 
 use App\Models\Branch;
+use App\Models\Airport;
 use Livewire\Component;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Auth;
@@ -13,8 +14,11 @@ class BranchModify extends Component
     // Route param (e.g. /settings/branch/{branch}/edit)
     public ?int $branchId = null;
 
+    public $airports;
+
     // Form fields
     public string  $name       = '';
+    public string  $airport_id = '';
     public string  $address    = '';
     public string  $phone_number   = '';
     public string  $email      = '';
@@ -22,6 +26,10 @@ class BranchModify extends Component
 
     public function mount(?int $branch = null): void
     {
+        $this->airports = Airport::query()
+            ->orderBy('city')     // or ->orderBy('name')
+            ->get(['id', 'city', 'iata']);
+
         if ($branch) {
             $row = Branch::find($branch);
             if (!$row) {
@@ -34,6 +42,7 @@ class BranchModify extends Component
 
             $this->branchId   = $row->getKey();
             $this->name       = (string) $row->name;
+            $this->airport_id = (string) $row->airport_id;
             $this->address    = (string) $row->address;
             $this->phone_number   = (string) $row->phone_number;
             $this->email      = (string) $row->email;
@@ -45,6 +54,7 @@ class BranchModify extends Component
     {
         return [
             'name' => ['required', 'string', 'max:120'],
+            'airport_id'   => ['required', 'integer', 'exists:airports,id'],
             'address'      => ['required', 'string', 'max:255'],
             'phone_number' => ['required', 'string', 'max:20'],
             'email'        => ['required', 'email:rfc,dns', 'max:120'],

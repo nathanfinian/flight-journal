@@ -25,6 +25,7 @@
             <tr>
             <th class="px-4 py-3 text-left">#</th>
             <th class="px-4 py-3 text-left">Name</th>
+            <th class="px-4 py-3 text-left">Airport</th>
             <th class="px-4 py-3 text-left">Address</th>
             <th class="px-4 py-3 text-left">Phone</th>
             <th class="px-4 py-3 text-left">Email</th>
@@ -48,6 +49,7 @@
                 {{ $num }}
                 </td>
                 <td class="px-4 py-3">{{ $branch->name }}</td>
+                <td class="px-4 py-3">{{ $branch->airport->iata }}</td>
                 <td class="px-4 py-3">{{ $branch->address }}</td>
                 <td class="px-4 py-3">{{ $branch->phone_number }}</td>
                 <td class="px-4 py-3">{{ $branch->email }}</td>
