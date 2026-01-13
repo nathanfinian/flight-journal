@@ -43,6 +43,9 @@ class DatabaseSeeder extends Seeder
         $this->call([
             AirportSeeder::class,
         ]);
+        $this->call([
+            FlightTypeSeeder::class,
+        ]);
 
         Equipment::factory()->count(10)->active()->create();
 
