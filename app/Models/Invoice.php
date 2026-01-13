@@ -24,7 +24,7 @@ class Invoice extends Model
         'dateTo',
         'airline_id',
         'branch_id',
-        'rate_id',
+        'airline_rates_id',
         'status',
         'due_date',
         'total_amount',
