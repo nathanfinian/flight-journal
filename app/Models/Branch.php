@@ -46,6 +46,11 @@ class Branch extends Model
         return $this->hasMany(ScheduledFlights::class, 'airline_route_id');
     }
 
+    public function airport()
+    {
+        return $this->belongsTo(Airport::class);
+    }
+
     public function flights()
     {
         return $this->hasMany(Flight::class, 'airline_route_id');

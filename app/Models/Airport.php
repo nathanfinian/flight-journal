@@ -29,4 +29,9 @@ class Airport extends Model
     {
         return 'id'; //Assuming you are using 'id' as a unique field
     }
+
+    public function branch()
+    {
+        return $this->hasOne(Branch::class);
+    }
 }
