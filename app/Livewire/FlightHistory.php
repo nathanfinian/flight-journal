@@ -24,6 +24,7 @@ class FlightHistory extends Component
     public ?string $selectedBranch = '';
     public ?string $airlineName = '';
     public ?string $selectedAirline = '';
+    public ?string $flightNo = '';
 
     public function mount()
     {
@@ -47,6 +48,11 @@ class FlightHistory extends Component
     }
 
     public function updatedSelectedAirline($value)
+    {
+        $this->loadActualFlights();
+    }
+
+    public function updatedFlightNo($value)
     {
         $this->loadActualFlights();
     }
@@ -86,6 +92,12 @@ class FlightHistory extends Component
                     $r->where('airline_id', $this->selectedAirline)
                 )
             )
+            ->when($this->flightNo, function ($q) {
+                $q->where(function ($sub) {
+                    $sub->where('origin_flight_no', 'like', '%' . $this->flightNo . '%')
+                        ->orWhere('departure_flight_no', 'like', '%' . $this->flightNo . '%');
+                });
+            })
             // dates
             ->when(
                 $from && $to,

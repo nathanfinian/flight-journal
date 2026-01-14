@@ -17,6 +17,7 @@ class FlightExportController extends Controller
 
     public function export(Request $request)
     {
+        //Get dates and names for display
         $this->dateFrom = $request->dateFrom;
         $this->dateTo = $request->dateTo;
         $this->branch = $request->branchName;
@@ -27,7 +28,8 @@ class FlightExportController extends Controller
                 $request->dateFrom,
                 $request->dateTo,
                 $request->branch,
-                $request->airline
+                $request->airline,
+                $request->flightNo,
             ),
             $this->branch . ' ' . $this->dateFrom . ' sampai ' . $this->dateTo . $this->airline . ' Flights.xlsx'
         );
@@ -35,6 +37,7 @@ class FlightExportController extends Controller
 
     public function exportPdf(Request $request)
     {
+        //Get dates and names for display
         $this->dateFrom = $request->dateFrom;
         $this->dateTo = $request->dateTo;
         $this->branch = $request->branchName;
@@ -45,7 +48,8 @@ class FlightExportController extends Controller
                 $request->dateFrom,
                 $request->dateTo,
                 $request->branch,
-                $request->airline
+                $request->airline,
+                $request->flightNo,
             ),
             $this->branch . ' ' . $this->dateFrom . ' sampai ' . $this->dateTo . ' ' . $this->airline . ' Flights.pdf',
              \Maatwebsite\Excel\Excel::MPDF);
@@ -53,11 +57,15 @@ class FlightExportController extends Controller
 
     public function print(Request $request)
     {
+        //Get variables for data query
         $dateFrom = $request->dateFrom;
         $dateTo = $request->dateTo;
 
         $branch = $request->branch;
         $airline = $request->airline;
+        $flightNo = $request->flightNo;
+
+        //Prepare string for display
         $airlineName = $request->airlineName
             ? ' - ' . $request->airlineName
             : '';
@@ -65,7 +73,7 @@ class FlightExportController extends Controller
             ? 'Cabang ' . $request->branchName
             : '';
 
-        $data = $this->getFlights($branch, $airline, $dateFrom, $dateTo);
+        $data = $this->getFlights($branch, $airline, $dateFrom, $dateTo, $flightNo);
 
         $dateFrom = $this->readableDate($dateFrom);
         $dateTo = $this->readableDate($dateTo);
@@ -95,7 +103,7 @@ class FlightExportController extends Controller
         return $value ? ' ' . $value : '';
     }
 
-    private function getFlights($branch, $airline, $from, $to)
+    private function getFlights($branch, $airline, $from, $to, $flightNo)
     {
         return Flight::query()
             ->with([
@@ -118,6 +126,12 @@ class FlightExportController extends Controller
                 $q->whereHas(
                     'originAirlineRoute',
                     fn($r) => $r->where('airline_id', $airline)
+                )
+            )
+            //Filter based on Flight Number
+            ->when($flightNo, fn($q) => $q->where(fn($sub) => $sub
+                    ->where('origin_flight_no', 'like', "%{$flightNo}%")
+                    ->orWhere('departure_flight_no', 'like', "%{$flightNo}%")
                 )
             )
 

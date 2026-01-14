@@ -14,6 +14,7 @@
                     'branch' => $selectedBranch,
                     'branchName' => $branchName,
                     'airline' => $selectedAirline,
+                    'flightNo' => $flightNo,
                     'airlineName' => $airlineName,
                 ]) }}', '_blank')"
             >
@@ -28,6 +29,7 @@
                     'branch' => $selectedBranch,
                     'branchName' => $branchName,
                     'airline' => $selectedAirline,
+                    'flightNo' => $flightNo,
                     'airlineName' => $airlineName,
                 ]) }}', '_blank')"
             >
@@ -47,7 +49,7 @@
 
     {{-- 🔼 End filters --}}
     <div class="flex flex-wrap items-center gap-4 justify-between">
-        {{-- Left group: existing filters --}}
+        {{-- Left group: filters --}}
         <div class="flex flex-wrap items-center gap-4">
             <x-ui.label>Cabang</x-ui.label>
             <x-ui.select
@@ -72,6 +74,14 @@
                     <x-ui.select.option value="{{ $airline->id }}">{{ $airline->name }}</x-ui.select.option>
                 @endforeach
             </x-ui.select>
+            <x-ui.label>Flight No</x-ui.label>
+            <div class="w-40">
+                <x-ui.input
+                    wire:model.live.debounce.400ms="flightNo"
+                    maxlength="10"
+                    placeholder="Flight No"
+                />
+            </div>
         </div>
 
         {{-- Right group: date range --}}

@@ -12,13 +12,15 @@ class FlightsExport implements FromView
     private ?string $to   = '';
     private ?string $branch   = '';
     private ?string $airline   = '';
+    private ?string $flightNo   = '';
 
-    public function __construct($from, $to, $branch, $airline)
+    public function __construct($from, $to, $branch, $airline, $flightNo)
     {
         $this->from = $from;
         $this->to = $to;
         $this->branch = $branch;
         $this->airline = $airline;
+        $this->flightNo = $flightNo;
     }
 
     public function view(): View
@@ -46,6 +48,12 @@ class FlightsExport implements FromView
                     fn($r) => $r->where('airline_id', $this->airline)
                 )
             )
+            ->when($this->flightNo, function ($q) {
+                $q->where(function ($sub) {
+                    $sub->where('origin_flight_no', 'like', '%' . $this->flightNo . '%')
+                        ->orWhere('departure_flight_no', 'like', '%' . $this->flightNo . '%');
+                });
+            })
             // --- DATE FILTERS (exactly like Livewire) ---
             ->when(
                 $from && $to,
