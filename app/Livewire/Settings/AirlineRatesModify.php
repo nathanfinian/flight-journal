@@ -3,13 +3,18 @@
 namespace App\Livewire\Settings;
 
 use App\Models\Airline;
-use App\Models\AirlineRate;
 use Livewire\Component;
+use App\Models\FlightType;
+use App\Models\AirlineRate;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\QueryException;
 
 class AirlineRatesModify extends Component
 {
     public $airlines;
+    public $flightTypes;
+
+    public array $percentages = [];
 
     public ?string $airline_id = '';
     
@@ -28,6 +33,17 @@ class AirlineRatesModify extends Component
             ->orderBy('name')     // or ->orderBy('name')
             ->get(['id', 'name', 'icao_code']);
 
+        $this->flightTypes = FlightType::query()
+            ->orderBy('id')     // or ->orderBy('name')
+            ->get(['id', 'name']);
+
+        foreach ($this->flightTypes as $type) {
+            $this->percentages[$type->id] = [
+                'flight_type_id' => $type->id,
+                'percentage' => null,
+            ];
+        }
+
         if ($airlineRate) {
             $this->airlineRateId   = $airlineRate->getKey();
             $this->airline_id      = $airlineRate->airline_id;
@@ -35,6 +51,13 @@ class AirlineRatesModify extends Component
             $this->charge_code     = (string) $airlineRate->charge_code;
             $this->ground_fee      = $this->toMoneyFormat($airlineRate->ground_fee);
             $this->cargo_fee       = $this->toMoneyFormat($airlineRate->cargo_fee);
+
+            foreach ($airlineRate->flightTypes as $type) {
+                $this->percentages[$type->id] = [
+                    'flight_type_id' => $type->id,
+                    'percentage' => number_format($type->pivot->percentage),
+                ];
+            }
         }else{
             session()->flash(
                 'notify',
@@ -54,27 +77,43 @@ class AirlineRatesModify extends Component
             'charge_code'   => ['required', 'string', 'max:15'],
             'ground_fee'    => ['required','regex:/^\d{1,3}(\.\d{3})*(,\d{1,2})?$|^\d+(,\d{1,2})?$/'],
             'cargo_fee'     => ['nullable','regex:/^\d{1,3}(\.\d{3})*(,\d{1,2})?$|^\d+(,\d{1,2})?$/'], //Change money input rules
+            'percentages.*.percentage' => 'nullable|numeric|min:0|max:100',
         ];
     }
-
     public function saveChanges()
     {
         $payload = $this->validate();
 
         $payload['ground_fee'] = $this->toDecimal($this->ground_fee);
-        $payload['cargo_fee']  = $this->cargo_fee ? $this->toDecimal($this->cargo_fee) : null;
+        $payload['cargo_fee']  = $this->cargo_fee
+            ? $this->toDecimal($this->cargo_fee)
+            : null;
 
+        // Save airline rate
         $airlineRate = AirlineRate::updateOrCreate(
             ['id' => $this->airlineRateId],
             $payload
         );
 
+        // 🔥 SAVE PERCENTAGES TO PIVOT TABLE
+        $syncData = [];
+
+        foreach ($this->percentages as $row) {
+            if ($row['percentage'] !== null) {
+                $syncData[$row['flight_type_id']] = [
+                    'percentage' => $row['percentage'],
+                    'created_by' => Auth::id(),
+                    'updated_at' => now(),
+                ];
+            }
+        }
+
+        $airlineRate->flightTypes()->sync($syncData);
+
         session()->flash('notify', [
             'content' => 'Rate airline berhasil disimpan!',
             'type' => 'success'
         ]);
-
-        $this->airlineRateId = $airlineRate->id;
 
         return $this->redirectRoute('settings.airlineRates', navigate: true);
     }

@@ -90,7 +90,47 @@
                         </x-ui.field>
                     </div>
                 </div>
+                @foreach ($flightTypes as $type)
+                <div class="grid grid-cols-12 gap-6">
+                    <div class="col-span-6">
+                    <x-ui.field>
+                        <x-ui.label>{{ $type->name }}</x-ui.label>
 
+                        {{-- hidden flight type id --}}
+                        <input 
+                            type="hidden"
+                            wire:model="percentages.{{ $type->id }}.flight_type_id"
+                            value="{{ $type->id }}"
+                        />
+
+                        {{-- percentage input --}}
+                        <x-ui.input
+                            wire:model.defer="percentages.{{ $type->id }}.percentage"
+                            placeholder="0"
+                            inputmode="decimal"
+                        >
+                            <x-slot name="suffix">%</x-slot>
+                        </x-ui.input>
+
+                        <x-ui.error name="percentages.{{ $type->id }}.percentage" />
+                    </x-ui.field>
+
+                    </div>
+                    <div class="col-span-6">
+                       @if ($loop->first)
+                            <x-ui.card size="xl" class="mx-auto">
+                                <x-ui.text class="font-semibold">
+                                    Deskripsi
+                                </x-ui.text>
+                                <x-ui.text class="opacity-50">
+                                    Input persentase untuk tipe-tipe flight yang terdaftar
+                                </x-ui.text>
+                            </x-ui.card>
+                       @endif
+                    </div>
+                </div>
+                @endforeach
+                
                 <div class="flex items-center justify-between mt-6">
                     <x-ui.button type="submit">Save changes</x-ui.button>
                     @if ($this->isEdit)

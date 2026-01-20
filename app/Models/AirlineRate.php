@@ -46,6 +46,13 @@ class AirlineRate extends Model
         return $this->hasMany(Invoice::class, 'airline_rates_id');
     }
 
+    public function flightTypes()
+    {
+        return $this->belongsToMany(FlightType::class,'airline_rate_flight_type')
+            ->withPivot(['percentage'])
+            ->withTimestamps();
+    }
+
     public function getRouteKeyName()
     {
         return 'id'; //Assuming you are using 'id' as a unique field
