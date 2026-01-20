@@ -49,6 +49,10 @@
         {{-- without this it cause flicker when multiple components changes in isolation in the  page --}}
         <script>
             loadDarkMode()
+
+            window.addEventListener('open-invoice-print', event => {
+                window.open(event.detail.url, '_blank');
+            });
         </script>
         <x-ui.toast :maxToasts="1" />
     </body>
