@@ -95,6 +95,7 @@
                     <div class="col-span-6">
                     <x-ui.field>
                         <x-ui.label>{{ $type->name }}</x-ui.label>
+                        <x-ui.description>(Persentase dikalikan dengan ground handling fee)</x-ui.description>
 
                         {{-- hidden flight type id --}}
                         <input 
@@ -117,16 +118,19 @@
 
                     </div>
                     <div class="col-span-6">
-                       @if ($loop->first)
-                            <x-ui.card size="xl" class="mx-auto">
-                                <x-ui.text class="font-semibold">
-                                    Deskripsi
-                                </x-ui.text>
-                                <x-ui.text class="opacity-50">
-                                    Input persentase untuk tipe-tipe flight yang terdaftar
-                                </x-ui.text>
-                            </x-ui.card>
-                       @endif
+                        <x-ui.label>&nbsp;</x-ui.label>
+                        <div class="flex justify-start">
+                            <x-ui.button 
+                                size="sm"
+                                variant="outline"
+                                icon="ps:trash-simple"
+                                wire:click="deletePivot({{ $type->id }})"
+                                class="mt-9"
+                            >
+                            </x-ui.button>
+                            <x-ui.text class="opacity-50 mt-10 ml-3">(Kosongkan atau click untuk menghapus)</x-ui.text>
+                        </div>
+                        
                     </div>
                 </div>
                 @endforeach

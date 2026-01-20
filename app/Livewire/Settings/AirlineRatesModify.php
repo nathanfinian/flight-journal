@@ -99,13 +99,15 @@ class AirlineRatesModify extends Component
         $syncData = [];
 
         foreach ($this->percentages as $row) {
-            if ($row['percentage'] !== null) {
-                $syncData[$row['flight_type_id']] = [
-                    'percentage' => $row['percentage'],
-                    'created_by' => Auth::id(),
-                    'updated_at' => now(),
-                ];
+            if ($row['percentage'] === null || $row['percentage'] === '') {
+                continue;
             }
+
+            $syncData[$row['flight_type_id']] = [
+                'percentage' => (float) $row['percentage'],
+                'created_by' => Auth::id(),
+                'updated_at' => now(),
+            ];
         }
 
         $airlineRate->flightTypes()->sync($syncData);
@@ -150,6 +152,11 @@ class AirlineRatesModify extends Component
             // Re-throw unexpected errors for visibility in logs
             throw $e;
         }
+    }
+
+    public function deletePivot(int $flightTypeId)
+    {
+        unset($this->percentages[$flightTypeId]);
     }
 
     private function toDecimal($value)
