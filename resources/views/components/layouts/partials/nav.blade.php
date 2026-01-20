@@ -46,6 +46,14 @@
                     />
                     <x-ui.navbar.item 
                         wire:navigate.hover
+                        icon="ps:newspaper"
+                        icon:class="w-5 h-5" 
+                        label="Invoice" 
+                        :href="route('invoice')"
+                        :active="request()->is('invoice*')"
+                    />
+                    <x-ui.navbar.item 
+                        wire:navigate.hover
                         icon="cog-6-tooth" 
                         icon:class="w-5 h-5"
                         label="Settings" 
