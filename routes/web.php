@@ -9,6 +9,7 @@ use App\Livewire\Auth\Login;
 use App\Livewire\Admin\Users;
 use App\Livewire\FlightHistory;
 use App\Livewire\FlightJournal;
+use App\Livewire\Invoice\Index;
 use App\Livewire\FlightSchedule;
 use App\Livewire\Settings\Branch;
 use App\Livewire\Admin\RoleModify;
@@ -23,6 +24,7 @@ use App\Livewire\FlightJournalModify;
 use App\Livewire\Settings\FlightType;
 use Illuminate\Support\Facades\Route;
 use App\Livewire\FlightScheduleModify;
+use App\Livewire\Invoice\PrintInvoice;
 use App\Livewire\Settings\AirlineRates;
 use App\Livewire\Settings\AirportRoute;
 use App\Livewire\Settings\BranchModify;
@@ -35,6 +37,7 @@ use App\Livewire\Settings\AirlineRatesModify;
 use App\Livewire\Settings\AirportRouteModify;
 use App\Livewire\Invoice\Create as CreateInvoice;
 use App\Http\Controllers\Export\FlightExportController;
+use App\Http\Controllers\InvoiceController;
 
 Route::get('/', Login::class)->name('login');
 // Route::get('/', Livewire\Home::class)->name('home');
@@ -45,7 +48,19 @@ Route::get('/', Login::class)->name('login');
 Route::middleware('auth')->group(function () {
     Route::get('/dashboard', Dashboard::class)->name('dashboard');
 
+    //Invoice Create, called from history and invoice list page
     Route::get('/invoice', CreateInvoice::class)->name('invoice.create');
+
+    Route::get('/invoice/print/{invoice}', [InvoiceController::class, 'print'])
+        ->name('invoice.print');
+        
+    //Invoice List page
+    Route::get('/invoice', Index::class)->name('invoice');
+    Route::get('/invoice/create', CreateInvoice::class)
+        ->name('invoice.create');
+    Route::get('/invoice/{id:id}/edit', CreateInvoice::class)
+        ->whereNumber('id') // optional safety
+        ->name('invoice.edit');  // <-- {airline} matches the type-hint
 
     //Flight Journal Scheduled, create and edit from scheduled to actual
     Route::get('/flight-journal', FlightJournal::class)->name('flight-journal');
@@ -54,7 +69,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/flight-journal/{id:id}/edit', FlightJournalModify::class)
         ->whereNumber('id') // optional safety
         ->name('flight-journal.edit');  // <-- {airline} matches the type-hint
-
+    
     //Flight Journal Actual and its modify page
     Route::get('/flight-journal/actual', FlightJournalActual::class)
         ->name('flight-journal.actual');
