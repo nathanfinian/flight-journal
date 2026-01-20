@@ -21,6 +21,7 @@ class Create extends Component
 
     public $branches;
     public $airlines;
+    public $flightTypesPercent;
     public $rates;
 
     /* =======================
@@ -79,6 +80,8 @@ class Create extends Component
             'type'    => 'success',
         ]);
 
+        $this->dispatch('open-invoice-print', url: route('invoice.print', $invoice));
+
         return $this->redirectRoute('flight-history', navigate: true);
     }
 
@@ -93,6 +96,17 @@ class Create extends Component
         }
 
         $rate = AirlineRate::find($value);
+
+        $counter = 0;
+
+        foreach ($rate->flightTypes as $type) {
+            $this->flightTypesPercent[$counter] = [
+                'flight_type_id' => $type->id,
+                'typeName' => $type->name,
+                'percentage' => number_format($type->pivot->percentage),
+            ];
+            $counter++;
+        }
 
         $this->ground_fee = number_format($rate->ground_fee); // Ground handling fee
         $this->cargo_fee  = number_format($rate->cargo_fee);  // Cargo handling fee

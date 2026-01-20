@@ -6,7 +6,7 @@
         <x-ui.separator class="my-2"/>
      
         <x-ui.breadcrumbs>
-            <x-ui.breadcrumbs.item wire:navigate.hover :href="route('flight-history')">Flight History</x-ui.breadcrumbs.item>
+            <x-ui.breadcrumbs.item wire:navigate.hover :href="route('invoice')">List Invoice</x-ui.breadcrumbs.item>
             <x-ui.breadcrumbs.item>Invoice</x-ui.breadcrumbs.item>
         </x-ui.breadcrumbs>
 
@@ -106,7 +106,6 @@
                         </x-ui.field>
                     </div>
                     <div class="col-span-6">
-                        <div class="col-span-6">
                         <x-ui.field>
                             <x-ui.label>Cargo Fee</x-ui.label>
                             <x-ui.input 
@@ -117,8 +116,28 @@
                             </x-ui.input>
                         </x-ui.field>
                     </div>
-                    </div>
                 </div>
+                @if ($flightTypesPercent)
+                @foreach ($flightTypesPercent as $type)
+                    <div class="grid grid-cols-12 gap-6">
+                        <div class="col-span-6">
+                            <x-ui.field>
+                                <x-ui.label>{{ $type['typeName'] }}</x-ui.label>
+                                <x-ui.input 
+                                    disabled
+                                    :value="$type['percentage']"
+                                    >
+                                    <x-slot name="suffix">%</x-slot>
+                                </x-ui.input>
+                            </x-ui.field>
+                        </div>
+                        <div class="col-span-6">
+                            <x-ui.label>&nbsp;</x-ui.label>
+                            <x-ui.text class="opacity-50 mt-4">(Persentase Tarif dari ground handling fee)</x-ui.text>
+                        </div>
+                    </div>
+                @endforeach
+                @endif
                 <div class="grid grid-cols-12 gap-6">
                     <div class="col-span-6">
                         <x-ui.field>
