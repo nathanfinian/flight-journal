@@ -38,8 +38,8 @@ class Invoice extends Model
      */
     protected $casts = [
         'date'       => 'date',
-        'dateFrom'  => 'date',
-        'dateTo'    => 'date',
+        'dateFrom'   => 'date',
+        'dateTo'     => 'date',
         'due_date'   => 'date',
         'total_amount' => 'decimal:0',
     ];
@@ -72,7 +72,7 @@ class Invoice extends Model
 
     public function rate(): BelongsTo
     {
-        return $this->belongsTo(AirlineRate::class, 'rate_id');
+        return $this->belongsTo(AirlineRate::class, 'airline_rates_id');
     }
 
     public function airline(): BelongsTo
