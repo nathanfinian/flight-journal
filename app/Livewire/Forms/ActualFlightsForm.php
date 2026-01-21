@@ -138,6 +138,14 @@ class ActualFlightsForm extends Form
         }
     }
 
+    # --------------------------------------------------------
+    # TRIM AND TO UPPERCASE Flight Number
+    # --------------------------------------------------------
+    public function normalizeFlightNumber(string $value): string
+    {
+        return strtoupper(trim($value));
+    }
+
     private function validateEquipmentMatch()
     {
         if (!$this->origin_equipment) return;
@@ -185,6 +193,14 @@ class ActualFlightsForm extends Form
         $this->checkTimeFormat($this->sched_arr);
         $this->checkTimeFormat($this->actual_departure);
         $this->checkTimeFormat($this->actual_arrival);
+
+        //Normalize Flight Numbers, trim and uppercase
+        $this->origin_flight_number = $this->normalizeFlightNumber(
+            $this->origin_flight_number
+        );
+        $this->departure_flight_number = $this->normalizeFlightNumber(
+            $this->departure_flight_number
+        );
 
         // 1) Validate property-level rules
         $this->validate();
