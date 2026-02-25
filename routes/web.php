@@ -4,12 +4,12 @@ use App\Livewire\Admin;
 use App\Livewire\Settings;
 use App\Livewire\Dashboard;
 use App\Actions\Auth\Logout;
+use App\Http\Controllers\CharterDepositController;
 use App\Livewire\Admin\Role;
 use App\Livewire\Auth\Login;
 use App\Livewire\Admin\Users;
 use App\Livewire\FlightHistory;
 use App\Livewire\FlightJournal;
-use App\Livewire\Invoice\Index;
 use App\Livewire\FlightSchedule;
 use App\Livewire\Settings\Branch;
 use App\Livewire\Admin\RoleModify;
@@ -24,7 +24,6 @@ use App\Livewire\FlightJournalModify;
 use App\Livewire\Settings\FlightType;
 use Illuminate\Support\Facades\Route;
 use App\Livewire\FlightScheduleModify;
-use App\Livewire\Invoice\PrintInvoice;
 use App\Livewire\Settings\AirlineRates;
 use App\Livewire\Settings\AirportRoute;
 use App\Livewire\Settings\BranchModify;
@@ -35,7 +34,14 @@ use App\Livewire\Settings\EquipmentModify;
 use App\Livewire\Settings\FlightTypeModify;
 use App\Livewire\Settings\AirlineRatesModify;
 use App\Livewire\Settings\AirportRouteModify;
+
+use App\Livewire\Invoice\Index as IndexInvoice;
 use App\Livewire\Invoice\Create as CreateInvoice;
+// use App\Livewire\Invoice\PrintInvoice;
+
+use App\Livewire\Deposit\Index as IndexDeposit;
+use App\Livewire\Deposit\Create as CreateDeposit;
+
 use App\Http\Controllers\Export\FlightExportController;
 use App\Http\Controllers\InvoiceController;
 
@@ -46,35 +52,55 @@ Route::get('/', Login::class)->name('login');
 // Route::get('/login', Login::class)->name('login');
 
 Route::middleware('auth')->group(function () {
+
+    /* =======================
+     | Dashboard
+     ======================= */
     Route::get('/dashboard', Dashboard::class)->name('dashboard');
 
-    //Invoice Create, called from history and invoice list page
-    Route::get('/invoice', CreateInvoice::class)->name('invoice.create');
-
-    Route::get('/invoice/print/{invoice}', [InvoiceController::class, 'print'])
-        ->name('invoice.print');
-        
-    //Invoice List page
-    Route::get('/invoice', Index::class)->name('invoice');
+    /* =======================
+     | Invoice - Regular Data page
+     ======================= */
+    Route::get('/invoice', IndexInvoice::class)->name('invoice');
     Route::get('/invoice/create', CreateInvoice::class)
         ->name('invoice.create');
     Route::get('/invoice/{id:id}/edit', CreateInvoice::class)
         ->whereNumber('id') // optional safety
         ->name('invoice.edit');  // <-- {airline} matches the type-hint
+    Route::get('/invoice/print/{invoice}', [InvoiceController::class, 'print'])
+        ->name('invoice.print');
 
-    //Flight Journal Scheduled, create and edit from scheduled to actual
+    /* =======================
+     | Invoice - Talangan Data page
+     ======================= */
+    Route::get('/invoice/deposit', IndexDeposit::class)->name('deposit');
+    Route::get('/invoice/deposit/create', CreateDeposit::class)
+        ->name('deposit.create');
+    Route::get('/invoice/deposit/{id:id}/edit', CreateDeposit::class)
+        ->whereNumber('id') // optional safety
+        ->name('deposit.edit');  // <-- {airline} matches the type-hint
+    Route::get('/deposit/print/{deposit}', [CharterDepositController::class, 'print'])
+        ->name('deposit.print');
+
+    /* =======================
+     | Flight Journal Scheduled, create and edit from scheduled to actual
+     ======================= */
     Route::get('/flight-journal', FlightJournal::class)->name('flight-journal');
     Route::get('/flight-journal/create', FlightJournalModify::class)
         ->name('flight-journal.create');
     Route::get('/flight-journal/{id:id}/edit', FlightJournalModify::class)
         ->whereNumber('id') // optional safety
         ->name('flight-journal.edit');  // <-- {airline} matches the type-hint
-    
-    //Flight Journal Actual and its modify page
+
+    /* =======================
+     | Flight Journal Actual (CRUD)
+     ======================= */
     Route::get('/flight-journal/actual', FlightJournalActual::class)
         ->name('flight-journal.actual');
 
-    //Flight scheduling pages CRUD
+    /* =======================
+     | Flight Scheduling (CRUD)
+     ======================= */
     Route::get('/flight-schedule', FlightSchedule::class)->name('flight-schedule');
     Route::get('/flight-schedule/create', FlightScheduleModify::class)
         ->name('flight-schedule.create');
@@ -82,17 +108,23 @@ Route::middleware('auth')->group(function () {
         ->whereNumber('scheduled') // optional safety
         ->name('flight-schedule.edit');  // <-- {airline} matches the type-hint
 
-    //Flight History Exports
+    /* =======================
+     | Flight History Exports
+     ======================= */
     Route::get('/flight-history', FlightHistory::class)->name('flight-history');
     Route::get('/exportfh', [FlightExportController::class, 'export'])->name('export-flight-history');
     Route::get('/exportfhpdf', [FlightExportController::class, 'exportPdf'])->name('export-flight-pdf');
     Route::get('/printfh', [FlightExportController::class, 'print'])->name('export-flight-print');
 
-    //Settings pages start
+    /* =======================
+     | Settings Pages
+     ======================= */
     Route::get('/settings', Settings::class)->name('settings.index');
     Route::get('/settings/account', Account::class)->name('settings.account');
-    
-    //Airlines
+
+    /* =======================
+     | Settings Pages - Airlines
+     ======================= */
     Route::get('/settings/airline', Airline::class)->name('settings.airline');
     Route::get('/settings/airline/create', AirlineModify::class)
         ->name('settings.airline.create');
@@ -100,7 +132,9 @@ Route::middleware('auth')->group(function () {
         ->whereNumber('airline') // optional safety
         ->name('settings.airline.edit');  // <-- {airline} matches the type-hint
 
-    //Airlines
+    /* =======================
+     | Settings Pages - Airline Rates
+     ======================= */
     Route::get('/settings/airlineRates', AirlineRates::class)->name('settings.airlineRates');
     Route::get('/settings/airlineRates/create', AirlineRatesModify::class)
         ->name('settings.airlineRates.create');
@@ -108,7 +142,9 @@ Route::middleware('auth')->group(function () {
         ->whereNumber('airlineRates') // optional safety
         ->name('settings.airlineRates.edit');  // <-- {airline} matches the type-hint
 
-    //Flight Type
+    /* =======================
+     | Settings Pages - Flight Type
+     ======================= */
     Route::get('/settings/flight-type', FlightType::class)->name('settings.flight-type');
     Route::get('/settings/flight-type/create', FlightTypeModify::class)
         ->name('settings.flight-type.create');
@@ -116,7 +152,9 @@ Route::middleware('auth')->group(function () {
         ->whereNumber('typeId') // optional safety
         ->name('settings.flight-type.edit');  // <-- {airline} matches the type-hint
 
-    //Aircraft Settings
+    /* =======================
+     | Settings Pages - Aircraft
+     ======================= */
     Route::get('/settings/aircraft', Aircraft::class)->name('settings.aircraft');
     Route::get('/settings/aircraft/create', AircraftModify::class)
         ->name('settings.aircraft.create');
@@ -124,7 +162,9 @@ Route::middleware('auth')->group(function () {
         ->whereNumber('aircraft') // optional safety
         ->name('settings.aircraft.edit');  // <-- {aircraft} matches the type-hint
 
-    //Equipments
+    /* =======================
+     | Settings Pages - Equipment
+     ======================= */
     Route::get('/settings/equipment', Equipment::class)->name('settings.equipment');
     Route::get('/settings/equipment/create', EquipmentModify::class)
         ->name('settings.equipment.create');
@@ -132,6 +172,9 @@ Route::middleware('auth')->group(function () {
         ->whereNumber('equipment') // optional safety
         ->name('settings.equipment.edit');  // <-- {equipment} matches the type-hint
 
+    /* =======================
+     | Settings Pages - Airport List
+     ======================= */
     Route::get('/settings/airport', Airport::class)->name('settings.airport');
     Route::get('/settings/airport/create', AirportModify::class)
         ->name('settings.airport.create');
@@ -139,6 +182,9 @@ Route::middleware('auth')->group(function () {
         ->whereNumber('airport') // optional safety
         ->name('settings.airport.edit');  // <-- {airport} matches the type-hint
 
+    /* =======================
+     | Settings Pages - Flight Routes
+     ======================= */
     Route::get('/settings/airport-route', AirportRoute::class)->name('settings.airport-route');
     Route::get('/settings/airport-route/create', AirportRouteModify::class)
         ->name('settings.airport-route.create');
@@ -146,13 +192,18 @@ Route::middleware('auth')->group(function () {
         ->whereNumber('route') // optional safety
         ->name('settings.airport-route.edit');  // <-- {airport-route} matches the type-hint
 
+    /* =======================
+     | Settings Pages - MCA Branches
+     ======================= */
     Route::get('/settings/branch', Branch::class)->name('settings.branch');
     Route::get('/settings/branch/create', BranchModify::class)
         ->name('settings.branch.create');
     Route::get('/settings/branch/{branch}/edit', BranchModify::class)
         ->whereNumber('branch') // optional safety
         ->name('settings.branch.edit');  // <-- {branch} matches the type-hint
-    //Settings pages end
+    /* =======================
+     | Settings Pages End
+     ======================= */
 });
 
 Route::middleware(['auth'])->group(function () {
