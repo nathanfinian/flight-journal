@@ -86,9 +86,11 @@
                         <x-slot:menu>
                             <x-ui.dropdown.group label="Sistem Invoice">
                                 <x-ui.dropdown.separator />
+                                @role('admin', 'finance')
                                 <x-ui.dropdown.item icon="ps:newspaper" :href="route('invoice')">
                                     Regular Invoice
                                 </x-ui.dropdown.item>
+                                @endrole
                                 
                                 <x-ui.dropdown.item icon="document-plus" :href="route('deposit')">
                                     Deposit/Talangan
