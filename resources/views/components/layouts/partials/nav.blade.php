@@ -20,7 +20,7 @@
                         :href="route('dashboard')" 
                         :active="request()->is('dashboard')"
                     />
-                    <x-ui.navbar.item 
+                    {{-- <x-ui.navbar.item 
                         wire:navigate.hover
                         icon="ps:notepad"
                         icon:class="w-5 h-5" 
@@ -43,7 +43,35 @@
                         label="History" 
                         :href="route('flight-history')"
                         :active="request()->is('flight-history*')"
-                    />
+                    /> --}}
+                    <x-ui.dropdown position="bottom-start">
+                        <x-slot:button>
+                            <x-ui.navbar.item 
+                                wire:navigate.hover
+                                icon="globe-asia-australia"
+                                icon:class="w-5 h-5" 
+                                label="Flights" 
+                                :active="request()->is('flight-journal*')"
+                            />
+                        </x-slot:button>
+                        
+                        <x-slot:menu>
+                            <x-ui.dropdown.group label="Data Penerbangan">
+                                <x-ui.dropdown.separator />
+                                <x-ui.dropdown.item icon="ps:notepad" :href="route('flight-journal')">
+                                    Jurnal
+                                </x-ui.dropdown.item>
+                                
+                                <x-ui.dropdown.item icon="ps:calendar-dots" :href="route('flight-schedule')">
+                                    Penjadwalan
+                                </x-ui.dropdown.item>
+
+                                <x-ui.dropdown.item icon="document-text" :href="route('flight-history')">
+                                    Sejarah
+                                </x-ui.dropdown.item>
+                            </x-ui.dropdown.group>
+                        </x-slot:menu>
+                    </x-ui.dropdown>
                     <x-ui.dropdown position="bottom-start">
                         <x-slot:button>
                             <x-ui.navbar.item 
@@ -66,8 +94,12 @@
                                     Deposit/Talangan
                                 </x-ui.dropdown.item>
 
-                                <x-ui.dropdown.item icon="document" :href="route('invoice')">
+                                <x-ui.dropdown.item disabled icon="document" :href="route('invoice')">
                                     Charter Invoice
+                                </x-ui.dropdown.item>
+
+                                <x-ui.dropdown.item disabled icon="document" :href="route('invoice')">
+                                    GSE Invoice
                                 </x-ui.dropdown.item>
                             </x-ui.dropdown.group>
                         </x-slot:menu>
