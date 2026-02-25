@@ -2,13 +2,13 @@
 
 namespace App\Livewire\Invoice;
 
-use App\Traits\GeneratesInvoiceNumber;
-
-use Livewire\Component;
-use App\Models\Branch;
+use App\Livewire\Forms\InvoiceForm;
 use App\Models\Airline;
 use App\Models\AirlineRate;
-use App\Livewire\Forms\InvoiceForm;
+use App\Models\Branch;
+use App\Models\Invoice;
+use App\Traits\GeneratesInvoiceNumber;
+use Livewire\Component;
 
 class Create extends Component
 {
@@ -19,21 +19,26 @@ class Create extends Component
     public $ground_fee;
     public $cargo_fee;
 
+    public $invoice;
+
     public $branches;
     public $airlines;
     public $flightTypesPercent;
     public $rates;
 
+    public bool $isEdit = false;
+
     /* =======================
      | Lifecycle
      ======================= */
-    public function mount(): void
+    public function mount(?int $id = null)
     {
         if (session()->has('invoice')) {
             $this->form->branch_id  = session('invoice.branch', 1);
             $this->form->dateFrom   = session('invoice.from');
             $this->form->dateTo     = session('invoice.to');
 
+            //Use trait to automatically generate invoice number
             if (empty($this->form->invoice_number) && $this->form->branch_id != null) {
                 $this->form->invoice_number = $this->generateInvoiceNumber((int) $this->form->branch_id);
             }
@@ -42,6 +47,7 @@ class Create extends Component
             session()->forget('invoice');
         }
 
+        //Form Setup
         $this->form->date = now()->format('Y-m-d');
 
         $this->branches = Branch::query()
@@ -57,7 +63,20 @@ class Create extends Component
         $this->rates = AirlineRate::query()
             ->orderBy('charge_name')
             ->get();
-        //Make helper to automatically generate invoice number
+
+        //Check for Edit Mode or not
+        if ($id == null) {
+            $this->form->date = now()->format('Y-m-d');
+
+            return; // go to create, when no data retrieved
+        } else {
+            $this->isEdit = true;
+            $this->invoice = Invoice::findOrFail($id);
+
+            $this->form->setInvoice($this->invoice);
+
+            $this->updatedFormAirlineRatesId($this->invoice->airline_rates_id);
+        }
     }
 
     /* =======================
@@ -73,16 +92,33 @@ class Create extends Component
      ======================= */
     public function saveChanges()
     {
-        $invoice = $this->form->store()->invoice_number;
+        if ($this->form->record) {
+            $invoice = $this->form->update()->invoice_number;
+        } else {
+            $invoice = $this->form->store()->invoice_number;
+        }
 
         session()->flash('notify', [
             'content' => $invoice . ' berhasil disave',
             'type'    => 'success',
         ]);
 
-        $this->dispatch('open-invoice-print', url: route('invoice.print', $invoice));
+        return $this->redirectRoute('invoice', navigate: true);
+    }
 
-        return $this->redirectRoute('flight-history', navigate: true);
+    /* =======================
+     | Delete
+     ======================= */
+    public function delete()
+    {
+        $this->form->delete();
+
+        session()->flash('notify', [
+            'content' => 'Invoice berhasil dihapus!',
+            'type' => 'success',
+        ]);
+
+        return $this->redirectRoute('invoice');
     }
 
     /* =======================
@@ -108,15 +144,17 @@ class Create extends Component
             $counter++;
         }
 
-        $this->ground_fee = number_format($rate->ground_fee); // Ground handling fee
-        $this->cargo_fee  = number_format($rate->cargo_fee);  // Cargo handling fee
-
+        $this->ground_fee = number_format($rate->ground_fee); //Ground handling fee
+        $this->cargo_fee  = number_format($rate->cargo_fee);  //Cargo handling fee
 
         if ($rate) {
             $this->form->airline_id = (string) $rate->airline_id;
         }
     }
 
+    /* =======================
+     | Recall Trait on Branch Change
+     ======================= */
     public function updatedFormBranchId($value): void
     {
         $this->form->invoice_number = $this->generateInvoiceNumber((int) $this->form->branch_id);
