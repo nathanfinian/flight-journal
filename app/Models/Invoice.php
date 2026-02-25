@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -112,6 +113,42 @@ class Invoice extends Model
     {
         return Attribute::make(
             get: fn() => $this->dateTo?->format('d F Y')
+        );
+    }
+
+    protected function flightRange(): Attribute
+    {
+        return Attribute::make(
+            get: function () {
+
+                if (! $this->dateFrom || ! $this->dateTo) {
+                    return null;
+                }
+
+                $from = Carbon::parse($this->dateFrom);
+                $to   = Carbon::parse($this->dateTo);
+
+                // Same day
+                if ($from->isSameDay($to)) {
+                    return $from->format('j F Y');
+                }
+
+                // Same month & year
+                if ($from->isSameMonth($to) && $from->isSameYear($to)) {
+                    return $from->format('j') . ' – ' .
+                        $to->format('j F Y');
+                }
+
+                // Same year, different month
+                if ($from->isSameYear($to)) {
+                    return $from->format('j F') . ' – ' .
+                        $to->format('j F Y');
+                }
+
+                // Different year
+                return $from->format('j F Y') . ' – ' .
+                    $to->format('j F Y');
+            }
         );
     }
 }
