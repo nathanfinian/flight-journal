@@ -1,0 +1,155 @@
+/* .header, .header-space {
+    height: 120px;
+}
+.footer, .footer-space{
+    height: 300px;
+}
+.header {
+    position: fixed;
+    top: 0;
+}
+.footer {
+    position: fixed;
+    bottom: 0;
+    justify-content: space-between;
+} */
+body {
+font-family: Arial, sans-serif;
+margin: 40px;
+color: #000;
+}
+
+.header-content {
+display: flex;
+justify-content: space-between;
+align-items: flex-start;
+margin-bottom: 20px;
+}
+
+.header-content .logo img {
+max-width: 250px;
+height: auto;
+}
+
+.header-content .company-info {
+text-align: right;
+line-height: 1.4;
+font-size: 14px;
+}
+
+hr {
+border: none;
+border-top: 1px solid #000;
+margin: 10px 0 20px;
+}
+
+.invoice-title {
+text-align: center;
+margin-bottom: 10px;
+font-size: 18px;
+font-weight: bold;
+}
+.invoice-number {
+text-align: center;
+margin-bottom: 30px;
+font-size: 14px;
+}
+.recipient {
+margin-bottom: 20px;
+font-size: 14px;
+line-height: 1.5;
+}
+.body-text {
+margin-bottom: 20px;
+font-size: 14px;
+line-height: 1.5;
+}
+.items-table {
+width: 100%;
+border-collapse: collapse;
+margin-bottom: 20px;
+font-size: 14px;
+}
+.items-table th,
+.items-table td {
+border: 1px solid #000;
+padding: 6px 8px;
+text-align: left;
+}
+.items-table th {
+background-color: #f2f2f2;
+}
+.summary {
+width: 100%;
+max-width: 400px;
+margin-left: auto;
+font-size: 14px;
+margin-bottom: 30px;
+}
+.summary .row {
+display: flex;
+justify-content: space-between;
+padding: 4px 0;
+}
+.amount-in-words {
+margin-top: 10px;
+font-style: italic;
+font-size: 14px;
+}
+.payment-instructions {
+margin-top: 20px;
+font-size: 14px;
+line-height: 1.5;
+}
+.closing {
+margin-top: 30px;
+font-size: 14px;
+line-height: 1.5;
+}
+.signatures {
+display: flex;
+justify-content: space-between;
+margin-top: 40px;
+font-size: 14px;
+}
+.w-enter{
+/* after this element, break to a new page */
+page-break-after: always;
+/* for newer browsers: */
+break-after: page;
+}
+.sign-box {
+width: 45%;
+text-align: center;
+line-height: 1.5;
+}
+.sign-box .name {
+font-weight: bold;
+margin-top: 60px;
+}
+.sign-box .title {
+font-size: 13px;
+margin-top: 4px;
+}
+
+/* =========================
+   KSR FONT SYSTEM (PRINT)
+========================= */
+
+.fontksr14 {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 14px;
+    line-height: 1.4;
+}
+
+.fontksr12 {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 12px;
+    line-height: 1.4;
+}
+
+.fontksr11 {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 11px;
+    line-height: 1.3;
+}
