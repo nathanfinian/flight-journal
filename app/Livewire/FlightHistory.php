@@ -28,10 +28,13 @@ class FlightHistory extends Component
 
     public function mount()
     {
-        $today = today('Asia/Jakarta')->toDateString(); // "2025-11-09"
+        //Date start from the start of the month
+        $start = now('Asia/Jakarta');
+        $this->dateFrom = $start->startOfMonth()->toDateString();
 
-        $this->dateFrom = $today;
+        $today = today('Asia/Jakarta')->toDateString(); // "2025-11-09"
         $this->dateTo = $today;
+
         // Load filters
         $this->branches = Branch::orderBy('name')->get(['id', 'name']);
         $this->airlines = Airline::orderBy('name')->get(['id', 'name']);
