@@ -10,7 +10,7 @@ use Illuminate\Database\QueryException;
 
 class BranchModify extends Component
 {
-    // Route param (e.g. /settings/branch/{branch}/edit)
+    // Route param (e.g. /admin/branch/{branch}/edit)
     public ?int $branchId = null;
 
     public $airports;
@@ -80,7 +80,7 @@ class BranchModify extends Component
             'type' => 'success'
         ]);
 
-        return $this->redirectRoute('settings.branch', navigate: true);
+        return $this->redirectRoute('admin.branch', navigate: true);
     }
 
     public function delete()
@@ -102,7 +102,7 @@ class BranchModify extends Component
                 'content' => $name . ' berhasil dihapus!',
                 'type' => 'success'
             ]);
-            $this->redirectRoute('settings.branch', navigate: true);
+            $this->redirectRoute('admin.branch', navigate: true);
         } catch (QueryException $e) {
             // 23000 => integrity constraint violation (FK in use, etc.)
             if ($e->getCode() === '23000') {

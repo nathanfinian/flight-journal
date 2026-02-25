@@ -193,15 +193,6 @@ Route::middleware('auth')->group(function () {
         ->name('settings.airport-route.edit');  // <-- {airport-route} matches the type-hint
 
     /* =======================
-     | Settings Pages - MCA Branches
-     ======================= */
-    Route::get('/settings/branch', Branch::class)->name('settings.branch');
-    Route::get('/settings/branch/create', BranchModify::class)
-        ->name('settings.branch.create');
-    Route::get('/settings/branch/{branch}/edit', BranchModify::class)
-        ->whereNumber('branch') // optional safety
-        ->name('settings.branch.edit');  // <-- {branch} matches the type-hint
-    /* =======================
      | Settings Pages End
      ======================= */
 });
@@ -227,4 +218,14 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/admin/roles/{roleid:id}/edit', RoleModify::class)
         ->whereNumber('roleid') // optional safety
         ->name('admin.roles.edit');
+
+    /* =======================
+     | Admin - Branches
+     ======================= */
+    Route::get('/admin/branch', Branch::class)->name('admin.branch');
+    Route::get('/admin/branch/create', BranchModify::class)
+        ->name('admin.branch.create');
+    Route::get('/admin/branch/{branch}/edit', BranchModify::class)
+        ->whereNumber('branch') // optional safety
+        ->name('admin.branch.edit');  // <-- {branch} matches the type-hint
 });

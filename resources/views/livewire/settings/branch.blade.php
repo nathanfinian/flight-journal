@@ -9,14 +9,14 @@
                 size="sm"
                 variant="outline"
                 icon="plus"
-                :href="route('settings.branch.create')"
+                :href="route('admin.branch.create')"
             />
         </div>
     </x-ui.heading>
 
     <x-ui.separator class="my-2"/>
      <x-ui.breadcrumbs>
-        <x-ui.breadcrumbs.item wire:navigate.hover :href="route('settings.index')">Settings</x-ui.breadcrumbs.item>
+        <x-ui.breadcrumbs.item wire:navigate.hover :href="route('admin.index')">Admin</x-ui.breadcrumbs.item>
         <x-ui.breadcrumbs.item>Branch List</x-ui.breadcrumbs.item>
     </x-ui.breadcrumbs>
 

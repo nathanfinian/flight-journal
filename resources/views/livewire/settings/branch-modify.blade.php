@@ -5,8 +5,8 @@
 
     <x-ui.separator class="my-2"/>
     <x-ui.breadcrumbs>
-        <x-ui.breadcrumbs.item wire:navigate.hover :href="route('settings.index')">Settings</x-ui.breadcrumbs.item>
-        <x-ui.breadcrumbs.item wire:navigate.hover :href="route('settings.branch')">Branch List</x-ui.breadcrumbs.item>
+        <x-ui.breadcrumbs.item wire:navigate.hover :href="route('admin.index')">Settings</x-ui.breadcrumbs.item>
+        <x-ui.breadcrumbs.item wire:navigate.hover :href="route('admin.branch')">Branch List</x-ui.breadcrumbs.item>
         <x-ui.breadcrumbs.item>Modify Branch</x-ui.breadcrumbs.item>
     </x-ui.breadcrumbs>
 

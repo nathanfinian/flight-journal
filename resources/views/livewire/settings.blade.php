@@ -20,7 +20,7 @@
                     <x-ui.icon name="arrow-up-right" class="text-gray-800 dark:text-white size-4" />
                 </x-ui.card>
             </x-ui.link>
-            <x-ui.link 
+            {{-- <x-ui.link 
                 wire:navigate.hover
                 :href="route('settings.branch')" 
                 variant="ghost"
@@ -32,7 +32,7 @@
                     </div>
                     <x-ui.icon name="arrow-up-right" class="text-gray-800 dark:text-white size-4" />
                 </x-ui.card>
-            </x-ui.link>
+            </x-ui.link> --}}
             <x-ui.link 
                 wire:navigate.hover
                 :href="route('settings.airport')" 

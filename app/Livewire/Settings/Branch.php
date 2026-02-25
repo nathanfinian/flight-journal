@@ -14,7 +14,7 @@ class Branch extends Component
 
     public function openEdit(int $id)
     {
-        return $this->redirectRoute('settings.branch.edit', ['branch' => $id], navigate: true);
+        return $this->redirectRoute('admin.branch.edit', ['branch' => $id], navigate: true);
     }
 
     public function render()

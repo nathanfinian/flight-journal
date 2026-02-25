@@ -33,6 +33,19 @@
                     <x-ui.icon name="arrow-up-right" class="text-gray-800 dark:text-white size-4" />
                 </x-ui.card>
             </x-ui.link>
+            <x-ui.link 
+                wire:navigate.hover
+                :href="route('admin.branch')" 
+                variant="ghost"
+            >
+                <x-ui.card class="flex items-center justify-between mb-4" size="xl">
+                    <div class="flex">
+                        <x-ui.icon name="ps:graph" variant="light" class="text-gray-800 dark:text-white mr-2"/>
+                        <span>branches</span>
+                    </div>
+                    <x-ui.icon name="arrow-up-right" class="text-gray-800 dark:text-white size-4" />
+                </x-ui.card>
+            </x-ui.link>
         </div>
     </div>
 </div>
