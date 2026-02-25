@@ -26,10 +26,13 @@ class Index extends Component
 
     public function mount()
     {
-        $today = today('Asia/Jakarta')->toDateString(); // "2025-11-09"
+        //Date start from the start of the month
+        $start = now('Asia/Jakarta');
+        $this->dateFrom = $start->startOfMonth()->toDateString();
 
-        $this->dateFrom = $today;
+        $today = today('Asia/Jakarta')->toDateString(); // "2025-11-09"
         $this->dateTo = $today;
+
         // Load filters
         $this->branches = Branch::orderBy('name')->get(['id', 'name']);
         $this->airlines = Airline::orderBy('name')->get(['id', 'name']);
@@ -37,30 +40,30 @@ class Index extends Component
         $this->selectedBranch = Auth::user()->branch_id;
 
         // Load all flights initially
-        $this->loadActualFlights();
+        $this->loadInvoices();
     }
     
     public function updatedSelectedBranch($value)
     {
-        $this->loadActualFlights();
+        $this->loadInvoices();
     }
 
     public function updatedSelectedAirline($value)
     {
-        $this->loadActualFlights();
+        $this->loadInvoices();
     }
 
     public function updatedDateFrom($value)
     {
-        $this->loadActualFlights();
+        $this->loadInvoices();
     }
 
     public function updatedDateTo($value)
     {
-        $this->loadActualFlights();
+        $this->loadInvoices();
     }
     
-    protected function loadActualFlights()
+    protected function loadInvoices()
     {
         [$from, $to] = $this->normalizedDates();
 
@@ -123,6 +126,12 @@ class Index extends Component
         ]);
 
         return redirect()->route('invoice.create');
+    }
+
+    public function openEdit(int $id)
+    {
+        //Change edit routes
+        return $this->redirectRoute('invoice.edit', ['id' => $id], navigate: true);
     }
 
     public function render()
