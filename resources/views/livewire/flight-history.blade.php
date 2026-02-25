@@ -33,14 +33,6 @@
                     'airlineName' => $airlineName,
                 ]) }}', '_blank')"
             >
-            </x-ui.button> 
-            <x-ui.button 
-                size="sm"
-                variant="outline"
-                icon="ps:invoice"
-                wire:click="generateInvoice"
-            >
-                Create Invoice
             </x-ui.button>
         </div>
     </x-ui.heading>
