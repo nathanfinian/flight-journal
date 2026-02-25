@@ -7,46 +7,10 @@
             <x-ui.button 
                 size="sm"
                 variant="outline"
-                icon="ps:microsoft-excel-logo"
-                onclick="window.open('{{ route('export-flight-history', [
-                    'dateFrom' => $dateFrom,
-                    'dateTo' => $dateTo,
-                    'branch' => $selectedBranch,
-                    'branchName' => $branchName,
-                    'airline' => $selectedAirline,
-                    'airlineName' => $airlineName,
-                ]) }}', '_blank')"
-            >
-            </x-ui.button>
-            <x-ui.button 
-                size="sm"
-                variant="outline"
-                icon="ps:printer"
-                onclick="window.open('{{ route('export-flight-print', [
-                    'dateFrom' => $dateFrom,
-                    'dateTo' => $dateTo,
-                    'branch' => $selectedBranch,
-                    'branchName' => $branchName,
-                    'airline' => $selectedAirline,
-                    'airlineName' => $airlineName,
-                ]) }}', '_blank')"
-            >
-            </x-ui.button> 
-            <x-ui.button 
-                size="sm"
-                variant="outline"
                 icon="ps:invoice"
                 wire:click="generateInvoice"
             >
-                Regular Invoice
-            </x-ui.button>
-            <x-ui.button 
-                size="sm"
-                variant="outline"
-                icon="ps:article"
-                wire:click="generateInvoice"
-            >
-                GSE Invoice
+                Buat Invoice
             </x-ui.button>
         </div>
     </x-ui.heading>
@@ -106,10 +70,11 @@
             <tr>
                 <th class="px-4 py-3 text-left">#</th>
                 <th class="px-4 py-3 text-left">Invoice</th>
+                <th class="px-4 py-3 text-left">Title</th>
                 <th class="px-4 py-3 text-left">Cabang</th>
                 <th class="px-4 py-3 text-left">Airline</th>
-                <th class="px-4 py-3 text-left">Dibuat</th>
-                <th class="px-4 py-3 text-left">Berakhir</th>
+                <th class="px-4 py-3 text-left">Rentang Flight</th>
+                <th class="px-4 py-3 text-left">Tanggal Invoice</th>
                 <th class="px-4 py-3 text-left">Rate</th>
                 <th class="px-4 py-3 text-left"></th>
             </tr>
@@ -121,15 +86,22 @@
                     <td class="px-4 py-3">{{ $index + 1 }}</td>
 
                     <td class="px-4 py-3">{{ $invoice->invoice_number}}</td>
+                    <td class="px-4 py-3">{{ $invoice->title}}</td>
                     <td class="px-4 py-3">{{ $invoice->branch->name ?? '—' }}</td>
                     <td class="px-4 py-3">{{ $invoice->airline->callsign ?? '—' }}</td>
 
+                    <td class="px-4 py-3 font-semibold">{{ $invoice->flightRange }}</td>
                     <td class="px-4 py-3 font-semibold">{{ $invoice->date->format('Y-m-d') }}</td>
-                    <td class="px-4 py-3 font-semibold">{{ $invoice->due_date->format('Y-m-d') }}</td>
                     <td class="px-4 py-3 font-semibold">{{ $invoice->rate->charge_name ?? '-'}}</td>
 
-                    <td class="px-4 py-3">
-                        {{-- {{ substr($invoice->actual_arr, 0, 5) }} – {{ substr($invoice->actual_dep, 0, 5) }} --}}off
+                    <td class="px-4 py-3 text-center" wire:click.stop>
+                        <x-ui.link 
+                            href="{{ route('invoice.print', $invoice->invoice_number) }}" 
+                            class="inline-flex items-center justify-center w-9 h-9 rounded-lg hover:bg-gray-100 dark:hover:bg-neutral-800 transition"
+                            openInNewTab
+                        >
+                            <x-ui.icon name="printer" class="w-5 h-5 text-gray-600 dark:text-white"/>
+                        </x-ui.link>
                     </td>
                 </tr>
             @empty
