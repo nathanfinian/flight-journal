@@ -6,7 +6,6 @@ use App\Models\Branch;
 use App\Models\Airport;
 use Livewire\Component;
 use Illuminate\Validation\Rule;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\QueryException;
 
 class BranchModify extends Component
@@ -21,6 +20,7 @@ class BranchModify extends Component
     public string  $airport_id = '';
     public string  $address    = '';
     public string  $phone_number   = '';
+    public string  $account_number   = '';
     public string  $email      = '';
     public string  $status     = 'ACTIVE'; // ACTIVE | INACTIVE these selects are automatically selected when passed with livewire
 
@@ -45,6 +45,7 @@ class BranchModify extends Component
             $this->airport_id = (string) $row->airport_id;
             $this->address    = (string) $row->address;
             $this->phone_number   = (string) $row->phone_number;
+            $this->account_number = (string) $row->account_number;
             $this->email      = (string) $row->email;
             $this->status     = $row->status ?: 'ACTIVE';
         }
@@ -58,6 +59,7 @@ class BranchModify extends Component
             'address'      => ['required', 'string', 'max:255'],
             'phone_number' => ['required', 'string', 'max:20'],
             'email'        => ['required', 'email:rfc,dns', 'max:120'],
+            'account_number' => ['nullable', 'string', 'max:100'],
             'status'   => ['required', Rule::in(['ACTIVE', 'INACTIVE'])],
         ];
     }

@@ -1,13 +1,13 @@
 <div class="mx-auto max-w-2xl space-y-20 mt-20">
   <div>
-    <x-ui.heading level="h1" size="xl">Modify Branch</x-ui.heading>
-    <x-ui.text class="opacity-50">Update data kelengkapan cabang di sini</x-ui.text>
+    <x-ui.heading level="h1" size="xl">Branch</x-ui.heading>
+    <x-ui.text class="opacity-50">Update kelengkapan data cabang di sini</x-ui.text>
 
     <x-ui.separator class="my-2"/>
     <x-ui.breadcrumbs>
-      <x-ui.breadcrumbs.item wire:navigate.hover :href="route('settings.index')">Settings</x-ui.breadcrumbs.item>
-      <x-ui.breadcrumbs.item wire:navigate.hover :href="route('settings.branch')">Branch List</x-ui.breadcrumbs.item>
-      <x-ui.breadcrumbs.item>Modify Branch</x-ui.breadcrumbs.item>
+        <x-ui.breadcrumbs.item wire:navigate.hover :href="route('settings.index')">Settings</x-ui.breadcrumbs.item>
+        <x-ui.breadcrumbs.item wire:navigate.hover :href="route('settings.branch')">Branch List</x-ui.breadcrumbs.item>
+        <x-ui.breadcrumbs.item>Modify Branch</x-ui.breadcrumbs.item>
     </x-ui.breadcrumbs>
 
     <div class="grow">
@@ -62,6 +62,16 @@
                 wire:model.defer="phone_number"
                 maxlength="15"
                 placeholder="081234556"
+                />
+                <x-ui.error name="phone_number" />
+            </x-ui.field>
+
+            <x-ui.field required>
+                <x-ui.label>Nomor Rekening</x-ui.label>
+                <x-ui.input
+                wire:model.defer="account_number"
+                maxlength="100"
+                placeholder="Rekening BNI: 1234 567 an Mulio Citra Angkasa"
                 />
                 <x-ui.error name="phone_number" />
             </x-ui.field>

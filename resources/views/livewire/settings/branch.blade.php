@@ -29,6 +29,7 @@
             <th class="px-4 py-3 text-left">Address</th>
             <th class="px-4 py-3 text-left">Phone</th>
             <th class="px-4 py-3 text-left">Email</th>
+            <th class="px-4 py-3 text-left">Rekening</th>
             <th class="px-4 py-3 text-left">Status</th>
             </tr>
         </thead>
@@ -53,6 +54,7 @@
                 <td class="px-4 py-3">{{ $branch->address }}</td>
                 <td class="px-4 py-3">{{ $branch->phone_number }}</td>
                 <td class="px-4 py-3">{{ $branch->email }}</td>
+                <td class="px-4 py-3">{{ $branch->account_number ?? '-' }}</td>
                 <td class="px-4 py-3">{{ $branch->status }}</td>
             </tr>
             @empty
