@@ -40,8 +40,6 @@ class Create extends Component
             ->orderBy('name')
             ->get();
 
-        
-
         if ($id == null) {
             $this->form->receipt_date = now()->format('Y-m-d');
 
