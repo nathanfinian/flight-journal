@@ -44,14 +44,34 @@
                         :href="route('flight-history')"
                         :active="request()->is('flight-history*')"
                     />
-                    <x-ui.navbar.item 
-                        wire:navigate.hover
-                        icon="ps:newspaper"
-                        icon:class="w-5 h-5" 
-                        label="Invoice" 
-                        :href="route('invoice')"
-                        :active="request()->is('invoice*')"
-                    />
+                    <x-ui.dropdown position="bottom-start">
+                        <x-slot:button>
+                            <x-ui.navbar.item 
+                                wire:navigate.hover
+                                icon="ps:newspaper"
+                                icon:class="w-5 h-5" 
+                                label="Invoicing" 
+                                :active="request()->is('invoice*')"
+                            />
+                        </x-slot:button>
+                        
+                        <x-slot:menu>
+                            <x-ui.dropdown.group label="Sistem Invoice">
+                                <x-ui.dropdown.separator />
+                                <x-ui.dropdown.item icon="ps:newspaper" :href="route('invoice')">
+                                    Regular Invoice
+                                </x-ui.dropdown.item>
+                                
+                                <x-ui.dropdown.item icon="document-plus" :href="route('deposit')">
+                                    Deposit/Talangan
+                                </x-ui.dropdown.item>
+
+                                <x-ui.dropdown.item icon="document" :href="route('invoice')">
+                                    Charter Invoice
+                                </x-ui.dropdown.item>
+                            </x-ui.dropdown.group>
+                        </x-slot:menu>
+                    </x-ui.dropdown>
                     <x-ui.navbar.item 
                         wire:navigate.hover
                         icon="cog-6-tooth" 
