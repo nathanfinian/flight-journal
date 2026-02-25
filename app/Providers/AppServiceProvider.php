@@ -31,15 +31,6 @@ class AppServiceProvider extends ServiceProvider
             return 'The ' . $attribute . ' may only contain letters, numbers, and underscores, and must be 3–20 characters long.';
         });
 
-        // Blade::if('role', function ($role) {
-        //     $user = Auth::user();
-
-        //     return $user &&
-        //         method_exists($user, 'role') &&
-        //         $user->role &&
-        //         $user->role->name === $role;
-        // });
-
         Blade::if('role', function (...$roles) {
             $user = Auth::user();
 
