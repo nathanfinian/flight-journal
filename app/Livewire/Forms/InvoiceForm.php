@@ -51,10 +51,10 @@ class InvoiceForm extends Form
         $this->airline_rates_id = (string) $invoice->airline_rates_id;
         $this->airline_id     = (string) $invoice->airline_id;
         $this->branch_id      = (string) $invoice->branch_id;
-        $this->date           = optional($invoice->date)->format('Y-m-d');
-        $this->due_date       = optional($invoice->due_date)->format('Y-m-d');
-        $this->dateFrom       = optional($invoice->date_from)->format('Y-m-d');
-        $this->dateTo         = optional($invoice->date_to)->format('Y-m-d');
+        $this->date           = $invoice->date?->format('Y-m-d');
+        $this->due_date       = $invoice->due_date?->format('Y-m-d');
+        $this->dateFrom       = $invoice->dateFrom?->format('Y-m-d');
+        $this->dateTo         = $invoice->dateTo?->format('Y-m-d');
         $this->total_amount   = (string) $invoice->total_amount;
     }
 
@@ -64,8 +64,6 @@ class InvoiceForm extends Form
     public function store(): Invoice
     {
         $this->validate();
-
-        // dd($this->airline_rates_id);
 
         return Invoice::create([
             'title'          => $this->title,
@@ -90,7 +88,10 @@ class InvoiceForm extends Form
             throw new \RuntimeException('Invoice record not set');
         }
 
-        $this->validate();
+        // $this->validate();
+        $this->validate([
+            'invoice_number' => 'required|string|min:3|max:80|unique:invoices,invoice_number,' . $this->record->id,
+        ]);
 
         $this->record->update([
             'title'          => $this->title,
@@ -106,6 +107,20 @@ class InvoiceForm extends Form
         ]);
 
         return $this->record;
+    }
+
+    /* =======================
+    | Delete record
+    ======================= */
+    public function delete(): void
+    {
+        if (!$this->record) {
+            throw new \Exception('No record selected for deletion.');
+        }
+
+        $this->record->delete();
+
+        $this->reset();
     }
 
     /* =======================
