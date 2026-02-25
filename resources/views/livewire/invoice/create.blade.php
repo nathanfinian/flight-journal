@@ -213,6 +213,13 @@
                 
                 <div class="flex items-center justify-between mt-6">
                     <x-ui.button type="submit">Generate Invoice</x-ui.button>
+                    @if ($this->isEdit)
+                        <x-ui.modal.trigger id="delete-modal">
+                            <x-ui.button variant="ghost">
+                                <x-ui.icon name="ps:trash" variant="thin" class="text-red-600 dark:text-red-500"/>
+                            </x-ui.button>
+                        </x-ui.modal.trigger>
+                    @endif
                 </div>
             </form>
         </div>
@@ -221,7 +228,7 @@
         id="delete-modal"
         position="center"
         heading="Delete Branch"
-        description="Yakin ingin menghapus jadwal flight ini?"
+        description="Yakin ingin menghapus invoice ini?"
     >
         <div class="mt-4 flex justify-end space-x-2">
             <x-ui.button 
