@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 
 class Invoice extends Model
 {
@@ -98,5 +99,19 @@ class Invoice extends Model
     public function deleter(): BelongsTo
     {
         return $this->belongsTo(User::class, 'deleted_by');
+    }
+
+    protected function dateFromFormatted(): Attribute
+    {
+        return Attribute::make(
+            get: fn() => $this->dateFrom?->format('d F Y')
+        );
+    }
+
+    protected function dateToFormatted(): Attribute
+    {
+        return Attribute::make(
+            get: fn() => $this->dateTo?->format('d F Y')
+        );
     }
 }
