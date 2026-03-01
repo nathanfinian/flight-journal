@@ -83,7 +83,7 @@
         </tr>
         <tr class="fontksr12">
             <td width="80%" align="left" style="font-size: 15px;">Terbilang&nbsp;:&nbsp;#&nbsp;{{ $deposit->terbilang }}&nbsp;#</td>
-            <td width="20%" align="center">Diterima Oleh,</td>
+            <td width="20%" align="center">Kepada,</td>
         </tr>
         <tr>
             <td width="80%" align="left" style="font-size: 15px;">&nbsp;<b>{{ $deposit->branch->account_number }}</b></td>
