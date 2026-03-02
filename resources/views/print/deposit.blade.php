@@ -53,7 +53,7 @@
         </tr>
         
         <tr class="fontksr14">
-            <td width="100%" align="left" colspan="4">&nbsp;Telah Terima dari&nbsp;:&nbsp;{{ $deposit->received_from_company }}</td>
+            <td width="100%" align="left" colspan="4">&nbsp;Kepada&nbsp;:&nbsp;{{ $deposit->received_from_company }}</td>
         </tr>
     </table>
     <table width="100%" border="1" cellpadding="0" cellspacing="0" >
