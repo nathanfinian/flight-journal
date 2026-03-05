@@ -13,6 +13,18 @@ class InvoiceForm extends Form
     #[Validate('required|string|min:3|max:80')]
     public string $title = '';
 
+    #[Validate('nullable|string|max:255')]
+    public string $toWhom = '';
+
+    #[Validate('nullable|string|max:255')]
+    public string $toTitle = '';
+
+    #[Validate('nullable|string|max:255')]
+    public string $toCompany = '';
+
+    #[Validate('nullable|string|max:255')]
+    public string $signer_name = '';
+
     #[Validate('required|string|min:3|max:80')]
     public string $invoice_number = '';
 
@@ -47,6 +59,10 @@ class InvoiceForm extends Form
     {
         $this->record         = $invoice;
         $this->title          = $invoice->title;
+        $this->toWhom         = (string) $invoice->toWhom;
+        $this->toTitle        = (string) $invoice->toTitle;
+        $this->toCompany      = (string) $invoice->toCompany;
+        $this->signer_name    = (string) $invoice->signer_name;
         $this->invoice_number = $invoice->invoice_number;
         $this->airline_rates_id = (string) $invoice->airline_rates_id;
         $this->airline_id     = (string) $invoice->airline_id;
@@ -67,6 +83,10 @@ class InvoiceForm extends Form
 
         return Invoice::create([
             'title'          => $this->title,
+            'toWhom'         => $this->toWhom ?: null,
+            'toTitle'        => $this->toTitle ?: null,
+            'toCompany'      => $this->toCompany ?: null,
+            'signer_name'    => $this->signer_name ?: null,
             'invoice_number' => $this->invoice_number,
             'airline_rates_id'=> $this->airline_rates_id,
             'airline_id'     => $this->airline_id,
@@ -95,6 +115,10 @@ class InvoiceForm extends Form
 
         $this->record->update([
             'title'          => $this->title,
+            'toWhom'         => $this->toWhom ?: null,
+            'toTitle'        => $this->toTitle ?: null,
+            'toCompany'      => $this->toCompany ?: null,
+            'signer_name'    => $this->signer_name ?: null,
             'invoice_number' => $this->invoice_number,
             'airline_rates_id'=> $this->airline_rates_id,
             'airline_id'     => $this->airline_id,
@@ -131,6 +155,10 @@ class InvoiceForm extends Form
         $this->reset([
             'record',
             'title',
+            'toWhom',
+            'toTitle',
+            'toCompany',
+            'signer_name',
             'invoice_number',
             'airline_rates_id',
             'airline_id',

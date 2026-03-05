@@ -40,6 +40,57 @@
                     </div>
                 </div>
                 <div class="grid grid-cols-12 gap-6">
+                    <div class="col-span-4">
+                        <x-ui.field required>
+                            <x-ui.label>Perusahaan Ditagih</x-ui.label>
+                            <x-ui.input
+                                wire:model.defer="form.toCompany"
+                                maxlength="255"
+                                placeholder="Nama perusahaan"
+                            />
+                            <x-ui.error name="form.toCompany" />
+                        </x-ui.field>
+                    </div>
+                    <div class="col-span-4">
+                        <x-ui.field required>
+                            <x-ui.label>Kepada</x-ui.label>
+                            <x-ui.input
+                                wire:model.defer="form.toWhom"
+                                maxlength="255"
+                                placeholder="Nama penerima"
+                            />
+                            <x-ui.error name="form.toWhom" />
+                        </x-ui.field>
+                    </div>
+                    <div class="col-span-4">
+                        <x-ui.field required>
+                            <x-ui.label>Jabatan</x-ui.label>
+                            <x-ui.input
+                                wire:model.defer="form.toTitle"
+                                maxlength="255"
+                                placeholder="Jabatan penerima"
+                            />
+                            <x-ui.error name="form.toTitle" />
+                        </x-ui.field>
+                    </div>
+                </div>
+                <div class="grid grid-cols-12 gap-6">
+                    <div class="col-span-6">
+                        <x-ui.field required>
+                            <x-ui.label>Nama Penandatangan</x-ui.label>
+                            <x-ui.input
+                                wire:model.defer="form.signer_name"
+                                maxlength="255"
+                                placeholder="Nama direktur/penandatangan"
+                            />
+                            <x-ui.error name="form.signer_name" />
+                        </x-ui.field>
+                    </div>
+                    <div class="col-span-6">
+                        {{-- empty --}}
+                    </div>
+                </div>
+                <div class="grid grid-cols-12 gap-6">
                     <div class="col-span-6">
                         <x-ui.field required>
                             <x-ui.label>Tanggal Tagihan</x-ui.label>
