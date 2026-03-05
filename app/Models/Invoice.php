@@ -20,6 +20,10 @@ class Invoice extends Model
      */
     protected $fillable = [
         'title',
+        'toWhom',
+        'toTitle',
+        'toCompany',
+        'signer_name',
         'invoice_number',
         'date',
         'dateFrom',
