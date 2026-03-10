@@ -27,6 +27,7 @@ class AirlineRatesModify extends Component
     public ?string $date_from = '';
     public ?string $date_to = '';
     public ?string $ground_fee = '';
+    public ?string $delay_rate = '';
     public ?string $cargo_fee = '';
     public ?string $ppn_rate = '';
     public ?string $pph_rate = '';
@@ -67,6 +68,7 @@ class AirlineRatesModify extends Component
             $this->date_from       = $airlineRate->date_from?->format('Y-m-d');
             $this->date_to         = $airlineRate->date_to?->format('Y-m-d');
             $this->ground_fee      = $this->toMoneyFormat($airlineRate->ground_fee);
+            $this->delay_rate      = $this->toMoneyFormat($airlineRate->delay_rate);
             $this->cargo_fee       = $this->toMoneyFormat($airlineRate->cargo_fee);
             $this->ppn_rate        = $this->toRateFormat($airlineRate->ppn_rate);
             $this->pph_rate        = $this->toRateFormat($airlineRate->pph_rate);
@@ -93,16 +95,17 @@ class AirlineRatesModify extends Component
     {
         return [
             'airline_id'    => ['required', 'exists:airlines,id'],
-            'branch_id'     => ['nullable', 'exists:branches,id'],
+            'branch_id'     => ['required', 'exists:branches,id'],
             'charge_name'   => ['required', 'string', 'max:120'],
             'charge_code'   => ['required', 'string', 'max:15'],
-            'date_from'     => ['nullable', 'date'],
-            'date_to'       => ['nullable', 'date', 'after_or_equal:date_from'],
+            'date_from'     => ['required', 'date'],
+            'date_to'       => ['required', 'date', 'after_or_equal:date_from'],
             'ground_fee'    => ['required','regex:/^\d{1,3}(\.\d{3})*(,\d{1,2})?$|^\d+(,\d{1,2})?$/'],
+            'delay_rate'    => ['nullable','regex:/^\d{1,3}(\.\d{3})*(,\d{1,2})?$|^\d+(,\d{1,2})?$/'],
             'cargo_fee'     => ['nullable','regex:/^\d{1,3}(\.\d{3})*(,\d{1,2})?$|^\d+(,\d{1,2})?$/'], //Change money input rules
-            'ppn_rate'      => ['nullable', 'numeric', 'min:0', 'max:100'],
-            'pph_rate'      => ['nullable', 'numeric', 'min:0', 'max:100'],
-            'konsesi_rate'  => ['nullable', 'numeric', 'min:0', 'max:100'],
+            'ppn_rate'      => ['required', 'numeric', 'min:0', 'max:100'],
+            'pph_rate'      => ['required', 'numeric', 'min:0', 'max:100'],
+            'konsesi_rate'  => ['required', 'numeric', 'min:0', 'max:100'],
             'percentages.*.percentage' => 'nullable|numeric|min:0|max:100',
         ];
     }
@@ -111,6 +114,9 @@ class AirlineRatesModify extends Component
         $payload = $this->validate();
 
         $payload['ground_fee'] = $this->toDecimal($this->ground_fee);
+        $payload['delay_rate'] = $this->delay_rate
+            ? $this->toDecimal($this->delay_rate)
+            : null;
         $payload['cargo_fee']  = $this->cargo_fee
             ? $this->toDecimal($this->cargo_fee)
             : null;

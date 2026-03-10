@@ -35,7 +35,7 @@
                         </x-ui.field>
                     </div>
                     <div class="col-span-6">
-                        <x-ui.field>
+                        <x-ui.field required>
                             <x-ui.label>Branch</x-ui.label>
                             <x-ui.select
                                 placeholder="Select branch..."
@@ -79,7 +79,7 @@
                 </div>
                 <div class="grid grid-cols-12 gap-6">
                     <div class="col-span-6">
-                        <x-ui.field>
+                        <x-ui.field required>
                             <x-ui.label>Tanggal Berlaku Dari</x-ui.label>
                             <x-ui.input
                                 type="date"
@@ -93,7 +93,7 @@
                         </x-ui.field>
                     </div>
                     <div class="col-span-6">
-                        <x-ui.field>
+                        <x-ui.field required>
                             <x-ui.label>Tanggal Berlaku Sampai</x-ui.label>
                             <x-ui.input
                                 type="date"
@@ -109,7 +109,7 @@
                 </div>
 
                 <div class="grid grid-cols-12 gap-6">
-                    <div class="col-span-6">
+                    <div class="col-span-4">
                         <x-ui.field required>
                             <x-ui.label>Ground Handling Fee</x-ui.label>
                             <x-ui.input 
@@ -121,7 +121,19 @@
                             <x-ui.error name="ground_fee" />
                         </x-ui.field>
                     </div>
-                    <div class="col-span-6">
+                    <div class="col-span-4">
+                        <x-ui.field required>
+                            <x-ui.label>Delay Fee</x-ui.label>
+                            <x-ui.input 
+                                wire:model.defer="delay_rate"
+                                x-mask:dynamic="$money($input, ',')" 
+                                placeholder="0.00">
+                                <x-slot name="prefix">Rp</x-slot>
+                            </x-ui.input>
+                            <x-ui.error name="delay_rate" />
+                        </x-ui.field>
+                    </div>
+                    <div class="col-span-4">
                         <x-ui.field>
                             <x-ui.label>Cargo (per KG)</x-ui.label>
                             <x-ui.input 
