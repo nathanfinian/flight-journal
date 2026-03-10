@@ -24,6 +24,7 @@ class AirlineRate extends Model
         'date_from',
         'date_to',
         'ground_fee',
+        'delay_rate',
         'cargo_fee',
         'ppn_rate',
         'pph_rate',
