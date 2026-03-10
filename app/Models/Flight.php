@@ -18,6 +18,7 @@ class Flight extends Model
         'origin_flight_no',
         'departure_flight_no',
         'flight_type_id',
+        'delay_charge',
         'origin_route_id',
         'departure_route_id',
         'origin_equipment_id',
@@ -34,7 +35,10 @@ class Flight extends Model
         'notes',
     ];
 
-    protected $casts = ['service_date' => 'date'];
+    protected $casts = [
+        'service_date' => 'date',
+        'delay_charge' => 'boolean',
+    ];
 
     protected static function booted()
     {
