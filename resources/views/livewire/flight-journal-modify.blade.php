@@ -247,6 +247,22 @@
                         </x-ui.field>
                     </div>
                 </div>
+                <div class="grid grid-cols-12 gap-6">
+                    <div class="col-span-6">
+                        <x-ui.field>
+                            <x-ui.label>Delay Charge</x-ui.label>
+                            <x-ui.checkbox 
+                                wire:model="form.delay_charge"
+                                label="Flight ini dikenakan biaya delay"
+                            />
+                            <x-ui.error name="form.delay_charge" />
+                        </x-ui.field>
+                        
+                    </div>
+                    <div class="col-span-6">
+                       {{-- empty --}}
+                    </div>
+                </div>
                 
                 {{-- Pax and Ground Time --}}
                 <div class="flex justify-items-center items-center mt-6 gap-6">
