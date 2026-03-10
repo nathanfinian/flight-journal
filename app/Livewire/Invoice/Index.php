@@ -7,7 +7,6 @@ use App\Models\Branch;
 use App\Models\Airline;
 use App\Models\Invoice;
 use Livewire\Component;
-use Illuminate\Support\Facades\Auth;
 
 class Index extends Component
 {
@@ -36,8 +35,6 @@ class Index extends Component
         // Load filters
         $this->branches = Branch::orderBy('name')->get(['id', 'name']);
         $this->airlines = Airline::orderBy('name')->get(['id', 'name']);
-
-        $this->selectedBranch = Auth::user()->branch_id;
 
         // Load all flights initially
         $this->loadInvoices();
