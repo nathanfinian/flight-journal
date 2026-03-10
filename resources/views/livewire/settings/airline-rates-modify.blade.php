@@ -35,7 +35,21 @@
                         </x-ui.field>
                     </div>
                     <div class="col-span-6">
-                        {{-- Empty --}}
+                        <x-ui.field>
+                            <x-ui.label>Branch</x-ui.label>
+                            <x-ui.select
+                                placeholder="Select branch..."
+                                icon="ps:airplane-takeoff"
+                                wire:model.live="branch_id"
+                            >
+                                @foreach($branches as $branch)
+                                    <x-ui.select.option value="{{ $branch->id }}">
+                                        {{ $branch->name }}
+                                    </x-ui.select.option>
+                                @endforeach
+                            </x-ui.select>
+                            <x-ui.error name="branch_id" />
+                        </x-ui.field>
                     </div>
                 </div>
 
@@ -63,6 +77,36 @@
                         </x-ui.field>
                     </div>
                 </div>
+                <div class="grid grid-cols-12 gap-6">
+                    <div class="col-span-6">
+                        <x-ui.field>
+                            <x-ui.label>Tanggal Berlaku Dari</x-ui.label>
+                            <x-ui.input
+                                type="date"
+                                wire:model.defer="date_from"
+                                class="
+                                    dark:[color-scheme:dark]
+                                    dark:[&::-webkit-calendar-picker-indicator]:invert
+                                "
+                            />
+                            <x-ui.error name="date_from" />
+                        </x-ui.field>
+                    </div>
+                    <div class="col-span-6">
+                        <x-ui.field>
+                            <x-ui.label>Tanggal Berlaku Sampai</x-ui.label>
+                            <x-ui.input
+                                type="date"
+                                wire:model.defer="date_to"
+                                class="
+                                    dark:[color-scheme:dark]
+                                    dark:[&::-webkit-calendar-picker-indicator]:invert
+                                "
+                            />
+                            <x-ui.error name="date_to" />
+                        </x-ui.field>
+                    </div>
+                </div>
 
                 <div class="grid grid-cols-12 gap-6">
                     <div class="col-span-6">
@@ -87,6 +131,47 @@
                                 <x-slot name="prefix">Rp</x-slot>
                             </x-ui.input>
                             <x-ui.error name="cargo_fee" />
+                        </x-ui.field>
+                    </div>
+                </div>
+                <div class="grid grid-cols-12 gap-6">
+                    <div class="col-span-4">
+                        <x-ui.field required>
+                            <x-ui.label>PPN Rate</x-ui.label>
+                            <x-ui.input
+                                wire:model.defer="ppn_rate"
+                                placeholder="11"
+                                inputmode="decimal"
+                            >
+                            <x-slot name="suffix">%</x-slot>
+                            </x-ui.input>
+                            <x-ui.error name="ppn_rate" />
+                        </x-ui.field>
+                    </div>
+                    <div class="col-span-4">
+                        <x-ui.field required>
+                            <x-ui.label>PPH Rate</x-ui.label>
+                            <x-ui.input
+                                wire:model.defer="pph_rate"
+                                placeholder="11"
+                                inputmode="decimal"
+                            >
+                            <x-slot name="suffix">%</x-slot>
+                            </x-ui.input>
+                            <x-ui.error name="pph_rate" />
+                        </x-ui.field>
+                    </div>
+                    <div class="col-span-4">
+                        <x-ui.field required>
+                            <x-ui.label>Konsesi Rate</x-ui.label>
+                            <x-ui.input
+                                wire:model.defer="konsesi_rate"
+                                placeholder="5"
+                                inputmode="decimal"
+                            >
+                            <x-slot name="suffix">%</x-slot>
+                            </x-ui.input>
+                            <x-ui.error name="konsesi_rate" />
                         </x-ui.field>
                     </div>
                 </div>

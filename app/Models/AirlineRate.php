@@ -18,10 +18,21 @@ class AirlineRate extends Model
      */
     protected $fillable = [
         'airline_id',
+        'branch_id',
         'charge_name',
         'charge_code',
+        'date_from',
+        'date_to',
         'ground_fee',
         'cargo_fee',
+        'ppn_rate',
+        'pph_rate',
+        'konsesi_rate',
+    ];
+
+    protected $casts = [
+        'date_from' => 'date',
+        'date_to' => 'date',
     ];
     
     protected static function booted()
@@ -39,6 +50,11 @@ class AirlineRate extends Model
     public function airline()
     {
         return $this->belongsTo(Airline::class);
+    }
+
+    public function branch()
+    {
+        return $this->belongsTo(Branch::class);
     }
 
     public function invoices()
