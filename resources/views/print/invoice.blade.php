@@ -72,16 +72,26 @@
 			</thead>
 			<tbody id="flight-items">
                 {{-- Summary of flights loop, total of each flight number per date range--}}
+			@foreach ($delayChargeDetails as $delayChargeDetail)
+			<tr>
+				<td>{{ $loop->iteration }}</td>
+				<td>FLIGHT {{ $delayChargeDetail->departure_flight_no }} (Delay Charge)</td>
+				<td>{{ $delayChargeDetail->quantity }}</td>
+				<td>{{ number_format($delayChargeUnitPrice) }}</td>
+				<td>{{ number_format($delayChargeDetail->quantity * $delayChargeUnitPrice) }}</td>
+			</tr>
+			@endforeach
 			@foreach ( $flightDetails as $flightDetail )
 			@php
-				$lineTotal = $invoice->rate->ground_fee * $flightDetail->Quantity;
+				$unitPrice = $invoice->rate->ground_fee * ((float) $flightDetail->rate_percentage / 100);
+				$lineTotal = $unitPrice * $flightDetail->quantity;
 			@endphp
 
 			<tr>
-				<td>{{ $loop->iteration }}</td>
-				<td>FLIGHT {{ $flightDetail->departure_flight_no }}</td>
-				<td>{{ $flightDetail->Quantity }}</td>
-				<td>{{ number_format($invoice->rate->ground_fee) }}</td>
+				<td>{{ $loop->iteration + $delayChargeDetails->count() }}</td>
+				<td>FLIGHT {{ $flightDetail->departure_flight_no }} ({{ $flightDetail->flight_type_name }})</td>
+				<td>{{ $flightDetail->quantity }}</td>
+				<td>{{ number_format($unitPrice) }}</td>
 				<td>{{ number_format($lineTotal) }}</td>
 			</tr>
 			@endforeach
@@ -95,7 +105,7 @@
 			</tr>
 			<tr>
 				<td colspan="2">PPN</td>
-				<td colspan="2" class="text-center">11% X {{ number_format($totalPreTax) }}</td>
+				<td colspan="2" class="text-center">{{ $formattedPPN }}% X {{ number_format($totalPreTax) }}</td>
 				<td>Rp. {{ number_format($totalPPN) }}</td>
 			</tr>
 			<tr>
@@ -104,7 +114,7 @@
 			</tr>
 			<tr>
 				<td colspan="2">PPH</td>
-				<td colspan="2" class="text-center">11% X {{ number_format($totalPreTax) }}</td>
+				<td colspan="2" class="text-center">{{ $formattedPPH }}% X {{ number_format($totalPreTax) }}</td>
 				<td>Rp. {{ number_format($totalPPH) }}</td>
 			</tr>
 			<tr>
@@ -113,8 +123,8 @@
 			</tr>
 			<tr>
 				<td colspan="2">Konsesi</td>
-				<td colspan="2" class="text-center">11% X {{ number_format($totalPreTax) }}</td>
-				<td>Rp. {{ number_format($totalKON) }}</td>
+				<td colspan="2" class="text-center">{{ $formattedKON }}% X {{ number_format($totalPreTax) }}</td>
+				<td>Rp. - {{ number_format($totalKON) }}</td>
 			</tr>
 			<tr>
 				<td colspan="4"><b>Grand Total</b></td>
@@ -205,12 +215,12 @@
 				@php $totalFlightFee = 0; @endphp
 				@forelse ($flightList as $flight)
 					@php
-						$lineTotal = (float) $invoice->rate->ground_fee;
+						$lineTotal = (float) $invoice->rate->ground_fee * ((float) $flight->rate_percentage / 100);
 						$totalFlightFee += $lineTotal;
 					@endphp
 					<tr>
 						<td rowspan="2" class="text-center">{{ \Carbon\Carbon::parse($flight->service_date)->format('d/m/Y') }}</td>
-						<td rowspan="2" class="text-center">{{ $flight->departure_flight_no }}</td>
+						<td rowspan="2" class="text-center">{{ $flight->departure_flight_no }}<br>{{ $flight->flight_type_name }}</td>
 						<td class="text-center">{{ $flight->registration_number ?? '-' }}</td>
 						<td class="text-center">{{ $flight->arrival_route ?? '-' }}</td>
 						<td class="text-center">{{ $flight->actual_arr ? substr($flight->actual_arr, 0, 5) : '-' }}</td>

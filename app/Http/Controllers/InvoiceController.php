@@ -21,11 +21,38 @@ class InvoiceController extends Controller
             ])
             ->firstOrFail();
 
-        $flightDetails = DB::table('actual_flights as af')
+        $delayChargeDetails = DB::table('actual_flights as af')
             ->leftJoin('airline_routes as ar_dep', 'ar_dep.id', '=', 'af.departure_route_id')
             ->select(
                 'af.departure_flight_no',
-                DB::raw('COUNT(*) as Quantity')
+                DB::raw('COUNT(*) as quantity')
+            )
+            ->whereBetween('af.service_date', [
+                $invoice->dateFrom,
+                $invoice->dateTo
+            ])
+            ->where('af.branch_id', $invoice->branch_id)
+            ->where('ar_dep.airline_id', $invoice->airline_id)
+            ->where('af.delay_charge', true)
+            ->whereNull('af.deleted_at')
+            ->groupBy('af.departure_flight_no')
+            ->orderBy('af.departure_flight_no')
+            ->get();
+
+        $flightDetails = DB::table('actual_flights as af')
+            ->leftJoin('airline_routes as ar_dep', 'ar_dep.id', '=', 'af.departure_route_id')
+            ->leftJoin('flight_types as ft', 'ft.id', '=', 'af.flight_type_id')
+            ->leftJoin('airline_rate_flight_type as arft', function ($join) use ($invoice) {
+                $join->on('arft.flight_type_id', '=', 'af.flight_type_id')
+                    ->where('arft.airline_rate_id', '=', $invoice->airline_rates_id);
+            })
+            ->select(
+                'af.flight_type_id',
+                'ft.type_code as flight_type',
+                'ft.name as flight_type_name',
+                'af.departure_flight_no',
+                DB::raw('COALESCE(arft.percentage, 100) as rate_percentage'),
+                DB::raw('COUNT(*) as quantity')
             )
             ->whereBetween('af.service_date', [
                 $invoice->dateFrom,
@@ -34,8 +61,15 @@ class InvoiceController extends Controller
             ->where('af.branch_id', $invoice->branch_id)
             ->where('ar_dep.airline_id', $invoice->airline_id)
             ->whereNull('af.deleted_at')
-            ->groupBy('af.departure_flight_no')
-            ->orderByDesc('Quantity')
+            ->groupBy(
+                'af.flight_type_id',
+                'ft.type_code',
+                'ft.name',
+                'af.departure_flight_no',
+                'arft.percentage'
+            )
+            ->orderBy('ft.type_code')
+            ->orderBy('af.departure_flight_no')
             ->get();
 
         $flightList = DB::table('actual_flights as af')
@@ -49,11 +83,20 @@ class InvoiceController extends Controller
             ->leftJoin('airport_routes as apr_dep', 'apr_dep.id', '=', 'ar_dep.airport_route_id')
             ->leftJoin('airports as ap_dep_from', 'ap_dep_from.id', '=', 'apr_dep.origin_id')
             ->leftJoin('airports as ap_dep_to', 'ap_dep_to.id', '=', 'apr_dep.destination_id')
+            ->leftJoin('flight_types as ft', 'ft.id', '=', 'af.flight_type_id')
+            ->leftJoin('airline_rate_flight_type as arft', function ($join) use ($invoice) {
+                $join->on('arft.flight_type_id', '=', 'af.flight_type_id')
+                    ->where('arft.airline_rate_id', '=', $invoice->airline_rates_id);
+            })
             ->select(
                 'af.service_date',
+                'af.flight_type_id',
                 'af.departure_flight_no',
                 'af.actual_arr',
                 'af.actual_dep',
+                'ft.name as flight_type_name',
+                'ft.type_code as flight_type',
+                DB::raw('COALESCE(arft.percentage, 100) as rate_percentage'),
                 DB::raw('COALESCE(eq_dep.registration, eq_org.registration) as registration_number'),
                 DB::raw("CONCAT(ap_org_from.iata, '-', ap_org_to.iata) as arrival_route"),
                 DB::raw("CONCAT(ap_dep_from.iata, '-', ap_dep_to.iata) as departure_route")
@@ -71,28 +114,40 @@ class InvoiceController extends Controller
 
         $totalQty = 0;
         $totalPreTax = 0;
+        $delayChargeUnitPrice = (float) ($invoice->rate->delay_rate ?? 0);
+
+        foreach ($delayChargeDetails as $delayChargeDetail) {
+            $delayChargeTotal = $delayChargeDetail->quantity * $delayChargeUnitPrice;
+            $totalQty += $delayChargeDetail->quantity;
+            $totalPreTax += $delayChargeTotal;
+        }
 
         foreach ($flightDetails as $detail) {
-            $lineTotal = $invoice->rate->ground_fee * $detail->Quantity;
-            $totalQty += $detail->Quantity;
+            $unitPrice = $invoice->rate->ground_fee * ((float) $detail->rate_percentage / 100);
+            $lineTotal = $unitPrice * $detail->quantity;
+            $totalQty += $detail->quantity;
             $totalPreTax += $lineTotal;
         }
 
-        $totalPPN = $totalPreTax * 0.11;
-        $totalPPH = $totalPreTax * 0.11;
-        $totalKON = $totalPreTax * 0.5;
+        $totalPPN = $totalPreTax * $invoice->rate->ppn_rate;
+        $totalPPH = $totalPreTax * $invoice->rate->pph_rate;
+        $totalKON = $totalPreTax * $invoice->rate->konsesi_rate;
+
+        $formattedPPN = number_format($invoice->rate->ppn_rate * 100);
+        $formattedPPH = number_format($invoice->rate->pph_rate * 100);
+        $formattedKON = number_format($invoice->rate->konsesi_rate * 100);
 
         $totalAfterPPN = $totalPreTax + $totalPPN;
         $totalAfterPPH = $totalAfterPPN + $totalPPH;
         $totalAfterKON = $totalAfterPPH - $totalKON;
-
-        // return view('print.invoice', compact('invoice',  'flightDetails'));
 
         $finalTerbilang = $this->Terbilang($totalAfterKON);
         $currentDate = Carbon::now()->format('d F Y');
 
         return view('print.invoice', [
             'invoice' => $invoice,
+            'delayChargeDetails' => $delayChargeDetails,
+            'delayChargeUnitPrice' => $delayChargeUnitPrice,
             'flightDetails' => $flightDetails,
             'flightList' => $flightList,
 
@@ -105,6 +160,10 @@ class InvoiceController extends Controller
             'totalAfterKON' => $totalAfterKON,
             'totalAfterPPH' => $totalAfterPPH,
             'totalAfterPPN' => $totalAfterPPN,
+
+            'formattedPPN' => $formattedPPN,
+            'formattedPPH' => $formattedPPH,
+            'formattedKON' => $formattedKON,
 
             'finalTerbilang' => $finalTerbilang,
             'currentDate' => $currentDate,
