@@ -61,7 +61,7 @@ class ActualFlightsForm extends Form
     #[Validate('required')]
     public string $actual_departure = '';
 
-    #[Validate('nullable|integer|between:1,999')]
+    #[Validate('nullable|integer|between:0,999')]
     public string $pax = '';
 
     #[Validate('nullable|integer|min:1|max:9999')]
@@ -251,7 +251,7 @@ class ActualFlightsForm extends Form
             'actual_dep'            => $this->actual_departure,
             'actual_arr'            => $this->actual_arrival,
             'service_date'          => $this->service_date,
-            'pax'                   => $this->pax ?: null,
+            'pax'                   => $this->pax,
             'ground_time'           => $this->ground_time ?: null,
             'pic'                   => $this->pic ?: null,
             'notes'                 => $this->notes ?: null,
