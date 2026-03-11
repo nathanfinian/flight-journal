@@ -86,14 +86,24 @@
                         <x-slot:menu>
                             <x-ui.dropdown.group label="Sistem Invoice">
                                 <x-ui.dropdown.separator />
-                                @role('admin', 'finance')
-                                <x-ui.dropdown.item icon="ps:newspaper" :href="route('invoice')">
-                                    Regular Invoice
+                                 <x-ui.dropdown.item icon="document-plus" :href="route('deposit')">
+                                    Deposit/Talangan
                                 </x-ui.dropdown.item>
+                                @role('admin', 'finance')
+                                    <x-ui.dropdown.item icon="ps:newspaper" :href="route('invoice')">
+                                        Regular Invoice
+                                    </x-ui.dropdown.item>
+                                    <x-ui.dropdown.item icon="document" :href="route('gseinvoice')">
+                                        GSE Invoice
+                                    </x-ui.dropdown.item>
+                                    <x-ui.dropdown.item disabled icon="document" :href="route('invoice')">
+                                        Charter Invoice
+                                    </x-ui.dropdown.item>
                                 @endrole
                                 
-                                <x-ui.dropdown.item icon="document-plus" :href="route('deposit')">
-                                    Deposit/Talangan
+                                @role('operation')
+                                <x-ui.dropdown.item disabled icon="ps:newspaper" :href="route('invoice')">
+                                    Regular Invoice
                                 </x-ui.dropdown.item>
 
                                 <x-ui.dropdown.item disabled icon="document" :href="route('invoice')">
@@ -103,6 +113,7 @@
                                 <x-ui.dropdown.item disabled icon="document" :href="route('invoice')">
                                     GSE Invoice
                                 </x-ui.dropdown.item>
+                                @endrole
                             </x-ui.dropdown.group>
                         </x-slot:menu>
                     </x-ui.dropdown>
