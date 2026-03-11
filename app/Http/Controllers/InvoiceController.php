@@ -138,8 +138,8 @@ class InvoiceController extends Controller
         $formattedKON = number_format($invoice->rate->konsesi_rate * 100);
 
         $totalAfterPPN = $totalPreTax + $totalPPN;
-        $totalAfterPPH = $totalAfterPPN + $totalPPH;
-        $totalAfterKON = $totalAfterPPH - $totalKON;
+        $totalAfterKON = $totalAfterPPN + $totalKON;
+        $totalAfterPPH = $totalAfterKON - $totalPPH;
 
         $finalTerbilang = $this->Terbilang($totalAfterKON);
         $currentDate = Carbon::now()->format('d F Y');

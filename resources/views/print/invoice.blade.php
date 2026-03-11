@@ -113,22 +113,22 @@
 				<td>Rp. {{ number_format($totalAfterPPN) }}</td>
 			</tr>
 			<tr>
-				<td colspan="2">PPH</td>
-				<td colspan="2" class="text-center">{{ $formattedPPH }}% X {{ number_format($totalPreTax) }}</td>
-				<td>Rp. {{ number_format($totalPPH) }}</td>
-			</tr>
-			<tr>
-				<td colspan="4"></td>
-				<td>Rp. {{ number_format($totalAfterPPH) }}</td>
-			</tr>
-			<tr>
 				<td colspan="2">Konsesi</td>
 				<td colspan="2" class="text-center">{{ $formattedKON }}% X {{ number_format($totalPreTax) }}</td>
-				<td>Rp. - {{ number_format($totalKON) }}</td>
+				<td>Rp. {{ number_format($totalKON) }}</td>
 			</tr>
 			<tr>
 				<td colspan="4"><b>Grand Total</b></td>
 				<td><b>Rp. {{ number_format($totalAfterKON) }}</b></td>
+			</tr>
+			<tr>
+				<td colspan="2">PPH</td>
+				<td colspan="2" class="text-center">{{ $formattedPPH }}% X {{ number_format($totalPreTax) }}</td>
+				<td>Rp. - {{ number_format($totalPPH) }}</td>
+			</tr>
+			<tr>
+				<td colspan="4"></td>
+				<td>Rp. {{ number_format($totalAfterPPH) }}</td>
 			</tr>
 			</tbody>
 		</table>
