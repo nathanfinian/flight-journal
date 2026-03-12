@@ -10,15 +10,15 @@ class GsePushbackDetail extends Model
     protected $table = 'gse_pushback_details';
 
     protected $fillable = [
-        'gse_invoice_id',
+        'gse_recap_id',
         'start_ps',
         'end_ps',
         'ata',
         'atd',
     ];
 
-    public function invoice(): BelongsTo
+    public function recap(): BelongsTo
     {
-        return $this->belongsTo(Invoice_gse::class, 'gse_invoice_id');
+        return $this->belongsTo(GseRecap::class, 'gse_recap_id');
     }
 }
