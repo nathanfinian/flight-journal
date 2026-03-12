@@ -20,30 +20,6 @@
                         :href="route('dashboard')" 
                         :active="request()->is('dashboard')"
                     />
-                    {{-- <x-ui.navbar.item 
-                        wire:navigate.hover
-                        icon="ps:notepad"
-                        icon:class="w-5 h-5" 
-                        label="Flight Journal" 
-                        :href="route('flight-journal')"
-                        :active="request()->is('flight-journal*')"
-                    />
-                    <x-ui.navbar.item 
-                        wire:navigate.hover
-                        icon="ps:calendar-dots"
-                        icon:class="w-5 h-5" 
-                        label="Scheduling" 
-                        :href="route('flight-schedule')"
-                        :active="request()->is('flight-schedule*')"
-                    />
-                    <x-ui.navbar.item 
-                        wire:navigate.hover
-                        icon="document-text"
-                        icon:class="w-5 h-5" 
-                        label="History" 
-                        :href="route('flight-history')"
-                        :active="request()->is('flight-history*')"
-                    /> --}}
                     <x-ui.dropdown position="bottom-start">
                         <x-slot:button>
                             <x-ui.navbar.item 
@@ -76,6 +52,30 @@
                         <x-slot:button>
                             <x-ui.navbar.item 
                                 wire:navigate.hover
+                                icon="ps:jeep"
+                                icon:class="w-5 h-5" 
+                                label="GSE" 
+                                :active="request()->is('gse*')"
+                            />
+                        </x-slot:button>
+                        
+                        <x-slot:menu>
+                            <x-ui.dropdown.group label="Data GSE">
+                                <x-ui.dropdown.separator />
+                                <x-ui.dropdown.item icon="ps:notepad" :href="route('rekapgse')">
+                                    Rekap
+                                </x-ui.dropdown.item>
+
+                                <x-ui.dropdown.item disabled icon="document-text" :href="route('flight-history')">
+                                    Biaya
+                                </x-ui.dropdown.item>
+                            </x-ui.dropdown.group>
+                        </x-slot:menu>
+                    </x-ui.dropdown>
+                    <x-ui.dropdown position="bottom-start">
+                        <x-slot:button>
+                            <x-ui.navbar.item 
+                                wire:navigate.hover
                                 icon="ps:newspaper"
                                 icon:class="w-5 h-5" 
                                 label="Invoicing" 
@@ -93,7 +93,7 @@
                                     <x-ui.dropdown.item icon="ps:newspaper" :href="route('invoice')">
                                         Regular Invoice
                                     </x-ui.dropdown.item>
-                                    <x-ui.dropdown.item icon="document" :href="route('gseinvoice')">
+                                    <x-ui.dropdown.item icon="document" :href="route('rekapgse')">
                                         GSE Invoice
                                     </x-ui.dropdown.item>
                                     <x-ui.dropdown.item disabled icon="document" :href="route('invoice')">
