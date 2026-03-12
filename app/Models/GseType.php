@@ -19,6 +19,16 @@ class GseType extends Model
         'service_rate' => 'decimal:2',
     ];
 
+    public function recaps(): HasMany
+    {
+        return $this->hasMany(GseRecap::class, 'gse_type_id');
+    }
+
+    public function rates(): HasMany
+    {
+        return $this->hasMany(GseTypeRate::class, 'gse_type_id');
+    }
+
     public function invoices(): HasMany
     {
         return $this->hasMany(Invoice_gse::class, 'gse_type_id');
