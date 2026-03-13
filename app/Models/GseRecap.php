@@ -6,9 +6,12 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class GseRecap extends Model
 {
+    use SoftDeletes;
+
     protected $table = 'gse_recaps';
 
     protected $fillable = [
@@ -17,7 +20,6 @@ class GseRecap extends Model
         'airline_id',
         'service_date',
         'equipment_id',
-        'invoice_number',
         'flight_number',
         'er_number',
         'operator_name',
