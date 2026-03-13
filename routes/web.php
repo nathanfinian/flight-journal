@@ -39,6 +39,12 @@ use App\Livewire\Invoice\Index as IndexInvoice;
 use App\Livewire\Invoice\Create as CreateInvoice;
 // use App\Livewire\Invoice\PrintInvoice;
 
+use App\Livewire\GseRecap\Index as IndexGSERecap;
+use App\Livewire\GseRecap\Create as CreateGSERecap;
+
+use App\Livewire\GseRates\Index as IndexGSERate;
+use App\Livewire\GseRates\Create as CreateGSERate;
+
 use App\Livewire\Deposit\Index as IndexDeposit;
 use App\Livewire\Deposit\Create as CreateDeposit;
 
@@ -69,6 +75,36 @@ Route::middleware('auth')->group(function () {
         ->name('invoice.edit');  // <-- {airline} matches the type-hint
     Route::get('/invoice/print/{invoice}', [InvoiceController::class, 'print'])
         ->name('invoice.print');
+
+    /* =======================
+     | GSE Rekap - GPU and ATT Invoices
+     ======================= */
+    Route::get('/gse/rekapgse', IndexGSERecap::class)->name('rekapgse');
+    Route::get('/gse/rekapgse/create', CreateGSERecap::class)
+        ->name('rekapgse.create');
+    Route::get('/gse/rekapgse/{id:id}/edit', CreateGSERecap::class)
+        ->whereNumber('id') // optional safety
+        ->name('rekapgse.edit');  // <-- {airline} matches the type-hint
+    //Route::get('/gse/rekap/print/{rekap}', [InvoiceController::class, 'print']) // print page
+      //  ->name('rekapgse.print');
+
+    Route::get('/gse/rategse', IndexGSERate::class)->name('rategse');
+    Route::get('/gse/rategse/create', CreateGSERate::class)->name('rategse.create');
+    Route::get('/gse/rategse/{gseRate:id}/edit', CreateGSERate::class)
+        ->whereNumber('gseRate')
+        ->name('rategse.edit');
+
+    /* =======================
+     | GSE Rates - Rates data based on GSE type and time period
+     ======================= */
+    Route::get('/gse/rategse', IndexGSERate::class)->name('rategse');
+    Route::get('/gse/rategse/create', CreateGSERate::class)
+        ->name('rategse.create');
+    Route::get('/gse/rategse/{id:id}/edit', CreateGSERate::class)
+        ->whereNumber('id') // optional safety
+        ->name('rategse.edit');  // <-- {airline} matches the type-hint
+    //Route::get('/gse/rekap/print/{rekap}', [InvoiceController::class, 'print']) // print page
+      //  ->name('rekapgse.print');
 
     /* =======================
      | Invoice - Talangan Data page
