@@ -66,7 +66,7 @@
                                     Rekap
                                 </x-ui.dropdown.item>
 
-                                <x-ui.dropdown.item disabled icon="document-text" :href="route('flight-history')">
+                                <x-ui.dropdown.item icon="document-text" :href="route('rategse')">
                                     Biaya
                                 </x-ui.dropdown.item>
                             </x-ui.dropdown.group>
