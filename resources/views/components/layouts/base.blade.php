@@ -11,7 +11,8 @@
         <title> MCA | Journal {{ isset($title) ? '| ' . $title : '' }}</title>
         <link rel="icon" type="image/x-icon" href="{{ asset('img/logo-black.png') }}">
 
-        @vite(['resources/css/app.css', 'resources/js/app.js'])
+        @filamentStyles
+        @vite('resources/css/app.css')
         
         <style>
             /* gives the progress bar primary color */
@@ -47,6 +48,10 @@
 
         @livewireScriptConfig
         {{-- without this it cause flicker when multiple components changes in isolation in the  page --}}
+
+        @filamentScripts
+        @vite('resources/js/app.js')
+        
         <script>
             loadDarkMode()
         </script>
