@@ -2,57 +2,75 @@
 
 namespace App\Livewire\Settings;
 
-use App\Models\Airline;
-use Livewire\Component;
-use Livewire\WithPagination;
 use App\Models\Equipment as EquipmentModel;
+use Filament\Actions\Action;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Enums\FiltersLayout;
+use Filament\Tables\Filters\SelectFilter;
+use Filament\Tables\Table;
+use Filament\Tables\TableComponent;
+use Livewire\Attributes\Layout;
 
-class Equipment extends Component
+#[Layout('components.layouts.app')]
+class Equipment extends TableComponent
 {
-    use WithPagination;
-
-    private int $perPage = 10;
-
-    public $airlines = [];
-
-    public ?string $selectedAirline = '';
-
-    public function mount()
+    public function table(Table $table): Table
     {
-        // Load filters
-        $this->airlines = Airline::orderBy('name')->get(['id', 'name']);
-    }
-
-    public function updatedSelectedAirline($value)
-    {
-        $this->resetPage(); // reset pagination when filtering
-    }
-
-    public function openEdit(int $id)
-    {
-        return $this->redirectRoute('settings.equipment.edit', ['equipment' => $id], navigate: true);
+        return $table
+            ->query(
+                EquipmentModel::query()
+                    ->with([
+                        'aircraft:id,type_name',
+                        'airline:id,name',
+                    ])
+                    ->join('airlines', 'equipments.airline_id', '=', 'airlines.id')
+                    ->select('equipments.*')
+            )
+            ->defaultSort('airlines.name')
+            ->searchPlaceholder('Cari registration')
+            ->paginated([10, 25, 50])
+            ->defaultPaginationPageOption(10)
+            ->recordUrl(fn (EquipmentModel $record): string => route('settings.equipment.edit', ['equipment' => $record->id]))
+            ->columns([
+                TextColumn::make('index')
+                    ->label('#')
+                    ->rowIndex(),
+                TextColumn::make('airline.name')
+                    ->label('Airline')
+                    ->sortable()
+                    ->searchable(),
+                TextColumn::make('registration')
+                    ->sortable()
+                    ->searchable(),
+                TextColumn::make('aircraft.type_name')
+                    ->label('Type')
+                    ->sortable()
+                    ->searchable(),
+                TextColumn::make('status')
+                    ->badge()
+                    ->color(fn (string $state): string => match (strtoupper($state)) {
+                        'ACTIVE' => 'success',
+                        'RETIRED' => 'danger',
+                        default => 'gray',
+                    })
+                    ->sortable(),
+            ])
+            ->filters([
+                SelectFilter::make('airline')
+                    ->relationship('airline', 'name'),
+                SelectFilter::make('status')
+                    ->options([
+                        'ACTIVE' => 'ACTIVE',
+                        'RETIRED' => 'INACTIVE',
+                    ]),
+            ], layout: FiltersLayout::BeforeContent)
+            ->filtersApplyAction(fn (Action $action): Action => $action->color('gray'))
+            ->emptyStateHeading('No equipment found.')
+            ->persistFiltersInSession();
     }
 
     public function render()
     {
-        $equipments = EquipmentModel::query()
-            ->with([
-                'aircraft:id,type_name',
-                'airline:id,name',
-            ])
-            ->join('airlines', 'equipments.airline_id', '=', 'airlines.id')
-
-            // 🔥 Filter by selected airline
-            ->when($this->selectedAirline, function ($q) {
-                $q->where('equipments.airline_id', $this->selectedAirline);
-            })
-
-            // 🔥 Order by airline name
-            ->orderBy('airlines.name', 'asc')
-
-            ->select('equipments.*') // avoid ambiguity
-            ->paginate($this->perPage);
-            
-        return view('livewire.settings.equipment', compact('equipments'));
+        return view('livewire.settings.equipment');
     }
 }
