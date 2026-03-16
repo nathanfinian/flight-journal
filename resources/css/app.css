@@ -29,3 +29,88 @@
 }
 
  @custom-variant dark (&:where(.dark, .dark *)); /* By Sheaf.dev */ 
+
+@layer components {
+    .fi-ta-ctn {
+        @apply bg-white ring-black/10 shadow-lg dark:bg-neutral-900 dark:ring-white/10;
+    }
+
+    .fi-ta-ctn .fi-ta-header,
+    .fi-ta-ctn .fi-ta-header-toolbar,
+    .fi-ta-ctn .fi-ta-filters-above-content-ctn,
+    .fi-ta-ctn .fi-pagination,
+    .fi-ta-ctn .fi-ta-filters.fi-ta-filters-below-content {
+        @apply border-black/10 dark:border-white/10;
+    }
+
+    .fi-ta-ctn .fi-ta-header-heading,
+    .fi-ta-ctn .fi-ta-filters-heading,
+    .fi-ta-header-cell,
+    .fi-ta-header-group-cell {
+        @apply text-neutral-900 dark:text-neutral-100;
+    }
+
+    .fi-ta-content-ctn {
+        @apply divide-black/10 dark:divide-white/10;
+    }
+
+    .fi-ta-content-ctn .fi-ta-content-header,
+    .fi-ta-ctn .fi-ta-reorder-indicator,
+    .fi-ta-ctn .fi-ta-selection-indicator,
+    .fi-ta-ctn .fi-ta-filter-indicators,
+    .fi-ta-content .fi-ta-group-header,
+    .fi-ta-row.fi-ta-group-header-row > td,
+    .fi-ta-row.fi-striped {
+        @apply bg-neutral-100 text-neutral-700 dark:bg-neutral-800/80 dark:text-neutral-200;
+    }
+
+    .fi-ta-content:not(.fi-ta-content-grid) {
+        @apply bg-black/10 dark:bg-white/10;
+    }
+
+    .fi-ta-content .fi-ta-record {
+        @apply bg-white dark:bg-neutral-900;
+    }
+
+    .fi-ta-content .fi-ta-record.fi-clickable,
+    .fi-ta-row.fi-clickable {
+        @apply hover:bg-neutral-100 dark:hover:bg-neutral-800/80;
+    }
+
+    .fi-ta-content .fi-ta-record.fi-selected,
+    .fi-ta-row.fi-selected:not(.fi-striped) {
+        @apply bg-neutral-100 dark:bg-neutral-800/80;
+    }
+
+    .fi-ta-content .fi-ta-record.fi-selected::before,
+    .fi-ta-row.fi-selected > *:first-child::before {
+        @apply bg-neutral-800 dark:bg-white;
+    }
+
+    .fi-ta-content .fi-ta-record .fi-ta-record-content .fi-ta-col,
+    .fi-ta-content .fi-ta-record .fi-ta-record-content .fi-ta-col .fi-ta-text-item,
+    .fi-ta-cell {
+        @apply text-neutral-800 dark:text-neutral-200;
+    }
+
+    .fi-ta-cell .fi-ta-placeholder,
+    .fi-ta-content .fi-ta-group-description {
+        @apply text-neutral-500 dark:text-neutral-400;
+    }
+
+    .fi-ta-header-cell:not(.fi-ta-header-cell-sorted) .fi-icon {
+        @apply text-neutral-400 dark:text-neutral-500;
+    }
+
+    .fi-ta-header-cell:not(.fi-ta-header-cell-sorted) .fi-ta-header-cell-sort-btn:hover .fi-icon,
+    .fi-ta-header-cell:not(.fi-ta-header-cell-sorted) .fi-ta-header-cell-sort-btn:focus-visible .fi-icon,
+    .fi-ta-header-cell.fi-ta-header-cell-sorted .fi-icon {
+        @apply text-neutral-700 dark:text-neutral-100;
+    }
+
+    .fi-ta-ctn .fi-input-wrp,
+    .fi-ta-ctn .fi-dropdown-panel,
+    .fi-ta-ctn .fi-modal-window {
+        @apply border-black/10 bg-white dark:border-white/10 dark:bg-neutral-900;
+    }
+}
