@@ -88,12 +88,6 @@ Route::middleware('auth')->group(function () {
     //Route::get('/gse/rekap/print/{rekap}', [InvoiceController::class, 'print']) // print page
       //  ->name('rekapgse.print');
 
-    Route::get('/gse/rategse', IndexGSERate::class)->name('rategse');
-    Route::get('/gse/rategse/create', CreateGSERate::class)->name('rategse.create');
-    Route::get('/gse/rategse/{gseRate:id}/edit', CreateGSERate::class)
-        ->whereNumber('gseRate')
-        ->name('rategse.edit');
-
     /* =======================
      | GSE Rates - Rates data based on GSE type and time period
      ======================= */
@@ -104,6 +98,18 @@ Route::middleware('auth')->group(function () {
         ->whereNumber('id') // optional safety
         ->name('rategse.edit');  // <-- {airline} matches the type-hint
     //Route::get('/gse/rekap/print/{rekap}', [InvoiceController::class, 'print']) // print page
+      //  ->name('rekapgse.print');
+
+    /* =======================
+     | GSE Rates - Rates data based on GSE type and time period
+     ======================= */
+    Route::get('/invoice/invoicegse', IndexGSERate::class)->name('invoicegse');
+    Route::get('/invoice/invoicegse/create', CreateGSERate::class)
+        ->name('invoicegse.create');
+    Route::get('/invoice/invoicegse/{id:id}/edit', CreateGSERate::class)
+        ->whereNumber('id') // optional safety
+        ->name('invoicegse.edit');  // <-- {airline} matches the type-hint
+    //Route::get('/invoice/rekap/print/{rekap}', [InvoiceController::class, 'print']) // print page
       //  ->name('rekapgse.print');
 
     /* =======================
