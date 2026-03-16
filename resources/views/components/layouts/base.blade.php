@@ -46,7 +46,7 @@
 
         {{ $slot }}
 
-        @livewireScriptConfig
+        @livewireScripts
         {{-- without this it cause flicker when multiple components changes in isolation in the  page --}}
 
         @filamentScripts
