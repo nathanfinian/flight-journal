@@ -42,8 +42,8 @@ class GseRecapForm extends Form
         $this->operator_name = (string) $recap->operator_name;
         $this->remarks = (string) $recap->remarks;
 
-        $this->start_time = (string) optional($recap->gpuDetail)->start_time;
-        $this->end_time = (string) optional($recap->gpuDetail)->end_time;
+        $this->start_time = $this->formatTimeForInput(optional($recap->gpuDetail)->start_time);
+        $this->end_time = $this->formatTimeForInput(optional($recap->gpuDetail)->end_time);
 
         $this->start_ps = (string) optional($recap->pushbackDetail)->start_ps;
         $this->end_ps = (string) optional($recap->pushbackDetail)->end_ps;
@@ -160,8 +160,8 @@ class GseRecapForm extends Form
     {
         return match ($this->detailType()) {
             'gpu' => [
-                'start_time' => ['required', 'date_format:H:i'],
-                'end_time' => ['required', 'date_format:H:i'],
+                'start_time' => ['required', 'regex:/^\d{2}:\d{2}(:\d{2})?$/'],
+                'end_time' => ['required', 'regex:/^\d{2}:\d{2}(:\d{2})?$/'],
             ],
             'pushback' => [
                 'start_ps' => ['required', 'string', 'max:20'],
@@ -179,8 +179,8 @@ class GseRecapForm extends Form
 
         if ($detailType === 'gpu') {
             $recap->gpuDetail()->updateOrCreate([], [
-                'start_time' => $validated['start_time'],
-                'end_time' => $validated['end_time'],
+                'start_time' => $this->formatTimeForStorage($validated['start_time']),
+                'end_time' => $this->formatTimeForStorage($validated['end_time']),
             ]);
 
             $recap->pushbackDetail()?->delete();
@@ -217,5 +217,25 @@ class GseRecapForm extends Form
         }
 
         return null;
+    }
+
+    private function formatTimeForInput(mixed $value): string
+    {
+        if (blank($value)) {
+            return '';
+        }
+
+        $value = (string) $value;
+
+        return preg_match('/^\d{2}:\d{2}:\d{2}$/', $value) === 1
+            ? substr($value, 0, 5)
+            : $value;
+    }
+
+    private function formatTimeForStorage(string $value): string
+    {
+        return preg_match('/^\d{2}:\d{2}$/', $value) === 1
+            ? "{$value}:00"
+            : $value;
     }
 }

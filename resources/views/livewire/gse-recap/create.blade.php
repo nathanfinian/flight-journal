@@ -116,14 +116,14 @@
                         <div class="col-span-6">
                             <x-ui.field required>
                                 <x-ui.label>Start Time</x-ui.label>
-                                <x-ui.input type="time" wire:model="form.start_time" />
+                                <x-ui.input type="time" wire:model.defer="form.start_time" />
                                 <x-ui.error name="form.start_time" />
                             </x-ui.field>
                         </div>
                         <div class="col-span-6">
                             <x-ui.field required>
                                 <x-ui.label>End Time</x-ui.label>
-                                <x-ui.input type="time" wire:model="form.end_time" />
+                                <x-ui.input type="time" wire:model.defer="form.end_time" />
                                 <x-ui.error name="form.end_time" />
                             </x-ui.field>
                         </div>
