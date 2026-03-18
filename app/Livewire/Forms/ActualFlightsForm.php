@@ -211,14 +211,6 @@ class ActualFlightsForm extends Form
 
         // 2) Validate unique flight numbers
         $this->validate([
-            'origin_flight_number' => [
-                Rule::unique('actual_flights', 'origin_flight_no')
-                    ->where(fn($q) => $q
-                        ->whereDate('service_date', $this->service_date)
-                        ->where('flight_type_id', $this->flight_type_id))
-                    ->whereNull('deleted_at')   // ⬅️ ignore soft-deleted rows
-                    ->ignore($this->record?->id),
-            ],
             'departure_flight_number' => [
                 Rule::unique('actual_flights', 'departure_flight_no')
                     ->where(fn($q) => $q
