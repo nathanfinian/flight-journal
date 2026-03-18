@@ -20,13 +20,15 @@ class Create extends Component
 
     public bool $isEdit = false;
 
-    public function mount(?GseTypeRate $gseRate = null): void
+    public function mount(?int $id = null): void
     {
         $this->gseTypes = GseType::query()
             ->orderBy('service_name')
             ->get(['id', 'service_name']);
 
-        if ($gseRate) {
+        if ($id !== null) {
+            $gseRate = GseTypeRate::query()->findOrFail($id);
+
             $this->isEdit = true;
             $this->gseRateId = $gseRate->getKey();
             $this->gse_type_id = (string) $gseRate->gse_type_id;
