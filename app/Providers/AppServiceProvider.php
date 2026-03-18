@@ -2,10 +2,12 @@
 
 namespace App\Providers;
 
+use Filament\Support\Colors\Color;
+use Filament\Support\Facades\FilamentColor;
 use Illuminate\Support\Facades\Blade;
-use Illuminate\Support\ServiceProvider;
-use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -22,7 +24,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        // In a service provider boot() method:
+        FilamentColor::register([
+            'purple' => Color::Purple,
+        ]);
+
         Validator::extend('username', function ($attribute, $value, $parameters, $validator) {
             return preg_match('/^[A-Za-z0-9_]{3,20}$/', $value);
         });
