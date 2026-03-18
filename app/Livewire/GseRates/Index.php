@@ -14,7 +14,7 @@ class Index extends Component
 
     public function openEdit(int $id)
     {
-        return $this->redirectRoute('rategse.edit', ['gseRate' => $id], navigate: true);
+        return $this->redirectRoute('rategse.edit', ['id' => $id], navigate: true);
     }
 
     public function render()
