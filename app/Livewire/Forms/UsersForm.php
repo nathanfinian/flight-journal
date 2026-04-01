@@ -26,6 +26,18 @@ class UsersForm extends Form
     #[Validate('required|exists:branches,id')]
     public string $branch = '';
 
+    public function rules(): array
+    {
+        return [
+            'username' => 'required|string|min:3|max:80|alpha_num',
+            'name' => 'required|string|min:3|max:80',
+            'password' => 'nullable|string|min:6|confirmed',
+            'password_confirmation' => 'same:password',
+            'role' => 'required|exists:roles,id',
+            'branch' => 'required|exists:branches,id',
+        ];
+    }
+
     public function fillFromModel(User $user)
     {
         $this->username = $user->username;
