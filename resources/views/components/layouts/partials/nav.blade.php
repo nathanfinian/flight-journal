@@ -93,7 +93,7 @@
                                     <x-ui.dropdown.item icon="ps:newspaper" :href="route('invoice')">
                                         Regular Invoice
                                     </x-ui.dropdown.item>
-                                    <x-ui.dropdown.item icon="document" :href="route('rekapgse')">
+                                    <x-ui.dropdown.item icon="document" :href="route('invoicegse')">
                                         GSE Invoice
                                     </x-ui.dropdown.item>
                                     <x-ui.dropdown.item disabled icon="document" :href="route('invoice')">
