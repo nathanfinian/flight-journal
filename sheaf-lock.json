@@ -1,3 +1,21 @@
 {
-    "files": []
+    "files": [],
+    "helpers": [],
+    "internalDependencies": {
+        "icon": [
+            "sidebar",
+            "button",
+            "navlist"
+        ],
+        "button": [
+            "sidebar",
+            "navlist"
+        ],
+        "navlist": [
+            "sidebar"
+        ],
+        "badge": [
+            "navlist"
+        ]
+    }
 }

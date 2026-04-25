@@ -7,10 +7,10 @@
             "installationTime": 1757085344
         },
         "icon": {
-            "installationTime": 1757085351
+            "installationTime": 1777107369
         },
         "button": {
-            "installationTime": 1757085718
+            "installationTime": 1777107381
         },
         "toast": {
             "installationTime": 1757085395
@@ -83,6 +83,12 @@
         },
         "description": {
             "installationTime": 1768648649
+        },
+        "sidebar": {
+            "installationTime": 1777106435
+        },
+        "navlist": {
+            "installationTime": 1777107341
         }
     },
     "project_hash": "70f40171-ddbe-4c3c-84d7-4aee93d30b69"
