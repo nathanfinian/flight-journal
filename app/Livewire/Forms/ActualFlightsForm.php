@@ -247,7 +247,7 @@ class ActualFlightsForm extends Form
             'actual_dep'            => $this->actual_departure,
             'actual_arr'            => $this->actual_arrival,
             'service_date'          => $this->service_date,
-            'pax'                   => $this->pax,
+            'pax'                   => $this->pax ?: null,
             'ground_time'           => $this->ground_time ?: null,
             'pic'                   => $this->pic ?: null,
             'notes'                 => $this->notes ?: null,
