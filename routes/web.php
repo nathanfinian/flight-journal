@@ -37,13 +37,15 @@ use App\Livewire\Settings\AirportRouteModify;
 
 use App\Livewire\Invoice\Index as IndexInvoice;
 use App\Livewire\Invoice\Create as CreateInvoice;
-// use App\Livewire\Invoice\PrintInvoice;
 
 use App\Livewire\GseRecap\Index as IndexGSERecap;
 use App\Livewire\GseRecap\Create as CreateGSERecap;
 
 use App\Livewire\GseRates\Index as IndexGSERate;
 use App\Livewire\GseRates\Create as CreateGSERate;
+
+use App\Livewire\GseInvoices\Index as IndexGSEInvoice;
+use App\Livewire\GseInvoices\Create as CreateGSEInvoice;
 
 use App\Livewire\Deposit\Index as IndexDeposit;
 use App\Livewire\Deposit\Create as CreateDeposit;
@@ -77,6 +79,18 @@ Route::middleware('auth')->group(function () {
         ->name('invoice.print');
 
     /* =======================
+     | GSE Invoice - GSE Invoice Page
+     ======================= */
+    Route::get('/invoice/gse', IndexGSEInvoice::class)->name('invoicegse');
+    Route::get('/invoice/gse/create', CreateGSEInvoice::class)
+        ->name('invoicegse.create');
+    Route::get('/invoice/gse/{id:id}/edit', CreateGSEInvoice::class)
+        ->whereNumber('id') // optional safety
+        ->name('invoicegse.edit');  // <-- {airline} matches the type-hint
+    Route::get('/invoice/gse/print/{invoice}', [InvoiceController::class, 'print'])
+        ->name('invoicegse.print');
+
+    /* =======================
      | GSE Rekap - GPU and ATT Invoices
      ======================= */
     Route::get('/gse/rekapgse', IndexGSERecap::class)->name('rekapgse');
@@ -103,10 +117,10 @@ Route::middleware('auth')->group(function () {
     /* =======================
      | GSE Rates - Rates data based on GSE type and time period
      ======================= */
-    Route::get('/invoice/invoicegse', IndexGSERate::class)->name('invoicegse');
-    Route::get('/invoice/invoicegse/create', CreateGSERate::class)
+    Route::get('/invoice/invoicegse', IndexGSEInvoice::class)->name('invoicegse');
+    Route::get('/invoice/invoicegse/create', CreateGSEInvoice::class)
         ->name('invoicegse.create');
-    Route::get('/invoice/invoicegse/{id:id}/edit', CreateGSERate::class)
+    Route::get('/invoice/invoicegse/{id:id}/edit', CreateGSEInvoice::class)
         ->whereNumber('id') // optional safety
         ->name('invoicegse.edit');  // <-- {airline} matches the type-hint
     //Route::get('/invoice/rekap/print/{rekap}', [InvoiceController::class, 'print']) // print page
