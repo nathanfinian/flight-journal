@@ -54,7 +54,7 @@
 <body>
 
 <div class="header">
-    <h2>Report Histori Penerbangan {{ $airline }}</h2>
+    <h2>Report Histori Penerbangan {{ $airline }}{{ $type }}</h2>
     <h4>{{ $branch }}</h4>
     <p style="font-size: 11px; color: #555;">{{ $dateFrom }} sampai {{ $dateTo }}</p>
 </div>
