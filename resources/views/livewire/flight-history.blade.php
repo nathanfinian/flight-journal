@@ -16,6 +16,8 @@
                     'airline' => $selectedAirline,
                     'flightNo' => $flightNo,
                     'airlineName' => $airlineName,
+                    'type' => $selectedType,
+                    'typeName' => $typeName,
                 ]) }}', '_blank')"
             >
             </x-ui.button>
@@ -31,6 +33,8 @@
                     'airline' => $selectedAirline,
                     'flightNo' => $flightNo,
                     'airlineName' => $airlineName,
+                    'type' => $selectedType,
+                    'typeName' => $typeName,
                 ]) }}', '_blank')"
             >
             </x-ui.button>
@@ -40,44 +44,85 @@
     <x-ui.separator class="my-2"/>
 
     {{-- 🔼 End filters --}}
-    <div class="flex flex-wrap items-center gap-4 justify-between">
-        {{-- Left group: filters --}}
-        <div class="flex flex-wrap items-center gap-4">
-            <x-ui.label>Cabang</x-ui.label>
-            <x-ui.select
-                placeholder="Semua Cabang"
-                wire:model.live="selectedBranch"
-                class="mt-1 block w-48 sm:text-sm"
-            >
-                <x-ui.select.option value="">Semua Cabang</x-ui.select.option>
-                @foreach($branches as $branch)
-                    <x-ui.select.option value="{{ $branch->id }}">{{ $branch->name }}</x-ui.select.option>
-                @endforeach
-            </x-ui.select>
+    <div class="w-full">
 
-            <x-ui.label>Airline</x-ui.label>
-            <x-ui.select
-                placeholder="Semua Airline"
-                wire:model.live="selectedAirline"
-                class="mt-1 block w-48 sm:text-sm"
-            >
-                <x-ui.select.option value="">Semua Airline</x-ui.select.option>
-                @foreach($airlines as $airline)
-                    <x-ui.select.option value="{{ $airline->id }}">{{ $airline->name }}</x-ui.select.option>
-                @endforeach
-            </x-ui.select>
-            <x-ui.label>Flight No</x-ui.label>
-            <div class="w-40">
+        <div class="grid w-full grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-[minmax(0,1fr)_minmax(0,1fr)_minmax(0,1fr)_minmax(0,0.8fr)_minmax(24rem,1.6fr)]">
+            <div>
+                <x-ui.field>
+                    <x-ui.label>Cabang</x-ui.label>
+                    <x-ui.select
+                        searchable
+                        placeholder="Semua Cabang"
+                        wire:model.live="selectedBranch"
+                        class="mt-1 block w-full sm:text-sm"
+                    >
+                        <x-ui.select.option value="">Semua Cabang</x-ui.select.option>
+                        @foreach($branches as $branch)
+                            <x-ui.select.option value="{{ $branch->id }}">{{ $branch->name }}</x-ui.select.option>
+                        @endforeach
+                    </x-ui.select>
+                </x-ui.field>
+            </div>
+            <div>
+                <x-ui.field>
+                    <x-ui.label>Airline</x-ui.label>
+                    <x-ui.select
+                        searchable
+                        placeholder="Semua Airline"
+                        wire:model.live="selectedAirline"
+                        class="mt-1 block w-full sm:text-sm"
+                    >
+                        <x-ui.select.option value="">Semua Airline</x-ui.select.option>
+                        @foreach($airlines as $airline)
+                            <x-ui.select.option value="{{ $airline->id }}">{{ $airline->name }}</x-ui.select.option>
+                        @endforeach
+                    </x-ui.select>
+                </x-ui.field>
+            </div>
+            <div>
+                <x-ui.field>
+                    <x-ui.label>Type</x-ui.label>
+                    <x-ui.select
+                        searchable
+                        placeholder="Semua Type"
+                        wire:model.live="selectedType"
+                        class="mt-1 block w-full sm:text-sm"
+                    >
+                        <x-ui.select.option value="">Semua Type</x-ui.select.option>
+                        @foreach($types as $type)
+                            <x-ui.select.option value="{{ $type->id }}">{{ $type->name }}</x-ui.select.option>
+                        @endforeach
+                    </x-ui.select>
+                </x-ui.field>
+            </div>
+            <div>
+                <x-ui.label>Flight No</x-ui.label>
                 <x-ui.input
                     wire:model.live.debounce.400ms="flightNo"
                     maxlength="10"
                     placeholder="Flight No"
                 />
             </div>
+            <div class="min-w-0">
+                <x-ui.label>Tanggal</x-ui.label>
+                <div class="mt-1 grid grid-cols-2 gap-2">
+                    <x-ui.input
+                        type="date"
+                        wire:model.live="dateFrom"
+                        class="w-full"
+                        placeholder="Dari"
+                    />
+                    <x-ui.input
+                        type="date"
+                        wire:model.live="dateTo"
+                        class="w-full"
+                        placeholder="Sampai"
+                    />
+                </div>
+            </div>
         </div>
 
-        {{-- Right group: date range --}}
-        <div class="ml-auto flex items-center gap-2">
+        {{-- <div class="col-span-3">
             <x-ui.label class="whitespace-nowrap">Tanggal</x-ui.label>
             <x-ui.input
                 type="date"
@@ -92,7 +137,65 @@
                 class="w-40"
                 placeholder="Sampai"
             />
-        </div>
+        </div> --}}
+        
+        {{-- Left group: filters --}}
+        {{-- <div class="flex flex-wrap items-center gap-4">
+            <x-ui.field>
+                <x-ui.label>Cabang</x-ui.label>
+                <x-ui.select
+                    searchable
+                    placeholder="Semua Cabang"
+                    wire:model.live="selectedBranch"
+                    class="mt-1 block w-48 sm:text-sm"
+                >
+                    <x-ui.select.option value="">Semua Cabang</x-ui.select.option>
+                    @foreach($branches as $branch)
+                        <x-ui.select.option value="{{ $branch->id }}">{{ $branch->name }}</x-ui.select.option>
+                    @endforeach
+                </x-ui.select>
+            </x-ui.field>
+            <x-ui.field>
+                <x-ui.label>Airline</x-ui.label>
+                <x-ui.select
+                    searchable
+                    placeholder="Semua Airline"
+                    wire:model.live="selectedAirline"
+                    class="mt-1 block w-48 sm:text-sm"
+                >
+                    <x-ui.select.option value="">Semua Airline</x-ui.select.option>
+                    @foreach($airlines as $airline)
+                        <x-ui.select.option value="{{ $airline->id }}">{{ $airline->name }}</x-ui.select.option>
+                    @endforeach
+                </x-ui.select>
+            </x-ui.field>
+            <x-ui.label>Flight No</x-ui.label>
+            <div class="w-40">
+                <x-ui.input
+                    wire:model.live.debounce.400ms="flightNo"
+                    maxlength="10"
+                    placeholder="Flight No"
+                />
+            </div>
+        </div> --}}
+
+        {{-- Right group: date range --}}
+        {{-- <div class="ml-auto flex items-center gap-2">
+            <x-ui.label class="whitespace-nowrap">Tanggal</x-ui.label>
+            <x-ui.input
+                type="date"
+                wire:model.live="dateFrom"
+                class="w-40"
+                placeholder="Dari"
+            />
+            <span class="text-gray-400">–</span>
+            <x-ui.input
+                type="date"
+                wire:model.live="dateTo"
+                class="w-40"
+                placeholder="Sampai"
+            />
+        </div> --}}
     </div>
 
     <table class="border border-collapse min-w-full text-sm rounded-xl overflow-hidden mt-4 shadow-lg">
@@ -104,6 +207,7 @@
                 <th class="px-4 py-3 text-left">Arrival</th>
                 <th class="px-4 py-3 text-left">Departure</th>
                 <th class="px-4 py-3 text-left">Airline</th>
+                <th class="px-4 py-3 text-left">Type</th>
                 <th class="px-4 py-3 text-left">Origin</th>
                 <th class="px-4 py-3 text-left">Departure</th>
                 <th class="px-4 py-3 text-left">Time (ATA - ATD)</th>
@@ -122,6 +226,7 @@
                     <td class="px-4 py-3 font-semibold">{{ $flight->departure_flight_no ?? '—' }}</td>
 
                     <td class="px-4 py-3">{{ $flight->originAirlineRoute->airline->name ?? '—' }}</td>
+                    <td class="px-4 py-3">{{ $flight->flightType->name ?? '—' }}</td>
 
                     <td class="px-4 py-3">
                         {{ $flight->originAirlineRoute->airportRoute->origin->iata ?? '---' }}

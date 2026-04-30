@@ -7,6 +7,7 @@ use Carbon\Carbon;
 use App\Models\Branch;
 use App\Models\Flight;
 use App\Models\Airline;
+use App\Models\FlightType;
 use Livewire\Component;
 use Illuminate\Support\Facades\Auth;
 
@@ -19,11 +20,15 @@ class FlightHistory extends Component
 
     public $branches = [];
     public $airlines = [];
+    public $types = [];
 
     public ?string $branchName = '';
     public ?string $selectedBranch = '';
     public ?string $airlineName = '';
     public ?string $selectedAirline = '';
+
+    public ?string $typeName = '';
+    public ?string $selectedType = '';
     public ?string $flightNo = '';
 
     public function mount()
@@ -38,6 +43,7 @@ class FlightHistory extends Component
         // Load filters
         $this->branches = Branch::orderBy('name')->get(['id', 'name']);
         $this->airlines = Airline::orderBy('name')->get(['id', 'name']);
+        $this->types = FlightType::orderBy('name')->get(['id', 'name']);
 
         $this->selectedBranch = Auth::user()->branch_id;
 
@@ -51,6 +57,11 @@ class FlightHistory extends Component
     }
 
     public function updatedSelectedAirline($value)
+    {
+        $this->loadActualFlights();
+    }
+
+    public function updatedSelectedType($value)
     {
         $this->loadActualFlights();
     }
@@ -77,6 +88,7 @@ class FlightHistory extends Component
         $this->actualFlights = Flight::query()
             ->with([
                 'branch:id,name',
+                'flightType:id,name',
                 'originEquipment:id,registration',
                 'departureEquipment:id,registration',
                 'originAirlineRoute.airline:id,name',
@@ -86,6 +98,7 @@ class FlightHistory extends Component
                 'departureAirlineRoute.airportRoute.destination:id,iata',
             ])
             ->when($this->selectedBranch, fn($q) => $q->where('branch_id', $this->selectedBranch))
+            ->when($this->selectedType, fn($q) => $q->where('flight_type_id', $this->selectedType))
             ->when(
                 $this->selectedAirline,
                 fn($q) =>
@@ -124,6 +137,8 @@ class FlightHistory extends Component
             $this->branchName = Branch::where('id', $this->selectedBranch)
                                 ->value('name');
             $this->airlineName = Airline::where('id', $this->selectedAirline)
+                                ->value('name');
+            $this->typeName = FlightType::where('id', $this->selectedType)
                                 ->value('name');
     }
 
