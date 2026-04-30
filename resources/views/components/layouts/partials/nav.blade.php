@@ -4,14 +4,12 @@
  @endphp
 
 <header 
-    x-data="{ open: false }"
-    x-on:keydown.window.escape="open = false"
     class="border-b-neutral-100 dark:border-b-neutral-800 dark:bg-neutral-900 bg-neutral-50 fixed inset-x-0 top-0 z-50 border-b"
 >
     <x-ui.navbar class="mx-auto flex items-center justify-between px-6 py-3 text-base-100 lg:px-8" aria-label="global">
             <div class="flex items-center pr-7">
                 <x-app.logo />
-                <div class="flex gap-4 ml-8">
+                <div class="ml-8 hidden gap-4 lg:flex">
                     <x-ui.navbar.item 
                         wire:navigate.hover
                         icon="chart-pie"
@@ -136,17 +134,23 @@
                     @endrole
                 </div>
             </div>
-            <div class="flex lg:hidden gap-4 items-center">
-                <form
-                    action="{{ route('app.auth.logout') }}"
-                    method="post"
-                    class="contents"
-                >
-                    @csrf
-                    <x-ui.dropdown.item as="button" type="submit">
-                        <x-ui.icon name="arrow-left-start-on-rectangle" variant="solid" class="text-white"/> 
-                    </x-ui.dropdown.item>
-                </form>
+            <div class="flex items-center gap-2 lg:hidden">
+                <x-ui.modal.trigger id="mobile-nav-menu">
+                    <button type="button"
+                            class="inline-flex items-center justify-center rounded-field p-2 text-neutral-700 hover:bg-neutral-100 dark:text-neutral-200 dark:hover:bg-white/5"
+                            aria-label="Open navigation menu">
+                        <svg class="h-6 w-6"
+                             fill="none"
+                             viewBox="0 0 24 24"
+                             stroke-width="1.5"
+                             stroke="currentColor"
+                             aria-hidden="true">
+                            <path stroke-linecap="round"
+                                  stroke-linejoin="round"
+                                  d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+                        </svg>
+                    </button>
+                </x-ui.modal.trigger>
             </div>
 
             <div class="hidden gap-4 lg:flex lg:items-center lg:justify-end">
@@ -163,49 +167,180 @@
             </div>
     </x-ui.navbar>
 
-    <!-- Mobile Menu -->
-    <div x-show="open"
-         class="lg:hidden"
-         x-ref="dialog"
-         x-cloak=""
-         aria-modal="true">
-        <div class="fixed inset-0 z-50 bg-background"></div>
-        <div class="fixed inset-y-0 right-0 z-50 w-full overflow-y-auto bg-background px-6 py-6 sm:max-w-sm sm:ring-1 sm:ring-base-200/10"
-             x-on:click.away="open = false">
-            <div class="flex items-center justify-between">
-                <div class="flex items-center">
-                    <x-app.logo />
+    <x-ui.modal
+        id="mobile-nav-menu"
+        slideover
+        width="sm"
+        backdrop="dark"
+        class="lg:hidden"
+        :close-button="true"
+    >
+        <div class="mb-6 flex items-center">
+            <x-app.logo />
+        </div>
+
+        <div class="-my-4 divide-y divide-neutral-200 dark:divide-white/10">
+            @auth
+                <div class="py-4">
+                    <p class="text-sm text-neutral-500 dark:text-neutral-400">Signed in as</p>
+                    <p class="mt-1 text-sm font-semibold text-neutral-900 dark:text-neutral-100">{{ $user->name }}</p>
+                    <a wire:navigate.hover
+                       href="{{ route('settings.account') }}"
+                       x-on:click="$modal.close('mobile-nav-menu')"
+                       class="mt-3 inline-flex rounded-field bg-neutral-100 px-3 py-1.5 text-sm text-neutral-700 dark:bg-white/10 dark:text-neutral-200">
+                        Account
+                    </a>
                 </div>
 
-                <div class="flex items-center">
-                <button type="button"
-                        class="-m-2.5 rounded-md p-2.5 text-base-100"
-                        x-on:click="open = false">
-                    <span class="sr-only">Close menu</span>
-                    <svg class="h-6 w-6"
-                         fill="none"
-                         viewBox="0 0 24 24"
-                         stroke-width="1.5"
-                         stroke="currentColor">
-                        <path stroke-linecap="round"
-                              stroke-linejoin="round"
-                              d="M6 18L18 6M6 6l12 12" />
-                    </svg>
-                </button>
-                </div>
-            </div>
-            <div class="mt-6 flow-root">
-                <div class="-my-6 divide-y divide-base-200/10">
-                    <div class="py-6">
-                        @guest
-                            <a href="{{ route('login') }}"
-                               class="-mx-3 block rounded-field px-3 py-2.5 text-base font-semibold leading-7 text hover:bg-base-200/10 bg-base-100/6">Login</a>
-                            <a href="{{ route('register') }}"
-                               class="mt-2 block rounded-md border ring-1 ring-base-200/10 bg-base-200/20 px-3 py-2.5 text-base font-semibold text-base-100">Register</a>
-                        @endguest
+                <div class="space-y-1 py-4">
+                    <a wire:navigate.hover
+                       href="{{ route('dashboard') }}"
+                       x-on:click="$modal.close('mobile-nav-menu')"
+                       class="block rounded-field px-3 py-2 text-sm font-medium text-neutral-700 hover:bg-neutral-100 dark:text-neutral-200 dark:hover:bg-white/5">
+                        Dashboard
+                    </a>
+
+                    <div class="rounded-field" x-data="{ expanded: false }">
+                        <button
+                            type="button"
+                            x-on:click="expanded = ! expanded"
+                            class="flex w-full items-center justify-between rounded-field px-3 py-2 text-left text-sm font-medium text-neutral-700 hover:bg-neutral-100 dark:text-neutral-200 dark:hover:bg-white/5"
+                        >
+                            <span>Flights</span>
+                            <x-ui.icon
+                                name="chevron-down"
+                                class="h-4 w-4 transition-transform duration-200"
+                                x-bind:class="expanded ? 'rotate-180' : ''"
+                            />
+                        </button>
+                        <div
+                            x-show="expanded"
+                            x-transition:enter="transition ease-out duration-200"
+                            x-transition:enter-start="opacity-0 -translate-y-1"
+                            x-transition:enter-end="opacity-100 translate-y-0"
+                            x-transition:leave="transition ease-in duration-150"
+                            x-transition:leave-start="opacity-100 translate-y-0"
+                            x-transition:leave-end="opacity-0 -translate-y-1"
+                            x-cloak
+                            class="mt-1 space-y-1 pl-4"
+                        >
+                            <a wire:navigate.hover href="{{ route('flight-journal') }}" x-on:click="$modal.close('mobile-nav-menu')" class="block rounded-field px-3 py-2 text-sm text-neutral-600 hover:bg-neutral-100 dark:text-neutral-300 dark:hover:bg-white/5">Jurnal</a>
+                            <a wire:navigate.hover href="{{ route('flight-schedule') }}" x-on:click="$modal.close('mobile-nav-menu')" class="block rounded-field px-3 py-2 text-sm text-neutral-600 hover:bg-neutral-100 dark:text-neutral-300 dark:hover:bg-white/5">Penjadwalan</a>
+                            <a wire:navigate.hover href="{{ route('flight-history') }}" x-on:click="$modal.close('mobile-nav-menu')" class="block rounded-field px-3 py-2 text-sm text-neutral-600 hover:bg-neutral-100 dark:text-neutral-300 dark:hover:bg-white/5">Sejarah</a>
+                        </div>
                     </div>
+
+                    <div class="rounded-field" x-data="{ expanded: false }">
+                        <button
+                            type="button"
+                            x-on:click="expanded = ! expanded"
+                            class="flex w-full items-center justify-between rounded-field px-3 py-2 text-left text-sm font-medium text-neutral-700 hover:bg-neutral-100 dark:text-neutral-200 dark:hover:bg-white/5"
+                        >
+                            <span>GSE</span>
+                            <x-ui.icon
+                                name="chevron-down"
+                                class="h-4 w-4 transition-transform duration-200"
+                                x-bind:class="expanded ? 'rotate-180' : ''"
+                            />
+                        </button>
+                        <div
+                            x-show="expanded"
+                            x-transition:enter="transition ease-out duration-200"
+                            x-transition:enter-start="opacity-0 -translate-y-1"
+                            x-transition:enter-end="opacity-100 translate-y-0"
+                            x-transition:leave="transition ease-in duration-150"
+                            x-transition:leave-start="opacity-100 translate-y-0"
+                            x-transition:leave-end="opacity-0 -translate-y-1"
+                            x-cloak
+                            class="mt-1 space-y-1 pl-4"
+                        >
+                            <a wire:navigate.hover href="{{ route('rekapgse') }}" x-on:click="$modal.close('mobile-nav-menu')" class="block rounded-field px-3 py-2 text-sm text-neutral-600 hover:bg-neutral-100 dark:text-neutral-300 dark:hover:bg-white/5">Rekap</a>
+                            <a wire:navigate.hover href="{{ route('rategse') }}" x-on:click="$modal.close('mobile-nav-menu')" class="block rounded-field px-3 py-2 text-sm text-neutral-600 hover:bg-neutral-100 dark:text-neutral-300 dark:hover:bg-white/5">Biaya</a>
+                        </div>
+                    </div>
+
+                    <div class="rounded-field" x-data="{ expanded: false }">
+                        <button
+                            type="button"
+                            x-on:click="expanded = ! expanded"
+                            class="flex w-full items-center justify-between rounded-field px-3 py-2 text-left text-sm font-medium text-neutral-700 hover:bg-neutral-100 dark:text-neutral-200 dark:hover:bg-white/5"
+                        >
+                            <span>Invoicing</span>
+                            <x-ui.icon
+                                name="chevron-down"
+                                class="h-4 w-4 transition-transform duration-200"
+                                x-bind:class="expanded ? 'rotate-180' : ''"
+                            />
+                        </button>
+                        <div
+                            x-show="expanded"
+                            x-transition:enter="transition ease-out duration-200"
+                            x-transition:enter-start="opacity-0 -translate-y-1"
+                            x-transition:enter-end="opacity-100 translate-y-0"
+                            x-transition:leave="transition ease-in duration-150"
+                            x-transition:leave-start="opacity-100 translate-y-0"
+                            x-transition:leave-end="opacity-0 -translate-y-1"
+                            x-cloak
+                            class="mt-1 space-y-1 pl-4"
+                        >
+                            <a wire:navigate.hover href="{{ route('deposit') }}" x-on:click="$modal.close('mobile-nav-menu')" class="block rounded-field px-3 py-2 text-sm text-neutral-600 hover:bg-neutral-100 dark:text-neutral-300 dark:hover:bg-white/5">Deposit/Talangan</a>
+                            @role('admin', 'finance')
+                                <a wire:navigate.hover href="{{ route('invoice') }}" x-on:click="$modal.close('mobile-nav-menu')" class="block rounded-field px-3 py-2 text-sm text-neutral-600 hover:bg-neutral-100 dark:text-neutral-300 dark:hover:bg-white/5">Regular Invoice</a>
+                                <a wire:navigate.hover href="{{ route('invoicegse') }}" x-on:click="$modal.close('mobile-nav-menu')" class="block rounded-field px-3 py-2 text-sm text-neutral-600 hover:bg-neutral-100 dark:text-neutral-300 dark:hover:bg-white/5">GSE Invoice</a>
+                                <span class="block rounded-field px-3 py-2 text-sm text-neutral-400 dark:text-neutral-500">Charter Invoice (Soon)</span>
+                            @endrole
+                            @role('operation')
+                                <span class="block rounded-field px-3 py-2 text-sm text-neutral-400 dark:text-neutral-500">Regular Invoice</span>
+                                <span class="block rounded-field px-3 py-2 text-sm text-neutral-400 dark:text-neutral-500">Charter Invoice</span>
+                                <span class="block rounded-field px-3 py-2 text-sm text-neutral-400 dark:text-neutral-500">GSE Invoice</span>
+                            @endrole
+                        </div>
+                    </div>
+
+                    <a wire:navigate.hover
+                       href="{{ route('settings.index') }}"
+                       x-on:click="$modal.close('mobile-nav-menu')"
+                       class="block rounded-field px-3 py-2 text-sm font-medium text-neutral-700 hover:bg-neutral-100 dark:text-neutral-200 dark:hover:bg-white/5">
+                        Settings
+                    </a>
+
+                    @role('admin')
+                        <a wire:navigate.hover
+                           href="{{ route('admin.index') }}"
+                           x-on:click="$modal.close('mobile-nav-menu')"
+                           class="block rounded-field px-3 py-2 text-sm font-medium text-neutral-700 hover:bg-neutral-100 dark:text-neutral-200 dark:hover:bg-white/5">
+                            Admin
+                        </a>
+                    @endrole
                 </div>
-            </div>
+
+                <div class="space-y-3 py-4">
+                    <x-ui.theme-switcher variant="inline"/>
+                    <form action="{{ route('app.auth.logout') }}"
+                          method="post">
+                        @csrf
+                        <button type="submit"
+                                class="w-full rounded-field bg-neutral-900 px-3 py-2 text-sm font-medium text-white dark:bg-white dark:text-neutral-900">
+                            Sign Out
+                        </button>
+                    </form>
+                </div>
+            @endauth
+
+            @guest
+                <div class="py-4">
+                    <a href="{{ route('login') }}"
+                       x-on:click="$modal.close('mobile-nav-menu')"
+                       class="-mx-3 block rounded-field px-3 py-2.5 text-base font-semibold leading-7 text-neutral-700 hover:bg-neutral-100 dark:text-neutral-200 dark:hover:bg-white/5">
+                        Login
+                    </a>
+                    <a href="{{ route('register') }}"
+                       x-on:click="$modal.close('mobile-nav-menu')"
+                       class="mt-2 block rounded-md border border-neutral-300 bg-neutral-100 px-3 py-2.5 text-base font-semibold text-neutral-800 dark:border-white/20 dark:bg-white/10 dark:text-neutral-100">
+                        Register
+                    </a>
+                </div>
+            @endguest
         </div>
-    </div>
+    </x-ui.modal>
 </header>
