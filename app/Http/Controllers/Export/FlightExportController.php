@@ -14,6 +14,7 @@ class FlightExportController extends Controller
     private ?string $dateTo = '';
     private ?string $branch = '';
     private ?string $airline = '';
+    private ?string $type = '';
 
     public function export(Request $request)
     {
@@ -22,6 +23,7 @@ class FlightExportController extends Controller
         $this->dateTo = $request->dateTo;
         $this->branch = $request->branchName;
         $this->airline = $this->prependSpace($request->airlineName);
+        $this->type = $this->prependSpace($request->typeName);
 
         return Excel::download(
             new FlightsExport(
@@ -30,8 +32,9 @@ class FlightExportController extends Controller
                 $request->branch,
                 $request->airline,
                 $request->flightNo,
+                $request->type,
             ),
-            $this->branch . ' ' . $this->dateFrom . ' sampai ' . $this->dateTo . $this->airline . ' Flights.xlsx'
+            $this->branch . ' ' . $this->dateFrom . ' sampai ' . $this->dateTo . $this->airline . $this->type . ' Flights.xlsx'
         );
     }
 
@@ -42,6 +45,7 @@ class FlightExportController extends Controller
         $this->dateTo = $request->dateTo;
         $this->branch = $request->branchName;
         $this->airline = $this->prependSpace($request->airlineName);
+        $this->type = $this->prependSpace($request->typeName);
 
         return Excel::download(
             new FlightsExport(
@@ -50,8 +54,9 @@ class FlightExportController extends Controller
                 $request->branch,
                 $request->airline,
                 $request->flightNo,
+                $request->type,
             ),
-            $this->branch . ' ' . $this->dateFrom . ' sampai ' . $this->dateTo . ' ' . $this->airline . ' Flights.pdf',
+            $this->branch . ' ' . $this->dateFrom . ' sampai ' . $this->dateTo . $this->airline . $this->type . ' Flights.pdf',
              \Maatwebsite\Excel\Excel::MPDF);
     }
 
@@ -63,6 +68,7 @@ class FlightExportController extends Controller
 
         $branch = $request->branch;
         $airline = $request->airline;
+        $type = $request->type;
         $flightNo = $request->flightNo;
 
         //Prepare string for display
@@ -72,8 +78,11 @@ class FlightExportController extends Controller
         $branchName = $request->branchName
             ? 'Cabang ' . $request->branchName
             : '';
+        $typeName = $request->typeName
+            ? ' - ' . $request->typeName
+            : '';
 
-        $data = $this->getFlights($branch, $airline, $dateFrom, $dateTo, $flightNo);
+        $data = $this->getFlights($branch, $airline, $type, $dateFrom, $dateTo, $flightNo);
 
         $dateFrom = $this->readableDate($dateFrom);
         $dateTo = $this->readableDate($dateTo);
@@ -82,6 +91,7 @@ class FlightExportController extends Controller
             'flights'     => $data,
             'branch'      => $branchName,
             'airline'     => $airlineName,
+            'type'        => $typeName,
             'dateFrom'    => $dateFrom,
             'dateTo'      => $dateTo,
         ]);
@@ -103,11 +113,12 @@ class FlightExportController extends Controller
         return $value ? ' ' . $value : '';
     }
 
-    private function getFlights($branch, $airline, $from, $to, $flightNo)
+    private function getFlights($branch, $airline, $type, $from, $to, $flightNo)
     {
         return Flight::query()
             ->with([
                 'branch:id,name',
+                'flightType:id,name',
                 'originEquipment:id,registration',
                 'departureEquipment:id,registration',
                 'originAirlineRoute.airline:id,name',
@@ -118,6 +129,9 @@ class FlightExportController extends Controller
             ])
             // Filter branch
             ->when($branch, fn($q) => $q->where('branch_id', $branch))
+
+            // Filter flight type
+            ->when($type, fn($q) => $q->where('flight_type_id', $type))
 
             // Filter airline
             ->when(
