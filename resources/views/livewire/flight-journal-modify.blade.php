@@ -60,9 +60,9 @@
                         <x-ui.field required>
                             <x-ui.label>Arrival Flight Number</x-ui.label>
                                 <x-ui.input
-                                    x-mask="******"
+                                    x-mask="**********"
                                     placeholder="JT660"
-                                    wire:model="form.origin_flight_number"
+                                    wire:model.live.debounce.300ms="form.origin_flight_number"
                                     x-on:input="$el.value=$el.value.toUpperCase()"
                                 />
                             <x-ui.error name="form.origin_flight_number" />
@@ -74,9 +74,9 @@
                         <x-ui.field required>
                             <x-ui.label>Departure Flight Number</x-ui.label>
                                 <x-ui.input
-                                    x-mask="******"
+                                    x-mask="**********"
                                     placeholder="JT660"
-                                    wire:model="form.departure_flight_number"
+                                    wire:model.live.debounce.300ms="form.departure_flight_number"
                                     x-on:input="$el.value=$el.value.toUpperCase()"
                                 />
                             <x-ui.error name="form.departure_flight_number" />
@@ -251,11 +251,25 @@
                     <div class="col-span-6">
                         <x-ui.field>
                             <x-ui.label>Delay Charge</x-ui.label>
-                            <x-ui.checkbox 
+                            <x-ui.select
+                                placeholder="Tidak ada delay charge"
                                 wire:model="form.delay_charge"
-                                label="Flight ini dikenakan biaya delay"
-                            />
+                                clearable
+                            >
+                                <x-ui.select.option value="">Tidak ada delay charge</x-ui.select.option>
+                                @if (filled($form->origin_flight_number))
+                                    <x-ui.select.option value="{{ strtoupper($form->origin_flight_number) }}">
+                                        Arrival - {{ strtoupper($form->origin_flight_number) }}
+                                    </x-ui.select.option>
+                                @endif
+                                @if (filled($form->departure_flight_number))
+                                    <x-ui.select.option value="{{ strtoupper($form->departure_flight_number) }}">
+                                        Departure - {{ strtoupper($form->departure_flight_number) }}
+                                    </x-ui.select.option>
+                                @endif
+                            </x-ui.select>
                             <x-ui.error name="form.delay_charge" />
+                            <x-ui.error name="delay_charge" />
                         </x-ui.field>
                         
                     </div>

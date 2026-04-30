@@ -40,8 +40,8 @@ class ActualFlightsForm extends Form
     #[Validate('required|integer|exists:flight_types,id')]
     public string $flight_type_id = '1';
 
-    #[Validate('boolean')]
-    public bool $delay_charge = false;
+    #[Validate('nullable|string|max:10')]
+    public string $delay_charge = '';
 
     #[Validate('required|integer|exists:equipments,id')]
     public string $origin_equipment = '';
@@ -86,7 +86,7 @@ class ActualFlightsForm extends Form
             $this->record = $record;
 
             $this->flight_type_id = $record->flight_type_id;
-            $this->delay_charge = (bool) $record->delay_charge;
+            $this->delay_charge = $record->delay_charge ?? '';
             $this->origin_equipment = $record->origin_equipment_id ?? '';
             $this->departure_equipment = $record->departure_equipment_id ?? '';
             $this->actual_departure = substr($record->actual_dep, 0, 5);
@@ -205,6 +205,7 @@ class ActualFlightsForm extends Form
         $this->departure_flight_number = $this->normalizeFlightNumber(
             $this->departure_flight_number
         );
+        $this->delay_charge = $this->normalizeFlightNumber($this->delay_charge);
 
         // 1) Validate property-level rules
         $this->validate();
@@ -224,6 +225,7 @@ class ActualFlightsForm extends Form
         // 3) Airline-route-equipment-flight number validation
         $this->validateAirlineRouteMatch();
         $this->validateFlightNumber();
+        $this->validateDelayCharge();
         $this->validateEquipmentMatch();
 
         // 4) Format time
@@ -237,7 +239,7 @@ class ActualFlightsForm extends Form
             'departure_flight_no'   => strtoupper($this->departure_flight_number),
             'branch_id'             => $this->branch_id,
             'flight_type_id'        => $this->flight_type_id,
-            'delay_charge'          => $this->delay_charge,
+            'delay_charge'          => $this->delay_charge ?: null,
             'origin_route_id'       => $this->origin_route,
             'departure_route_id'    => $this->departure_route,
             'origin_equipment_id'   => $this->origin_equipment,
@@ -260,5 +262,21 @@ class ActualFlightsForm extends Form
 
         $flight = Flight::create($payload);
         return $flight->airline->name;
+    }
+
+    private function validateDelayCharge(): void
+    {
+        if ($this->delay_charge === '') {
+            return;
+        }
+
+        if (! in_array($this->delay_charge, [
+            $this->origin_flight_number,
+            $this->departure_flight_number,
+        ], true)) {
+            throw ValidationException::withMessages([
+                'delay_charge' => 'Delay charge harus kosong, flight arrival, atau flight departure.',
+            ]);
+        }
     }
 }

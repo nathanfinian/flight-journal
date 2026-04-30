@@ -37,7 +37,6 @@ class Flight extends Model
 
     protected $casts = [
         'service_date' => 'date',
-        'delay_charge' => 'boolean',
     ];
 
     protected static function booted()

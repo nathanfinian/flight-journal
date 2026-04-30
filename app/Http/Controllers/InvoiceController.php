@@ -24,7 +24,13 @@ class InvoiceController extends Controller
         $delayChargeDetails = DB::table('actual_flights as af')
             ->leftJoin('airline_routes as ar_dep', 'ar_dep.id', '=', 'af.departure_route_id')
             ->select(
-                'af.departure_flight_no',
+                'af.delay_charge as delay_charge_flight_no',
+                DB::raw("
+                    CASE
+                        WHEN af.delay_charge = af.origin_flight_no THEN 'Arrival'
+                        WHEN af.delay_charge = af.departure_flight_no THEN 'Departure'
+                    END as delay_charge_type
+                "),
                 DB::raw('COUNT(*) as quantity')
             )
             ->whereBetween('af.service_date', [
@@ -33,10 +39,12 @@ class InvoiceController extends Controller
             ])
             ->where('af.branch_id', $invoice->branch_id)
             ->where('ar_dep.airline_id', $invoice->airline_id)
-            ->where('af.delay_charge', true)
+            ->whereNotNull('af.delay_charge')
+            ->where('af.delay_charge', '!=', '')
             ->whereNull('af.deleted_at')
-            ->groupBy('af.departure_flight_no')
-            ->orderBy('af.departure_flight_no')
+            ->groupBy('af.delay_charge', 'delay_charge_type')
+            ->orderBy('af.delay_charge')
+            ->orderBy('delay_charge_type')
             ->get();
 
         $flightDetails = DB::table('actual_flights as af')

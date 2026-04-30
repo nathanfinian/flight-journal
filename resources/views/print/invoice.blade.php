@@ -75,7 +75,7 @@
 			@foreach ($delayChargeDetails as $delayChargeDetail)
 			<tr>
 				<td>{{ $loop->iteration }}</td>
-				<td>FLIGHT {{ $delayChargeDetail->departure_flight_no }} (Delay Charge)</td>
+				<td>FLIGHT {{ $delayChargeDetail->delay_charge_flight_no }} (Delay Charge {{ $delayChargeDetail->delay_charge_type }})</td>
 				<td>{{ $delayChargeDetail->quantity }}</td>
 				<td>{{ number_format($delayChargeUnitPrice) }}</td>
 				<td>{{ number_format($delayChargeDetail->quantity * $delayChargeUnitPrice) }}</td>
