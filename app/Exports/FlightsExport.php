@@ -12,15 +12,17 @@ class FlightsExport implements FromView
     private ?string $to   = '';
     private ?string $branch   = '';
     private ?string $airline   = '';
+    private ?string $type   = '';
     private ?string $flightNo   = '';
 
-    public function __construct($from, $to, $branch, $airline, $flightNo)
+    public function __construct($from, $to, $branch, $airline, $flightNo, $type = '')
     {
         $this->from = $from;
         $this->to = $to;
         $this->branch = $branch;
         $this->airline = $airline;
         $this->flightNo = $flightNo;
+        $this->type = $type;
     }
 
     public function view(): View
@@ -31,6 +33,7 @@ class FlightsExport implements FromView
         $flights = Flight::query()
             ->with([
                 'branch:id,name',
+                'flightType:id,name',
                 'originEquipment:id,registration',
                 'departureEquipment:id,registration',
                 'originAirlineRoute.airline:id,name',
@@ -40,6 +43,7 @@ class FlightsExport implements FromView
                 'departureAirlineRoute.airportRoute.destination:id,iata',
             ])
             ->when($this->branch, fn($q) => $q->where('branch_id', $this->branch))
+            ->when($this->type, fn($q) => $q->where('flight_type_id', $this->type))
             ->when(
                 $this->airline,
                 fn($q) =>
