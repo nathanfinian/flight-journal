@@ -17,6 +17,8 @@ class Invoice_gse extends Model
 
     protected $fillable = [
         'gse_type_id',
+        'branch_id',
+        'airline_id',
         'invoice_number',
         'dateFrom',
         'dateTo',
@@ -52,6 +54,16 @@ class Invoice_gse extends Model
     public function gseType(): BelongsTo
     {
         return $this->belongsTo(GseType::class, 'gse_type_id');
+    }
+
+    public function branch(): BelongsTo
+    {
+        return $this->belongsTo(Branch::class, 'branch_id');
+    }
+
+    public function airline(): BelongsTo
+    {
+        return $this->belongsTo(Airline::class, 'airline_id');
     }
 
     public function creator(): BelongsTo

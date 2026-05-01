@@ -87,8 +87,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/invoice/gse/{id:id}/edit', CreateGSEInvoice::class)
         ->whereNumber('id') // optional safety
         ->name('invoicegse.edit');  // <-- {airline} matches the type-hint
-    Route::get('/invoice/gse/print/{invoice}', [InvoiceController::class, 'print'])
-        ->name('invoicegse.print');
+    // Route::get('/invoice/gse/print/{invoice}', [InvoiceController::class, 'print'])
+    //     ->name('invoicegse.print');
 
     /* =======================
      | GSE Rekap - GPU and ATT Invoices
@@ -112,18 +112,6 @@ Route::middleware('auth')->group(function () {
         ->whereNumber('id') // optional safety
         ->name('rategse.edit');  // <-- {airline} matches the type-hint
     //Route::get('/gse/rekap/print/{rekap}', [InvoiceController::class, 'print']) // print page
-      //  ->name('rekapgse.print');
-
-    /* =======================
-     | GSE Rates - Rates data based on GSE type and time period
-     ======================= */
-    Route::get('/invoice/invoicegse', IndexGSEInvoice::class)->name('invoicegse');
-    Route::get('/invoice/invoicegse/create', CreateGSEInvoice::class)
-        ->name('invoicegse.create');
-    Route::get('/invoice/invoicegse/{id:id}/edit', CreateGSEInvoice::class)
-        ->whereNumber('id') // optional safety
-        ->name('invoicegse.edit');  // <-- {airline} matches the type-hint
-    //Route::get('/invoice/rekap/print/{rekap}', [InvoiceController::class, 'print']) // print page
       //  ->name('rekapgse.print');
 
     /* =======================
