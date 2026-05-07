@@ -65,7 +65,7 @@ class InvoiceController extends Controller
             END
         ";
 
-        $flightDetails = DB::table('actual_flights as af')
+        $flightDetailsBaseQuery = DB::table('actual_flights as af')
             ->leftJoin('airline_routes as ar_dep', 'ar_dep.id', '=', 'af.departure_route_id')
             ->leftJoin('flight_types as ft', 'ft.id', '=', 'af.flight_type_id')
             ->leftJoin('airline_rate_flight_type as arft', function ($join) use ($invoice) {
@@ -78,8 +78,7 @@ class InvoiceController extends Controller
                 'ft.name as flight_type_name',
                 DB::raw("{$billingFlightNoExpression} as departure_flight_no"),
                 DB::raw("{$ferryDirectionExpression} as ferry_direction"),
-                DB::raw('COALESCE(arft.percentage, 100) as rate_percentage'),
-                DB::raw('COUNT(*) as quantity')
+                DB::raw('COALESCE(arft.percentage, 100) as rate_percentage')
             )
             ->whereBetween('af.service_date', [
                 $invoice->dateFrom,
@@ -87,16 +86,28 @@ class InvoiceController extends Controller
             ])
             ->where('af.branch_id', $invoice->branch_id)
             ->where('ar_dep.airline_id', $invoice->airline_id)
-            ->whereNull('af.deleted_at')
-            ->groupBy(
-                'af.flight_type_id',
-                'ft.type_code',
-                'ft.name',
-                'arft.percentage'
+            ->whereNull('af.deleted_at');
+
+        $flightDetails = DB::query()
+            ->fromSub($flightDetailsBaseQuery, 'flight_details')
+            ->select(
+                'flight_type_id',
+                'flight_type',
+                'flight_type_name',
+                'departure_flight_no',
+                'ferry_direction',
+                'rate_percentage',
+                DB::raw('COUNT(*) as quantity')
             )
-            ->groupByRaw($billingFlightNoExpression)
-            ->groupByRaw($ferryDirectionExpression)
-            ->orderBy('ft.type_code')
+            ->groupBy(
+                'flight_type_id',
+                'flight_type',
+                'flight_type_name',
+                'departure_flight_no',
+                'ferry_direction',
+                'rate_percentage'
+            )
+            ->orderBy('flight_type')
             ->orderBy('departure_flight_no')
             ->get();
 
