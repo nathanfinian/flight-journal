@@ -75,7 +75,7 @@
 			@foreach ($delayChargeDetails as $delayChargeDetail)
 			<tr>
 				<td>{{ $loop->iteration }}</td>
-				<td>FLIGHT {{ $delayChargeDetail->delay_charge_flight_no }} (Delay Charge {{ $delayChargeDetail->delay_charge_type }})</td>
+				<td>FLIGHT {{ $delayChargeDetail->delay_charge_flight_no }} ({{ $delayChargeDetail->delay_charge_type }} Delay Charge)</td>
 				<td>{{ $delayChargeDetail->quantity }}</td>
 				<td>{{ number_format($delayChargeUnitPrice) }}</td>
 				<td>{{ number_format($delayChargeDetail->quantity * $delayChargeUnitPrice) }}</td>
@@ -89,7 +89,10 @@
 
 			<tr>
 				<td>{{ $loop->iteration + $delayChargeDetails->count() }}</td>
-				<td>FLIGHT {{ $flightDetail->departure_flight_no }} ({{ $flightDetail->flight_type_name }})</td>
+				<td>
+					FLIGHT {{ $flightDetail->departure_flight_no }}
+					({{ $flightDetail->ferry_direction ? $flightDetail->ferry_direction . ' ' : '' }}{{ $flightDetail->flight_type_name }})
+				</td>
 				<td>{{ $flightDetail->quantity }}</td>
 				<td>{{ number_format($unitPrice) }}</td>
 				<td>{{ number_format($lineTotal) }}</td>
@@ -220,7 +223,10 @@
 					@endphp
 					<tr>
 						<td rowspan="2" class="text-center">{{ \Carbon\Carbon::parse($flight->service_date)->format('d/m/Y') }}</td>
-						<td rowspan="2" class="text-center">{{ $flight->departure_flight_no }}<br>{{ $flight->flight_type_name }}</td>
+						<td rowspan="2" class="text-center">
+							{{ $flight->departure_flight_no }}<br>
+							{{ $flight->flight_type_name }}{{ $flight->ferry_direction ? ' - ' . $flight->ferry_direction : '' }}
+						</td>
 						<td class="text-center">{{ $flight->registration_number ?? '-' }}</td>
 						<td class="text-center">{{ $flight->arrival_route ?? '-' }}</td>
 						<td class="text-center">{{ $flight->actual_arr ? substr($flight->actual_arr, 0, 5) : '-' }}</td>

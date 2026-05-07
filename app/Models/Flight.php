@@ -18,6 +18,7 @@ class Flight extends Model
         'origin_flight_no',
         'departure_flight_no',
         'flight_type_id',
+        'ferry_flight_no',
         'delay_charge',
         'origin_route_id',
         'departure_route_id',

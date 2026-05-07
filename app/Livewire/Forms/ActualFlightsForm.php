@@ -6,6 +6,7 @@ use Livewire\Form;
 use App\Models\Flight;
 use App\Traits\TimeValidation;
 use App\Models\Equipment;
+use App\Models\FlightType;
 use App\Models\AirlineRoute;
 use Illuminate\Support\Carbon;
 use Illuminate\Validation\Rule;
@@ -39,6 +40,9 @@ class ActualFlightsForm extends Form
 
     #[Validate('required|integer|exists:flight_types,id')]
     public string $flight_type_id = '1';
+
+    #[Validate('nullable|string|max:10')]
+    public string $ferry_flight_no = '';
 
     #[Validate('nullable|string|max:10')]
     public string $delay_charge = '';
@@ -86,6 +90,7 @@ class ActualFlightsForm extends Form
             $this->record = $record;
 
             $this->flight_type_id = $record->flight_type_id;
+            $this->ferry_flight_no = $record->ferry_flight_no ?? '';
             $this->delay_charge = $record->delay_charge ?? '';
             $this->origin_equipment = $record->origin_equipment_id ?? '';
             $this->departure_equipment = $record->departure_equipment_id ?? '';
@@ -205,6 +210,7 @@ class ActualFlightsForm extends Form
         $this->departure_flight_number = $this->normalizeFlightNumber(
             $this->departure_flight_number
         );
+        $this->ferry_flight_no = $this->normalizeFlightNumber($this->ferry_flight_no);
         $this->delay_charge = $this->normalizeFlightNumber($this->delay_charge);
 
         // 1) Validate property-level rules
@@ -225,6 +231,7 @@ class ActualFlightsForm extends Form
         // 3) Airline-route-equipment-flight number validation
         $this->validateAirlineRouteMatch();
         $this->validateFlightNumber();
+        $this->validateFerryFlightNumber();
         $this->validateDelayCharge();
         $this->validateEquipmentMatch();
 
@@ -239,6 +246,7 @@ class ActualFlightsForm extends Form
             'departure_flight_no'   => strtoupper($this->departure_flight_number),
             'branch_id'             => $this->branch_id,
             'flight_type_id'        => $this->flight_type_id,
+            'ferry_flight_no'       => $this->isFerryFlightType() ? ($this->ferry_flight_no ?: null) : null,
             'delay_charge'          => $this->delay_charge ?: null,
             'origin_route_id'       => $this->origin_route,
             'departure_route_id'    => $this->departure_route,
@@ -278,5 +286,49 @@ class ActualFlightsForm extends Form
                 'delay_charge' => 'Delay charge harus kosong, flight arrival, atau flight departure.',
             ]);
         }
+    }
+
+    private function validateFerryFlightNumber(): void
+    {
+        if (! $this->isFerryFlightType()) {
+            $this->ferry_flight_no = '';
+
+            return;
+        }
+
+        if ($this->ferry_flight_no === '') {
+            throw ValidationException::withMessages([
+                'ferry_flight_no' => 'Flight number ferry wajib dipilih.',
+            ]);
+        }
+
+        if (! in_array($this->ferry_flight_no, [
+            $this->origin_flight_number,
+            $this->departure_flight_number,
+        ], true)) {
+            throw ValidationException::withMessages([
+                'ferry_flight_no' => 'Flight number ferry harus flight arrival atau flight departure.',
+            ]);
+        }
+    }
+
+    public function isFerryFlightType(): bool
+    {
+        if (! $this->flight_type_id) {
+            return false;
+        }
+
+        $flightType = FlightType::query()
+            ->whereKey($this->flight_type_id)
+            ->first(['name', 'type_code']);
+
+        if (! $flightType) {
+            return false;
+        }
+
+        $name = strtolower((string) $flightType->name);
+        $code = strtolower((string) $flightType->type_code);
+
+        return str_contains($name, 'ferry') || $code === 'ferry' || $code === 'fry';
     }
 }

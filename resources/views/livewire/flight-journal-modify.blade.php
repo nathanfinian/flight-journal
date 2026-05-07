@@ -235,7 +235,7 @@
                             <x-ui.select 
                                 placeholder="Select tipe..."
                                 icon="ps:seal"
-                                wire:model="form.flight_type_id"
+                                wire:model.live="form.flight_type_id"
                                 >
                                 @foreach($flightTypes as $type)
                                     <x-ui.select.option value="{{ $type->id }}">
@@ -247,6 +247,35 @@
                         </x-ui.field>
                     </div>
                 </div>
+                @if ($form->isFerryFlightType())
+                    <div class="grid grid-cols-12 gap-6">
+                        <div class="col-span-6">
+                            <x-ui.field required>
+                                <x-ui.label>Ferry Flight Number</x-ui.label>
+                                <x-ui.select
+                                    placeholder="Pilih flight ferry..."
+                                    wire:model="form.ferry_flight_no"
+                                >
+                                    @if (filled($form->origin_flight_number))
+                                        <x-ui.select.option value="{{ strtoupper($form->origin_flight_number) }}">
+                                            Arrival - {{ strtoupper($form->origin_flight_number) }}
+                                        </x-ui.select.option>
+                                    @endif
+                                    @if (filled($form->departure_flight_number))
+                                        <x-ui.select.option value="{{ strtoupper($form->departure_flight_number) }}">
+                                            Departure - {{ strtoupper($form->departure_flight_number) }}
+                                        </x-ui.select.option>
+                                    @endif
+                                </x-ui.select>
+                                <x-ui.error name="form.ferry_flight_no" />
+                                <x-ui.error name="ferry_flight_no" />
+                            </x-ui.field>
+                        </div>
+                        <div class="col-span-6">
+                           {{-- empty --}}
+                        </div>
+                    </div>
+                @endif
                 <div class="grid grid-cols-12 gap-6">
                     <div class="col-span-6">
                         <x-ui.field>

@@ -47,6 +47,24 @@ class InvoiceController extends Controller
             ->orderBy('delay_charge_type')
             ->get();
 
+        $billingFlightNoExpression = "
+            CASE
+                WHEN (LOWER(ft.name) LIKE '%ferry%' OR LOWER(ft.type_code) IN ('ferry', 'fry'))
+                    THEN COALESCE(af.ferry_flight_no, af.departure_flight_no)
+                ELSE af.departure_flight_no
+            END
+        ";
+        $ferryDirectionExpression = "
+            CASE
+                WHEN NOT (LOWER(ft.name) LIKE '%ferry%' OR LOWER(ft.type_code) IN ('ferry', 'fry'))
+                    THEN NULL
+                WHEN COALESCE(af.ferry_flight_no, af.departure_flight_no) = af.origin_flight_no
+                    THEN 'Arrival'
+                WHEN COALESCE(af.ferry_flight_no, af.departure_flight_no) = af.departure_flight_no
+                    THEN 'Departure'
+            END
+        ";
+
         $flightDetails = DB::table('actual_flights as af')
             ->leftJoin('airline_routes as ar_dep', 'ar_dep.id', '=', 'af.departure_route_id')
             ->leftJoin('flight_types as ft', 'ft.id', '=', 'af.flight_type_id')
@@ -58,7 +76,8 @@ class InvoiceController extends Controller
                 'af.flight_type_id',
                 'ft.type_code as flight_type',
                 'ft.name as flight_type_name',
-                'af.departure_flight_no',
+                DB::raw("{$billingFlightNoExpression} as departure_flight_no"),
+                DB::raw("{$ferryDirectionExpression} as ferry_direction"),
                 DB::raw('COALESCE(arft.percentage, 100) as rate_percentage'),
                 DB::raw('COUNT(*) as quantity')
             )
@@ -73,11 +92,12 @@ class InvoiceController extends Controller
                 'af.flight_type_id',
                 'ft.type_code',
                 'ft.name',
-                'af.departure_flight_no',
                 'arft.percentage'
             )
+            ->groupByRaw($billingFlightNoExpression)
+            ->groupByRaw($ferryDirectionExpression)
             ->orderBy('ft.type_code')
-            ->orderBy('af.departure_flight_no')
+            ->orderBy('departure_flight_no')
             ->get();
 
         $flightList = DB::table('actual_flights as af')
@@ -99,11 +119,12 @@ class InvoiceController extends Controller
             ->select(
                 'af.service_date',
                 'af.flight_type_id',
-                'af.departure_flight_no',
+                DB::raw("{$billingFlightNoExpression} as departure_flight_no"),
                 'af.actual_arr',
                 'af.actual_dep',
                 'ft.name as flight_type_name',
                 'ft.type_code as flight_type',
+                DB::raw("{$ferryDirectionExpression} as ferry_direction"),
                 DB::raw('COALESCE(arft.percentage, 100) as rate_percentage'),
                 DB::raw('COALESCE(eq_dep.registration, eq_org.registration) as registration_number'),
                 DB::raw("CONCAT(ap_org_from.iata, '-', ap_org_to.iata) as arrival_route"),
@@ -117,7 +138,7 @@ class InvoiceController extends Controller
             ->where('ar_dep.airline_id', $invoice->airline_id)
             ->whereNull('af.deleted_at')
             ->orderBy('af.service_date')
-            ->orderBy('af.departure_flight_no')
+            ->orderBy('departure_flight_no')
             ->get();
 
         $totalQty = 0;
