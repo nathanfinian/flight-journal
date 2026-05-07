@@ -13,6 +13,7 @@ class FlightExportController extends Controller
     private ?string $dateFrom = '';
     private ?string $dateTo = '';
     private ?string $branch = '';
+    private ?string $flightNo = '';
     private ?string $airline = '';
     private ?string $type = '';
 
@@ -22,6 +23,7 @@ class FlightExportController extends Controller
         $this->dateFrom = $request->dateFrom;
         $this->dateTo = $request->dateTo;
         $this->branch = $request->branchName;
+        $this->flightNo = $this->prependSpace($request->flightNo);
         $this->airline = $this->prependSpace($request->airlineName);
         $this->type = $this->prependSpace($request->typeName);
 
@@ -34,7 +36,7 @@ class FlightExportController extends Controller
                 $request->flightNo,
                 $request->type,
             ),
-            $this->branch . ' ' . $this->dateFrom . ' sampai ' . $this->dateTo . $this->airline . $this->type . ' Flights.xlsx'
+            $this->documentName('xlsx')
         );
     }
 
@@ -44,6 +46,7 @@ class FlightExportController extends Controller
         $this->dateFrom = $request->dateFrom;
         $this->dateTo = $request->dateTo;
         $this->branch = $request->branchName;
+        $this->flightNo = $this->prependSpace($request->flightNo);
         $this->airline = $this->prependSpace($request->airlineName);
         $this->type = $this->prependSpace($request->typeName);
 
@@ -56,7 +59,7 @@ class FlightExportController extends Controller
                 $request->flightNo,
                 $request->type,
             ),
-            $this->branch . ' ' . $this->dateFrom . ' sampai ' . $this->dateTo . $this->airline . $this->type . ' Flights.pdf',
+            $this->documentName('pdf'),
              \Maatwebsite\Excel\Excel::MPDF);
     }
 
@@ -111,6 +114,55 @@ class FlightExportController extends Controller
     private function prependSpace(?string $value): string
     {
         return $value ? ' ' . $value : '';
+    }
+
+    private function documentName(string $extension): string
+    {
+        $name = implode(' ', array_filter([
+            trim((string) $this->flightNo),
+            trim((string) $this->branch),
+            $this->readableDateRange(),
+            trim((string) $this->airline),
+            trim((string) $this->type),
+        ]));
+
+        return $this->safeFilename($name . '.' . $extension);
+    }
+
+    private function readableDateRange(): string
+    {
+        $dateFrom = $this->readableDocumentDate($this->dateFrom);
+        $dateTo = $this->readableDocumentDate($this->dateTo);
+
+        if ($dateFrom && $dateTo) {
+            return $dateFrom . ' sampai ' . $dateTo;
+        }
+
+        if ($dateFrom) {
+            return 'Mulai ' . $dateFrom;
+        }
+
+        if ($dateTo) {
+            return 'Sampai ' . $dateTo;
+        }
+
+        return '';
+    }
+
+    private function readableDocumentDate(?string $value): string
+    {
+        if (!$value) {
+            return '';
+        }
+
+        return \Carbon\Carbon::parse($value)
+            ->locale('id')
+            ->translatedFormat('d F Y');
+    }
+
+    private function safeFilename(string $value): string
+    {
+        return preg_replace('/[\\\\\/:*?"<>|]+/', '-', $value) ?? $value;
     }
 
     private function getFlights($branch, $airline, $type, $from, $to, $flightNo)
