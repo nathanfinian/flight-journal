@@ -51,6 +51,7 @@ use App\Livewire\Deposit\Index as IndexDeposit;
 use App\Livewire\Deposit\Create as CreateDeposit;
 
 use App\Http\Controllers\Export\FlightExportController;
+use App\Http\Controllers\Export\GseInvoiceRecapExportController;
 use App\Http\Controllers\InvoiceController;
 
 Route::get('/', Login::class)->name('login');
@@ -87,6 +88,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/invoice/gse/{id:id}/edit', CreateGSEInvoice::class)
         ->whereNumber('id') // optional safety
         ->name('invoicegse.edit');  // <-- {airline} matches the type-hint
+    Route::get('/invoice/gse/{invoice}/export-recap', [GseInvoiceRecapExportController::class, 'export'])
+        ->whereNumber('invoice')
+        ->name('invoicegse.export-recap');
     // Route::get('/invoice/gse/print/{invoice}', [InvoiceController::class, 'print'])
     //     ->name('invoicegse.print');
 

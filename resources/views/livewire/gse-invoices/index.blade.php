@@ -30,6 +30,7 @@
                 <th class="px-4 py-3 text-left">Date Range</th>
                 <th class="px-4 py-3 text-left">Recaps</th>
                 <th class="px-4 py-3 text-left">Total</th>
+                <th class="px-4 py-3 text-left">Export</th>
             </tr>
         </thead>
 
@@ -62,10 +63,21 @@
                     <td class="px-4 py-3">{{ $invoice->dateRange ?? '-' }}</td>
                     <td class="px-4 py-3">{{ $invoice->recaps_count }}</td>
                     <td class="px-4 py-3">Rp. {{ number_format((float) ($invoice->invoice_recaps_sum_amount ?? 0), 2, ',', '.') }}</td>
+                    <td class="px-4 py-3" x-on:click.stop>
+                        <x-ui.button
+                            as="a"
+                            size="sm"
+                            variant="outline"
+                            icon="ps:microsoft-excel-logo"
+                            href="{{ route('invoicegse.export-recap', $invoice) }}"
+                        >
+                            Excel
+                        </x-ui.button>
+                    </td>
                 </tr>
             @empty
                 <tr>
-                    <td colspan="6" class="px-4 py-6 text-center text-gray-500">
+                    <td colspan="7" class="px-4 py-6 text-center text-gray-500">
                         No GSE invoice found.
                     </td>
                 </tr>
