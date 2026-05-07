@@ -35,6 +35,16 @@
 
         <tbody class="divide-y divide-gray-400 dark:divide-neutral-800">
             @forelse ($invoices as $invoice)
+                @php
+                    $recapServices = $invoice->recaps
+                        ->pluck('gseType.service_name')
+                        ->filter()
+                        ->unique()
+                        ->values();
+                    $serviceDisplay = $recapServices->count() > 1
+                        ? $recapServices->implode(' + ')
+                        : ($invoice->gseType?->service_name ?? '-');
+                @endphp
                 <tr
                     class="hover:bg-gray-50 dark:hover:bg-neutral-800/60 cursor-pointer"
                     wire:click="openEdit({{ $invoice->id }})"
@@ -48,7 +58,7 @@
                         {{ $num }}
                     </td>
                     <td class="px-4 py-3">{{ $invoice->invoice_number }}</td>
-                    <td class="px-4 py-3">{{ $invoice->gseType?->service_name ?? '-' }}</td>
+                    <td class="px-4 py-3">{{ $serviceDisplay }}</td>
                     <td class="px-4 py-3">{{ $invoice->dateRange ?? '-' }}</td>
                     <td class="px-4 py-3">{{ $invoice->recaps_count }}</td>
                     <td class="px-4 py-3">Rp. {{ number_format((float) ($invoice->invoice_recaps_sum_amount ?? 0), 2, ',', '.') }}</td>

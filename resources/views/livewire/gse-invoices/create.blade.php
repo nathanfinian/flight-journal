@@ -30,6 +30,11 @@
                                 placeholder="Select GSE type..."
                                 wire:model.live="form.gse_type_id"
                             >
+                                @if($hasCombinedGseTypes)
+                                    <x-ui.select.option value="{{ \App\Livewire\Forms\GseInvoiceForm::COMBINED_GPU_ATT }}">
+                                        GPU + ATT
+                                    </x-ui.select.option> 
+                                @endif
                                 @foreach($gseTypes as $gseType)
                                     <x-ui.select.option value="{{ $gseType->id }}">
                                         {{ $gseType->service_name }}
@@ -127,6 +132,7 @@
                                             <th class="px-4 py-3 text-left">ER</th>
                                             <th class="px-4 py-3 text-left">Flight</th>
                                             <th class="px-4 py-3 text-left">Airline</th>
+                                            <th class="px-4 py-3 text-left">Service</th>
                                             <th class="px-4 py-3 text-left">Equipment</th>
                                             <th class="px-4 py-3 text-left">Charge Type</th>
                                             <th class="px-4 py-3 text-left">Rate</th>
@@ -147,6 +153,7 @@
                                                 </td>
                                                 <td class="px-4 py-3">{{ $recap['flight_number'] }}</td>
                                                 <td class="px-4 py-3">{{ $recap['airline'] }}</td>
+                                                <td class="px-4 py-3">{{ $recap['service'] }}</td>
                                                 <td class="px-4 py-3">{{ $recap['equipment'] }}</td>
                                                 <td class="px-4 py-3">
                                                     {{ $pivotRows[$recap['id']]['charge_type'] ?: '-' }}

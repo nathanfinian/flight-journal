@@ -25,6 +25,7 @@ class Create extends Component
     public $gseTypes;
     public $branches;
     public $airlines;
+    public bool $hasCombinedGseTypes = false;
 
     public ?GseInvoice $invoice = null;
 
@@ -39,6 +40,7 @@ class Create extends Component
         $this->gseTypes = GseType::query()
             ->orderBy('service_name')
             ->get(['id', 'service_name']);
+        $this->hasCombinedGseTypes = $this->hasGpuAndAttTypes();
 
         $this->branches = Branch::query()
             ->where('status', 'ACTIVE')
@@ -72,6 +74,10 @@ class Create extends Component
 
         $this->form->setInvoice($this->invoice);
 
+        if ($this->hasMixedGpuAttRecaps($this->invoice->recaps)) {
+            $this->form->gse_type_id = GseInvoiceForm::COMBINED_GPU_ATT;
+        }
+
         if (filled($this->form->branch_id) && filled($this->form->airline_id)) {
             $this->loadRecaps(keepExistingSelection: true);
         }
@@ -89,7 +95,9 @@ class Create extends Component
     public function updatedFormGseTypeId($value): void
     {
         if (! $this->isEdit && filled($value)) {
-            $this->form->invoice_number = $this->generateGseInvoiceNumber((int) $value);
+            $this->form->invoice_number = $value === GseInvoiceForm::COMBINED_GPU_ATT
+                ? $this->generateCombinedGpuAttInvoiceNumber()
+                : $this->generateGseInvoiceNumber((int) $value);
         }
 
         // A GSE type change can point to different rates and eligible recaps.
@@ -143,7 +151,7 @@ class Create extends Component
                 'gpuDetail:id,gse_recap_id,start_time,end_time',
                 'pushbackDetail:id,gse_recap_id,start_ps,end_ps',
             ])
-            ->where('gse_type_id', $this->form->gse_type_id)
+            ->whereIn('gse_type_id', $this->selectedGseTypeIds())
             ->where('branch_id', $this->form->branch_id)
             ->where('airline_id', $this->form->airline_id)
             ->whereBetween('service_date', [$this->form->dateFrom, $this->form->dateTo])
@@ -191,7 +199,7 @@ class Create extends Component
 
         $eligibleRecapCount = GseRecap::query()
             ->whereIn('id', $selectedRecapIds)
-            ->where('gse_type_id', $this->form->gse_type_id)
+            ->whereIn('gse_type_id', $this->selectedGseTypeIds())
             ->where('branch_id', $this->form->branch_id)
             ->where('airline_id', $this->form->airline_id)
             ->whereBetween('service_date', [$this->form->dateFrom, $this->form->dateTo])
@@ -396,6 +404,75 @@ class Create extends Component
     private function normalizeDecimal(mixed $value): float
     {
         return round((float) $value, 2);
+    }
+
+    private function selectedGseTypeIds(): array
+    {
+        if ($this->form->gse_type_id === GseInvoiceForm::COMBINED_GPU_ATT) {
+            return $this->combinedGpuAttTypeIds()
+                ->map(fn ($id) => (int) $id)
+                ->all();
+        }
+
+        return [(int) $this->form->gse_type_id];
+    }
+
+    private function combinedGpuAttTypeIds(): Collection
+    {
+        return GseType::query()
+            ->where(function (Builder $query): void {
+                $query
+                    ->whereRaw('LOWER(service_name) LIKE ?', ['%gpu%'])
+                    ->orWhereRaw('LOWER(service_name) LIKE ?', ['%att%']);
+            })
+            ->orderByRaw("CASE WHEN LOWER(service_name) LIKE '%gpu%' THEN 0 ELSE 1 END")
+            ->pluck('id');
+    }
+
+    private function hasGpuAndAttTypes(): bool
+    {
+        $serviceNames = GseType::query()
+            ->where(function (Builder $query): void {
+                $query
+                    ->whereRaw('LOWER(service_name) LIKE ?', ['%gpu%'])
+                    ->orWhereRaw('LOWER(service_name) LIKE ?', ['%att%']);
+            })
+            ->pluck('service_name')
+            ->map(fn (string $serviceName): string => strtolower($serviceName));
+
+        return $serviceNames->contains(fn (string $serviceName): bool => str_contains($serviceName, 'gpu'))
+            && $serviceNames->contains(fn (string $serviceName): bool => str_contains($serviceName, 'att'));
+    }
+
+    private function hasMixedGpuAttRecaps(Collection $recaps): bool
+    {
+        $serviceNames = $recaps
+            ->map(fn (GseRecap $recap): string => strtolower((string) $recap->gseType?->service_name))
+            ->filter();
+
+        return $serviceNames->contains(fn (string $serviceName): bool => str_contains($serviceName, 'gpu'))
+            && $serviceNames->contains(fn (string $serviceName): bool => str_contains($serviceName, 'att'));
+    }
+
+    private function generateCombinedGpuAttInvoiceNumber(): string
+    {
+        return DB::transaction(function (): string {
+            $period = now()->format('Ym');
+
+            $last = GseInvoice::query()
+                ->where('invoice_number', 'like', "INV-GSE-GPUATT-{$period}-%")
+                ->whereYear('created_at', now()->year)
+                ->whereMonth('created_at', now()->month)
+                ->lockForUpdate()
+                ->orderByDesc('id')
+                ->first();
+
+            $next = $last
+                ? ((int) substr($last->invoice_number, -6)) + 1
+                : 1;
+
+            return sprintf('INV-GSE-GPUATT-%s-%06d', $period, $next);
+        });
     }
 
     public function render()

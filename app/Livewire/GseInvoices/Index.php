@@ -20,7 +20,10 @@ class Index extends Component
     public function render()
     {
         $invoices = GseInvoice::query()
-            ->with('gseType:id,service_name')
+            ->with([
+                'gseType:id,service_name',
+                'recaps.gseType:id,service_name',
+            ])
             ->withCount('recaps')
             ->withSum('invoiceRecaps', 'amount')
             ->orderByDesc('id')

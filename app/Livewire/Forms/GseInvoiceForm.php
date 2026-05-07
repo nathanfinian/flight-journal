@@ -3,10 +3,14 @@
 namespace App\Livewire\Forms;
 
 use App\Models\Invoice_gse as GseInvoice;
+use App\Models\GseType;
+use Illuminate\Support\Collection;
 use Livewire\Form;
 
 class GseInvoiceForm extends Form
 {
+    public const COMBINED_GPU_ATT = 'gpu_att';
+
     public ?GseInvoice $record = null;
 
     public string $invoice_number = '';
@@ -31,7 +35,7 @@ class GseInvoiceForm extends Form
     {
         return [
             'invoice_number' => ['required', 'string', 'max:80', 'unique:gse_invoices,invoice_number,' . $this->record?->id],
-            'gse_type_id' => ['required', 'exists:gse_types,id'],
+            'gse_type_id' => ['required', $this->gseTypeRule()],
             'branch_id' => ['required', 'exists:branches,id'],
             'airline_id' => ['required', 'exists:airlines,id'],
             'dateFrom' => ['required', 'date'],
@@ -43,7 +47,7 @@ class GseInvoiceForm extends Form
     {
         // Used before loading recaps, when the invoice number may not be ready yet.
         return [
-            'gse_type_id' => ['required', 'exists:gse_types,id'],
+            'gse_type_id' => ['required', $this->gseTypeRule()],
             'branch_id' => ['required', 'exists:branches,id'],
             'airline_id' => ['required', 'exists:airlines,id'],
             'dateFrom' => ['required', 'date'],
@@ -54,6 +58,7 @@ class GseInvoiceForm extends Form
     public function persist(): GseInvoice
     {
         $validated = $this->validate();
+        $validated['gse_type_id'] = $this->storageGseTypeId($validated['gse_type_id']);
 
         // Keep create and edit paths behind one method so the component can sync
         // recap pivot rows after the invoice header has been saved.
@@ -89,5 +94,60 @@ class GseInvoiceForm extends Form
             'dateFrom',
             'dateTo',
         ]);
+    }
+
+    private function gseTypeRule(): \Closure
+    {
+        return function (string $attribute, mixed $value, \Closure $fail): void {
+            if ($value === self::COMBINED_GPU_ATT) {
+                if ($this->hasGpuAndAttTypes()) {
+                    return;
+                }
+
+                $fail('The selected GSE type is invalid.');
+
+                return;
+            }
+
+            if (! GseType::query()->whereKey($value)->exists()) {
+                $fail('The selected GSE type is invalid.');
+            }
+        };
+    }
+
+    private function storageGseTypeId(string $gseTypeId): string
+    {
+        if ($gseTypeId !== self::COMBINED_GPU_ATT) {
+            return $gseTypeId;
+        }
+
+        return (string) $this->combinedGpuAttTypeIds()->first();
+    }
+
+    private function combinedGpuAttTypeIds(): Collection
+    {
+        return GseType::query()
+            ->where(function ($query): void {
+                $query
+                    ->whereRaw('LOWER(service_name) LIKE ?', ['%gpu%'])
+                    ->orWhereRaw('LOWER(service_name) LIKE ?', ['%att%']);
+            })
+            ->orderByRaw("CASE WHEN LOWER(service_name) LIKE '%gpu%' THEN 0 ELSE 1 END")
+            ->pluck('id');
+    }
+
+    private function hasGpuAndAttTypes(): bool
+    {
+        $serviceNames = GseType::query()
+            ->where(function ($query): void {
+                $query
+                    ->whereRaw('LOWER(service_name) LIKE ?', ['%gpu%'])
+                    ->orWhereRaw('LOWER(service_name) LIKE ?', ['%att%']);
+            })
+            ->pluck('service_name')
+            ->map(fn (string $serviceName): string => strtolower($serviceName));
+
+        return $serviceNames->contains(fn (string $serviceName): bool => str_contains($serviceName, 'gpu'))
+            && $serviceNames->contains(fn (string $serviceName): bool => str_contains($serviceName, 'att'));
     }
 }
