@@ -17,6 +17,10 @@ class GseInvoiceForm extends Form
     public string $gse_type_id = '';
     public string $branch_id = '';
     public string $airline_id = '';
+    public string $toWhom = '';
+    public string $toTitle = '';
+    public string $toCompany = '';
+    public string $signer_name = '';
     public string $dateFrom = '';
     public string $dateTo = '';
 
@@ -27,6 +31,10 @@ class GseInvoiceForm extends Form
         $this->gse_type_id = (string) $invoice->gse_type_id;
         $this->branch_id = (string) $invoice->branch_id;
         $this->airline_id = (string) $invoice->airline_id;
+        $this->toWhom = (string) $invoice->toWhom;
+        $this->toTitle = (string) $invoice->toTitle;
+        $this->toCompany = (string) $invoice->toCompany;
+        $this->signer_name = (string) $invoice->signer_name;
         $this->dateFrom = $invoice->dateFrom?->format('Y-m-d') ?? '';
         $this->dateTo = $invoice->dateTo?->format('Y-m-d') ?? '';
     }
@@ -38,6 +46,10 @@ class GseInvoiceForm extends Form
             'gse_type_id' => ['required', $this->gseTypeRule()],
             'branch_id' => ['required', 'exists:branches,id'],
             'airline_id' => ['required', 'exists:airlines,id'],
+            'toWhom' => ['required', 'string', 'max:255'],
+            'toTitle' => ['required', 'string', 'max:255'],
+            'toCompany' => ['required', 'string', 'max:255'],
+            'signer_name' => ['required', 'string', 'max:255'],
             'dateFrom' => ['required', 'date'],
             'dateTo' => ['required', 'date', 'after_or_equal:dateFrom'],
         ];
@@ -59,6 +71,10 @@ class GseInvoiceForm extends Form
     {
         $validated = $this->validate();
         $validated['gse_type_id'] = $this->storageGseTypeId($validated['gse_type_id']);
+        $validated['toWhom'] = $validated['toWhom'] ?: null;
+        $validated['toTitle'] = $validated['toTitle'] ?: null;
+        $validated['toCompany'] = $validated['toCompany'] ?: null;
+        $validated['signer_name'] = $validated['signer_name'] ?: null;
 
         // Keep create and edit paths behind one method so the component can sync
         // recap pivot rows after the invoice header has been saved.
@@ -91,6 +107,10 @@ class GseInvoiceForm extends Form
             'gse_type_id',
             'branch_id',
             'airline_id',
+            'toWhom',
+            'toTitle',
+            'toCompany',
+            'signer_name',
             'dateFrom',
             'dateTo',
         ]);

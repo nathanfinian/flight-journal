@@ -52,6 +52,7 @@ use App\Livewire\Deposit\Create as CreateDeposit;
 
 use App\Http\Controllers\Export\FlightExportController;
 use App\Http\Controllers\Export\GseInvoiceRecapExportController;
+use App\Http\Controllers\GseInvoicePrintController;
 use App\Http\Controllers\InvoiceController;
 
 Route::get('/', Login::class)->name('login');
@@ -91,8 +92,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/invoice/gse/{invoice}/export-recap', [GseInvoiceRecapExportController::class, 'export'])
         ->whereNumber('invoice')
         ->name('invoicegse.export-recap');
-    // Route::get('/invoice/gse/print/{invoice}', [InvoiceController::class, 'print'])
-    //     ->name('invoicegse.print');
+    Route::get('/invoice/gse/{invoice}/print', [GseInvoicePrintController::class, 'print'])
+        ->whereNumber('invoice')
+        ->name('invoicegse.print');
 
     /* =======================
      | GSE Rekap - GPU and ATT Invoices
