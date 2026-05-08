@@ -26,6 +26,8 @@
             <tr>
                 <th class="px-4 py-3 text-left">#</th>
                 <th class="px-4 py-3 text-left">Invoice Number</th>
+                <th class="px-4 py-3 text-left">Airline</th>
+                <th class="px-4 py-3 text-left">Branch</th>
                 <th class="px-4 py-3 text-left">Service</th>
                 <th class="px-4 py-3 text-left">Date Range</th>
                 <th class="px-4 py-3 text-left">Recaps</th>
@@ -59,25 +61,38 @@
                         {{ $num }}
                     </td>
                     <td class="px-4 py-3">{{ $invoice->invoice_number }}</td>
+                    <td class="px-4 py-3">{{ $invoice->airline?->name ?? '-' }}</td>
+                    <td class="px-4 py-3">{{ $invoice->branch?->name ?? '-' }}</td>
                     <td class="px-4 py-3">{{ $serviceDisplay }}</td>
                     <td class="px-4 py-3">{{ $invoice->dateRange ?? '-' }}</td>
                     <td class="px-4 py-3">{{ $invoice->recaps_count }}</td>
                     <td class="px-4 py-3">Rp. {{ number_format((float) ($invoice->invoice_recaps_sum_amount ?? 0), 2, ',', '.') }}</td>
                     <td class="px-4 py-3" x-on:click.stop>
-                        <x-ui.button
-                            as="a"
-                            size="sm"
-                            variant="outline"
-                            icon="ps:microsoft-excel-logo"
-                            href="{{ route('invoicegse.export-recap', $invoice) }}"
-                        >
-                            Excel
-                        </x-ui.button>
+                        <div class="flex items-center gap-2">
+                            <x-ui.button
+                                as="a"
+                                size="sm"
+                                variant="outline"
+                                icon="printer"
+                                href="{{ route('invoicegse.print', $invoice) }}"
+                                target="_blank"
+                            >
+                            </x-ui.button>
+
+                            <x-ui.button
+                                as="a"
+                                size="sm"
+                                variant="outline"
+                                icon="ps:microsoft-excel-logo"
+                                href="{{ route('invoicegse.export-recap', $invoice) }}"
+                            >
+                            </x-ui.button>
+                        </div>
                     </td>
                 </tr>
             @empty
                 <tr>
-                    <td colspan="7" class="px-4 py-6 text-center text-gray-500">
+                    <td colspan="9" class="px-4 py-6 text-center text-gray-500">
                         No GSE invoice found.
                     </td>
                 </tr>
