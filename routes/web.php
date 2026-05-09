@@ -47,6 +47,9 @@ use App\Livewire\GseRates\Create as CreateGSERate;
 use App\Livewire\GseTypes\Index as IndexGSEType;
 use App\Livewire\GseTypes\Create as CreateGSEType;
 
+use App\Livewire\GseEquipment\Index as IndexGSEEquipment;
+use App\Livewire\GseEquipment\Create as CreateGSEEquipment;
+
 use App\Livewire\GseInvoices\Index as IndexGSEInvoice;
 use App\Livewire\GseInvoices\Create as CreateGSEInvoice;
 
@@ -132,6 +135,16 @@ Route::middleware('auth')->group(function () {
     Route::get('/gse/types/{id:id}/edit', CreateGSEType::class)
         ->whereNumber('id')
         ->name('gsetype.edit');
+
+    /* =======================
+     | GSE Equipment
+     ======================= */
+    Route::get('/gse/equipment', IndexGSEEquipment::class)->name('gseequipment');
+    Route::get('/gse/equipment/create', CreateGSEEquipment::class)
+        ->name('gseequipment.create');
+    Route::get('/gse/equipment/{id:id}/edit', CreateGSEEquipment::class)
+        ->whereNumber('id')
+        ->name('gseequipment.edit');
 
     /* =======================
      | Invoice - Talangan Data page

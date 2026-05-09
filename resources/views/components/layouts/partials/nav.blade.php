@@ -74,7 +74,7 @@
                                         Tipe
                                     </x-ui.dropdown.item>
                                     
-                                    <x-ui.dropdown.item icon="ps:tire">
+                                    <x-ui.dropdown.item icon="ps:tire" :href="route('gseequipment')">
                                         List Equipment
                                     </x-ui.dropdown.item>
                                 </x-ui.dropdown.submenu>

@@ -58,6 +58,16 @@ class Branch extends Model
         return $this->hasMany(Deposit::class);
     }
 
+    public function gseEquipment()
+    {
+        return $this->hasMany(GseEquipment::class, 'branch_id');
+    }
+
+    public function stockMovements()
+    {
+        return $this->hasMany(StockMovement::class, 'branch_id');
+    }
+
     public function users()
     {
         return $this->hasMany(User::class);

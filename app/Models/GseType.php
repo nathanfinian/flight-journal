@@ -45,6 +45,11 @@ class GseType extends Model
         return $this->hasMany(Invoice_gse::class, 'gse_type_id');
     }
 
+    public function equipment(): HasMany
+    {
+        return $this->hasMany(GseEquipment::class, 'gse_type_id');
+    }
+
     public function creator(): BelongsTo
     {
         return $this->belongsTo(User::class, 'created_by');
