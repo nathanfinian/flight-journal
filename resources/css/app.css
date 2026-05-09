@@ -16,6 +16,9 @@
 /* Required by tables */
 @import '../../vendor/filament/tables/resources/css/index.css';
 
+/* SheafUI Datepicker */
+@import './components/calendar/cell.css';
+
 @variant dark (&:where(.dark, .dark *));
 
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';

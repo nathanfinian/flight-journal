@@ -4,6 +4,9 @@ import './bootstrap';
 import { Livewire, Alpine } from '../../vendor/livewire/livewire/dist/livewire.esm';
 import './globals/modals.js';
 
+// SheafUI Datepicker
+import './components/date-picker/index.js';
+
 // now you can register
 // components using Alpine.data(...) and
 // plugins using Alpine.plugin(...) 
