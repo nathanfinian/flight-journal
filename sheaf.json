@@ -92,6 +92,9 @@
         },
         "date-picker": {
             "installationTime": 1778308691
+        },
+        "calendar": {
+            "installationTime": 1778310928
         }
     },
     "project_hash": "70f40171-ddbe-4c3c-84d7-4aee93d30b69"
