@@ -70,23 +70,23 @@
                                 <x-ui.dropdown.separator />
                                 {{-- Sub Menu For GSE Equipments Registration --}}
                                 <x-ui.dropdown.submenu label="Equipments" icon="ps:car-profile">
-                                    <x-ui.dropdown.item icon="document">
+                                    <x-ui.dropdown.item icon="ps:files">
                                         Tipe
                                     </x-ui.dropdown.item>
                                     
-                                    <x-ui.dropdown.item icon="document">
+                                    <x-ui.dropdown.item icon="ps:tire">
                                         List Equipment
                                     </x-ui.dropdown.item>
                                 </x-ui.dropdown.submenu>
                                 {{-- Sub Menu for GSE Inventory inputs --}}
                                 <x-ui.dropdown.submenu label="Inventory" icon="ps:warehouse">
-                                    <x-ui.dropdown.item icon="document">
+                                    <x-ui.dropdown.item icon="ps:file">
                                         Kategori
                                     </x-ui.dropdown.item>
-                                    <x-ui.dropdown.item icon="document">
-                                        Registrasi Barang
+                                    <x-ui.dropdown.item icon="ps:cube">
+                                        List Barang
                                     </x-ui.dropdown.item>
-                                    <x-ui.dropdown.item icon="document" disabled>
+                                    <x-ui.dropdown.item icon="ps:ruler" disabled>
                                         Tipe Satuan
                                     </x-ui.dropdown.item>
                                 </x-ui.dropdown.submenu>
