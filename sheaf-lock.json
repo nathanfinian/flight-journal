@@ -1,11 +1,17 @@
 {
-    "files": [],
+    "files": {
+        "resources/js/components/date-picker/index.js": [
+            "date-picker"
+        ]
+    },
     "helpers": [],
     "internalDependencies": {
         "icon": [
             "sidebar",
             "button",
-            "navlist"
+            "navlist",
+            "input",
+            "date-picker"
         ],
         "button": [
             "sidebar",
@@ -16,6 +22,9 @@
         ],
         "badge": [
             "navlist"
+        ],
+        "input": [
+            "date-picker"
         ]
     }
 }
