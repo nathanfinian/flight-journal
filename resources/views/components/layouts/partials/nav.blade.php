@@ -50,7 +50,7 @@
                         <x-slot:button>
                             <x-ui.navbar.item 
                                 wire:navigate.hover
-                                icon="ps:jeep"
+                                icon="ps:car-simple"
                                 icon:class="w-5 h-5" 
                                 label="GSE" 
                                 :active="request()->is('gse*')"
@@ -66,6 +66,35 @@
 
                                 <x-ui.dropdown.item icon="document-text" :href="route('rategse')">
                                     Biaya
+                                </x-ui.dropdown.item>
+                                <x-ui.dropdown.separator />
+                                {{-- Sub Menu For GSE Equipments Registration --}}
+                                <x-ui.dropdown.submenu label="Equipments" icon="ps:car-profile">
+                                    <x-ui.dropdown.item icon="document">
+                                        Tipe
+                                    </x-ui.dropdown.item>
+                                    
+                                    <x-ui.dropdown.item icon="document">
+                                        List Equipment
+                                    </x-ui.dropdown.item>
+                                </x-ui.dropdown.submenu>
+                                {{-- Sub Menu for GSE Inventory inputs --}}
+                                <x-ui.dropdown.submenu label="Inventory" icon="ps:warehouse">
+                                    <x-ui.dropdown.item icon="document">
+                                        Kategori
+                                    </x-ui.dropdown.item>
+                                    <x-ui.dropdown.item icon="document">
+                                        Registrasi Barang
+                                    </x-ui.dropdown.item>
+                                    <x-ui.dropdown.item icon="document" disabled>
+                                        Tipe Satuan
+                                    </x-ui.dropdown.item>
+                                </x-ui.dropdown.submenu>
+
+                                <x-ui.dropdown.separator />
+                                {{-- Transaksi Inventory GSE --}}
+                                <x-ui.dropdown.item icon="ps:arrows-left-right" :href="route('rategse')">
+                                    Transaksi
                                 </x-ui.dropdown.item>
                             </x-ui.dropdown.group>
                         </x-slot:menu>
