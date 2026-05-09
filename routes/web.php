@@ -44,6 +44,9 @@ use App\Livewire\GseRecap\Create as CreateGSERecap;
 use App\Livewire\GseRates\Index as IndexGSERate;
 use App\Livewire\GseRates\Create as CreateGSERate;
 
+use App\Livewire\GseTypes\Index as IndexGSEType;
+use App\Livewire\GseTypes\Create as CreateGSEType;
+
 use App\Livewire\GseInvoices\Index as IndexGSEInvoice;
 use App\Livewire\GseInvoices\Create as CreateGSEInvoice;
 
@@ -119,6 +122,16 @@ Route::middleware('auth')->group(function () {
         ->name('rategse.edit');  // <-- {airline} matches the type-hint
     //Route::get('/gse/rekap/print/{rekap}', [InvoiceController::class, 'print']) // print page
       //  ->name('rekapgse.print');
+
+    /* =======================
+     | GSE Types
+     ======================= */
+    Route::get('/gse/types', IndexGSEType::class)->name('gsetype');
+    Route::get('/gse/types/create', CreateGSEType::class)
+        ->name('gsetype.create');
+    Route::get('/gse/types/{id:id}/edit', CreateGSEType::class)
+        ->whereNumber('id')
+        ->name('gsetype.edit');
 
     /* =======================
      | Invoice - Talangan Data page

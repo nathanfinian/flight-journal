@@ -70,7 +70,7 @@
                                 <x-ui.dropdown.separator />
                                 {{-- Sub Menu For GSE Equipments Registration --}}
                                 <x-ui.dropdown.submenu label="Equipments" icon="ps:car-profile">
-                                    <x-ui.dropdown.item icon="ps:files">
+                                    <x-ui.dropdown.item icon="ps:files" :href="route('gsetype')">
                                         Tipe
                                     </x-ui.dropdown.item>
                                     
