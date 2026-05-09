@@ -80,7 +80,7 @@
                                 </x-ui.dropdown.submenu>
                                 {{-- Sub Menu for GSE Inventory inputs --}}
                                 <x-ui.dropdown.submenu label="Inventory" icon="ps:warehouse">
-                                    <x-ui.dropdown.item icon="ps:file">
+                                    <x-ui.dropdown.item icon="ps:file" :href="route('gsecategories')">
                                         Kategori
                                     </x-ui.dropdown.item>
                                     <x-ui.dropdown.item icon="ps:cube">

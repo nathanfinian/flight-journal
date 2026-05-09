@@ -50,6 +50,9 @@ use App\Livewire\GseTypes\Create as CreateGSEType;
 use App\Livewire\GseEquipment\Index as IndexGSEEquipment;
 use App\Livewire\GseEquipment\Create as CreateGSEEquipment;
 
+use App\Livewire\GseInventoryCategories\Index as IndexGSEInventoryCategories;
+use App\Livewire\GseInventoryCategories\CategoryForm as GSEInventoryCategoryForm;
+
 use App\Livewire\GseInvoices\Index as IndexGSEInvoice;
 use App\Livewire\GseInvoices\Create as CreateGSEInvoice;
 
@@ -145,6 +148,16 @@ Route::middleware('auth')->group(function () {
     Route::get('/gse/equipment/{id:id}/edit', CreateGSEEquipment::class)
         ->whereNumber('id')
         ->name('gseequipment.edit');
+
+    /* =======================
+     | GSE Inventory Categories
+     ======================= */
+    Route::get('/gse/inventory/categories', IndexGSEInventoryCategories::class)->name('gsecategories');
+    Route::get('/gse/inventory/categories/create', GSEInventoryCategoryForm::class)
+        ->name('gsecategories.create');
+    Route::get('/gse/inventory/categories/{id:id}/edit', GSEInventoryCategoryForm::class)
+        ->whereNumber('id')
+        ->name('gsecategories.edit');
 
     /* =======================
      | Invoice - Talangan Data page
