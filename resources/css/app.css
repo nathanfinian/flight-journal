@@ -17,7 +17,7 @@
 @import '../../vendor/filament/tables/resources/css/index.css';
 
 /* SheafUI Datepicker */
-@import './components/calendar/cell.css';
+/* @import './components/calendar/cell.css'; */
 
 @variant dark (&:where(.dark, .dark *));
 
