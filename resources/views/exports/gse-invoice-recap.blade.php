@@ -43,7 +43,7 @@
                 <td>{{ $recap->er_number }}</td>
                 <td>{{ $recap->flight_number }}</td>
                 <td>{{ $recap->airline?->name ?? '-' }}</td>
-                <td>{{ $recap->gseType?->service_name ?? '-' }}</td>
+                <td>{{ $recap->gseType?->type_name ?? '-' }}</td>
                 <td>{{ $recap->equipment?->registration ?? '-' }}</td>
                 <td>{{ $recap->pivot->charge_type ?: '-' }}</td>
                 <td>{{ (float) $recap->pivot->service_rate }}</td>

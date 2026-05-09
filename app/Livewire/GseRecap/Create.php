@@ -29,7 +29,7 @@ class Create extends Component
         $this->branches = Branch::query()->orderBy('name')->get(['id', 'name']);
         $this->airlines = Airline::query()->orderBy('name')->get(['id', 'name']);
         $this->equipments = Equipment::query()->orderBy('registration')->get(['id', 'registration', 'airline_id']);
-        $this->gseTypes = GseType::query()->orderBy('service_name')->get(['id', 'service_name']);
+        $this->gseTypes = GseType::query()->orderBy('type_name')->get(['id', 'type_name']);
         $this->form->service_date = now('Asia/Jakarta')->toDateString();
 
         if ($id !== null) {

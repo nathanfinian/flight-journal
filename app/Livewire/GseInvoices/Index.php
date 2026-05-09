@@ -21,10 +21,10 @@ class Index extends Component
     {
         $invoices = GseInvoice::query()
             ->with([
-                'gseType:id,service_name',
+                'gseType:id,type_name',
                 'branch:id,name',
                 'airline:id,name',
-                'recaps.gseType:id,service_name',
+                'recaps.gseType:id,type_name',
             ])
             ->withCount('recaps')
             ->withSum('invoiceRecaps', 'amount')

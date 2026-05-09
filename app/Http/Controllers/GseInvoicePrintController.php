@@ -17,7 +17,7 @@ class GseInvoicePrintController extends Controller
         $invoice->load([
             'branch.airport',
             'airline',
-            'gseType:id,service_name',
+            'gseType:id,type_name',
         ]);
 
         $invoiceRecaps = GseInvoiceRecap::query()
@@ -26,7 +26,7 @@ class GseInvoicePrintController extends Controller
             ->leftJoin('gse_types', 'gse_types.id', '=', 'gse_recaps.gse_type_id')
             ->select('gse_invoice_recap.*')
             ->with([
-                'recap.gseType:id,service_name',
+                'recap.gseType:id,type_name',
                 'recap.branch:id,name',
                 'recap.airline:id,name',
                 'recap.equipment:id,registration',
@@ -34,7 +34,7 @@ class GseInvoicePrintController extends Controller
                 'recap.pushbackDetail:id,gse_recap_id,start_ps,end_ps,ata,atd',
             ])
             ->orderByRaw($this->gseServiceOrderSql())
-            ->orderBy('gse_types.service_name')
+            ->orderBy('gse_types.type_name')
             ->orderBy('gse_recaps.service_date')
             ->orderBy('gse_recaps.flight_number')
             ->orderBy('gse_recaps.er_number')
@@ -59,7 +59,7 @@ class GseInvoicePrintController extends Controller
     {
         return $invoiceRecaps
             ->groupBy(function (GseInvoiceRecap $invoiceRecap): string {
-                $service = $invoiceRecap->recap?->gseType?->service_name ?? '-';
+                $service = $invoiceRecap->recap?->gseType?->type_name ?? '-';
 
                 return implode('|', [
                     $this->serviceSortKey($service),
@@ -71,7 +71,7 @@ class GseInvoicePrintController extends Controller
             ->map(function (Collection $rows): array {
                 /** @var GseInvoiceRecap $first */
                 $first = $rows->first();
-                $service = $first->recap?->gseType?->service_name ?? '-';
+                $service = $first->recap?->gseType?->type_name ?? '-';
                 $chargeType = $first->charge_type ?: '-';
                 $serviceRate = (float) $first->service_rate;
 
@@ -102,8 +102,8 @@ class GseInvoicePrintController extends Controller
     {
         return "
             CASE
-                WHEN LOWER(gse_types.service_name) LIKE '%att%' THEN 0
-                WHEN LOWER(gse_types.service_name) LIKE '%gpu%' THEN 1
+                WHEN LOWER(gse_types.type_name) LIKE '%att%' THEN 0
+                WHEN LOWER(gse_types.type_name) LIKE '%gpu%' THEN 1
                 ELSE 2
             END
         ";

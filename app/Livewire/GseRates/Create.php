@@ -23,8 +23,8 @@ class Create extends Component
     public function mount(?int $id = null): void
     {
         $this->gseTypes = GseType::query()
-            ->orderBy('service_name')
-            ->get(['id', 'service_name']);
+            ->orderBy('type_name')
+            ->get(['id', 'type_name']);
 
         if ($id !== null) {
             $gseRate = GseTypeRate::query()->findOrFail($id);
@@ -79,7 +79,7 @@ class Create extends Component
     public function delete()
     {
         $row = GseTypeRate::find($this->gseRateId);
-        $name = $row?->gseType?->service_name ?? 'Unknown';
+        $name = $row?->gseType?->type_name ?? 'Unknown';
 
         if (! $row) {
             session()->flash('notify', [

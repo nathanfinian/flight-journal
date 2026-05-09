@@ -15,12 +15,12 @@ class GseInvoiceRecapExport implements FromView
     public function view(): View
     {
         $invoice = $this->invoice->load([
-            'gseType:id,service_name',
+            'gseType:id,type_name',
             'branch:id,name',
             'airline:id,name',
             'recaps' => fn ($query) => $query
                 ->with([
-                    'gseType:id,service_name',
+                    'gseType:id,type_name',
                     'branch:id,name',
                     'airline:id,name',
                     'equipment:id,registration',

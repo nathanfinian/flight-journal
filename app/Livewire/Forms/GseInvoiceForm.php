@@ -149,10 +149,10 @@ class GseInvoiceForm extends Form
         return GseType::query()
             ->where(function ($query): void {
                 $query
-                    ->whereRaw('LOWER(service_name) LIKE ?', ['%gpu%'])
-                    ->orWhereRaw('LOWER(service_name) LIKE ?', ['%att%']);
+                    ->whereRaw('LOWER(type_name) LIKE ?', ['%gpu%'])
+                    ->orWhereRaw('LOWER(type_name) LIKE ?', ['%att%']);
             })
-            ->orderByRaw("CASE WHEN LOWER(service_name) LIKE '%gpu%' THEN 0 ELSE 1 END")
+            ->orderByRaw("CASE WHEN LOWER(type_name) LIKE '%gpu%' THEN 0 ELSE 1 END")
             ->pluck('id');
     }
 
@@ -161,10 +161,10 @@ class GseInvoiceForm extends Form
         $serviceNames = GseType::query()
             ->where(function ($query): void {
                 $query
-                    ->whereRaw('LOWER(service_name) LIKE ?', ['%gpu%'])
-                    ->orWhereRaw('LOWER(service_name) LIKE ?', ['%att%']);
+                    ->whereRaw('LOWER(type_name) LIKE ?', ['%gpu%'])
+                    ->orWhereRaw('LOWER(type_name) LIKE ?', ['%att%']);
             })
-            ->pluck('service_name')
+            ->pluck('type_name')
             ->map(fn (string $serviceName): string => strtolower($serviceName));
 
         return $serviceNames->contains(fn (string $serviceName): bool => str_contains($serviceName, 'gpu'))

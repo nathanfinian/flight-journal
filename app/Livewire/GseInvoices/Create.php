@@ -38,8 +38,8 @@ class Create extends Component
     public function mount(?int $id = null): void
     {
         $this->gseTypes = GseType::query()
-            ->orderBy('service_name')
-            ->get(['id', 'service_name']);
+            ->orderBy('type_name')
+            ->get(['id', 'type_name']);
         $this->hasCombinedGseTypes = $this->hasGpuAndAttTypes();
 
         $this->branches = Branch::query()
@@ -63,7 +63,7 @@ class Create extends Component
         $this->isEdit = true;
         $this->invoice = GseInvoice::query()
             ->with([
-                'recaps.gseType:id,service_name',
+                'recaps.gseType:id,type_name',
                 'recaps.branch:id,name',
                 'recaps.airline:id,name',
                 'recaps.equipment:id,registration',
@@ -144,7 +144,7 @@ class Create extends Component
         // Only show recaps that have an active rate for their own service date.
         $recaps = GseRecap::query()
             ->with([
-                'gseType:id,service_name',
+                'gseType:id,type_name',
                 'branch:id,name',
                 'airline:id,name',
                 'equipment:id,registration',
@@ -320,7 +320,7 @@ class Create extends Component
                     'airline' => $recap->airline?->name ?? '-',
                     'branch' => $recap->branch?->name ?? '-',
                     'equipment' => $recap->equipment?->registration ?? '-',
-                    'service' => $recap->gseType?->service_name ?? '-',
+                    'service' => $recap->gseType?->type_name ?? '-',
                     'charge_type' => (string) ($rate?->charge_type ?? '-'),
                     'service_rate' => $serviceRate,
                     'quantity' => $quantity,
@@ -422,10 +422,10 @@ class Create extends Component
         return GseType::query()
             ->where(function (Builder $query): void {
                 $query
-                    ->whereRaw('LOWER(service_name) LIKE ?', ['%gpu%'])
-                    ->orWhereRaw('LOWER(service_name) LIKE ?', ['%att%']);
+                    ->whereRaw('LOWER(type_name) LIKE ?', ['%gpu%'])
+                    ->orWhereRaw('LOWER(type_name) LIKE ?', ['%att%']);
             })
-            ->orderByRaw("CASE WHEN LOWER(service_name) LIKE '%gpu%' THEN 0 ELSE 1 END")
+            ->orderByRaw("CASE WHEN LOWER(type_name) LIKE '%gpu%' THEN 0 ELSE 1 END")
             ->pluck('id');
     }
 
@@ -434,10 +434,10 @@ class Create extends Component
         $serviceNames = GseType::query()
             ->where(function (Builder $query): void {
                 $query
-                    ->whereRaw('LOWER(service_name) LIKE ?', ['%gpu%'])
-                    ->orWhereRaw('LOWER(service_name) LIKE ?', ['%att%']);
+                    ->whereRaw('LOWER(type_name) LIKE ?', ['%gpu%'])
+                    ->orWhereRaw('LOWER(type_name) LIKE ?', ['%att%']);
             })
-            ->pluck('service_name')
+            ->pluck('type_name')
             ->map(fn (string $serviceName): string => strtolower($serviceName));
 
         return $serviceNames->contains(fn (string $serviceName): bool => str_contains($serviceName, 'gpu'))
@@ -447,7 +447,7 @@ class Create extends Component
     private function hasMixedGpuAttRecaps(Collection $recaps): bool
     {
         $serviceNames = $recaps
-            ->map(fn (GseRecap $recap): string => strtolower((string) $recap->gseType?->service_name))
+            ->map(fn (GseRecap $recap): string => strtolower((string) $recap->gseType?->type_name))
             ->filter();
 
         return $serviceNames->contains(fn (string $serviceName): bool => str_contains($serviceName, 'gpu'))

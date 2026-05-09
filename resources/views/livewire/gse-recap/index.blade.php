@@ -51,7 +51,7 @@
             >
                 <x-ui.select.option value="">Semua Type</x-ui.select.option>
                 @foreach($gseTypes as $gseType)
-                    <x-ui.select.option value="{{ $gseType->id }}">{{ $gseType->service_name }}</x-ui.select.option>
+                    <x-ui.select.option value="{{ $gseType->id }}">{{ $gseType->type_name }}</x-ui.select.option>
                 @endforeach
             </x-ui.select>
         </div>
@@ -100,7 +100,7 @@
                     <td class="px-4 py-3">{{ $recap->equipment->registration ?? '-' }}</td>
                     <td class="px-4 py-3">{{ $recap->equipment->aircraft->type_name ?? '-' }}</td>
                     <td class="px-4 py-3">{{ $recap->operator_name ?? '-' }}</td>
-                    <td class="px-4 py-3">{{ $recap->gseType->service_name ?? '-' }}</td>
+                    <td class="px-4 py-3">{{ $recap->gseType->type_name ?? '-' }}</td>
                     <td class="px-4 py-3">{{ $recap->branch->name ?? '-' }}</td>
                 </tr>
             @empty

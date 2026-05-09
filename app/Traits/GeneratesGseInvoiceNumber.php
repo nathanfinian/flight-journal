@@ -13,7 +13,7 @@ trait GeneratesGseInvoiceNumber
     {
         return DB::transaction(function () use ($gseTypeId) {
             $gseType = GseType::query()->findOrFail($gseTypeId);
-            $typeCode = $this->makeGseTypeCode($gseType->service_name, $gseType->getKey());
+            $typeCode = $this->makeGseTypeCode($gseType->type_name, $gseType->getKey());
             $period = now()->format('Ym');
 
             $last = Invoice_gse::query()

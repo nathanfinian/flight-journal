@@ -40,13 +40,13 @@
             @forelse ($invoices as $invoice)
                 @php
                     $recapServices = $invoice->recaps
-                        ->pluck('gseType.service_name')
+                        ->pluck('gseType.type_name')
                         ->filter()
                         ->unique()
                         ->values();
                     $serviceDisplay = $recapServices->count() > 1
                         ? $recapServices->implode(' + ')
-                        : ($invoice->gseType?->service_name ?? '-');
+                        : ($invoice->gseType?->type_name ?? '-');
                 @endphp
                 <tr
                     class="hover:bg-gray-50 dark:hover:bg-neutral-800/60 cursor-pointer"

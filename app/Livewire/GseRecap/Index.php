@@ -34,7 +34,7 @@ class Index extends Component
 
         $this->branches = Branch::orderBy('name')->get(['id', 'name']);
         $this->airlines = Airline::orderBy('name')->get(['id', 'name']);
-        $this->gseTypes = GseType::orderBy('service_name')->get(['id', 'service_name']);
+        $this->gseTypes = GseType::orderBy('type_name')->get(['id', 'type_name']);
 
         $this->loadInvoices();
     }
@@ -81,7 +81,7 @@ class Index extends Component
                 'operator_name',
             ])
             ->with([
-                'gseType:id,service_name',
+                'gseType:id,type_name',
                 'branch:id,name',
                 'airline:id,name',
                 'equipment:id,registration,aircraft_id',

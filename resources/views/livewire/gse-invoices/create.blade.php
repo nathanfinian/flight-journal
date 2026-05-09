@@ -37,7 +37,7 @@
                                 @endif
                                 @foreach($gseTypes as $gseType)
                                     <x-ui.select.option value="{{ $gseType->id }}">
-                                        {{ $gseType->service_name }}
+                                        {{ $gseType->type_name }}
                                     </x-ui.select.option>
                                 @endforeach
                             </x-ui.select>

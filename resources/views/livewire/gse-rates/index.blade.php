@@ -46,7 +46,7 @@
                         @endphp
                         {{ $num }}
                     </td>
-                    <td class="px-4 py-3">{{ $gseRate->gseType->service_name ?? '-' }}</td>
+                    <td class="px-4 py-3">{{ $gseRate->gseType->type_name ?? '-' }}</td>
                     <td class="px-4 py-3">{{ $gseRate->charge_type }}</td>
                     <td class="px-4 py-3">Rp. {{ number_format((float) $gseRate->service_rate, 0, ',', '.') }}</td>
                     <td class="px-4 py-3">{{ $gseRate->effective_from?->format('Y-m-d') ?? '-' }}</td>

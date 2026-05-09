@@ -175,7 +175,7 @@
 				@forelse ($invoiceRecaps as $invoiceRecap)
                     @php
                         $recap = $invoiceRecap->recap;
-                        $serviceName = $recap?->gseType?->service_name ?? '-';
+                        $serviceName = $recap?->gseType?->type_name ?? '-';
                     @endphp
                     @if ($currentService !== $serviceName)
                         @php $currentService = $serviceName; @endphp

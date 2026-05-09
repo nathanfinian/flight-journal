@@ -205,7 +205,7 @@ class GseRecapForm extends Form
             return null;
         }
 
-        $serviceName = (string) GseType::query()->whereKey($this->gse_type_id)->value('service_name');
+        $serviceName = (string) GseType::query()->whereKey($this->gse_type_id)->value('type_name');
         $normalized = strtolower($serviceName);
 
         if (str_contains($normalized, 'gpu')) {
