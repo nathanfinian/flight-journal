@@ -21,7 +21,6 @@
                     <x-ui.dropdown position="bottom-start">
                         <x-slot:button>
                             <x-ui.navbar.item 
-                                wire:navigate.hover
                                 icon="globe-asia-australia"
                                 icon:class="w-5 h-5" 
                                 label="Flights" 
@@ -32,15 +31,15 @@
                         <x-slot:menu>
                             <x-ui.dropdown.group label="Data Penerbangan">
                                 <x-ui.dropdown.separator />
-                                <x-ui.dropdown.item icon="ps:notepad" :href="route('flight-journal')">
+                                <x-ui.dropdown.item wire:navigate.hover icon="ps:notepad" :href="route('flight-journal')">
                                     Jurnal
                                 </x-ui.dropdown.item>
                                 
-                                <x-ui.dropdown.item icon="ps:calendar-dots" :href="route('flight-schedule')">
+                                <x-ui.dropdown.item wire:navigate.hover icon="ps:calendar-dots" :href="route('flight-schedule')">
                                     Penjadwalan
                                 </x-ui.dropdown.item>
 
-                                <x-ui.dropdown.item icon="document-text" :href="route('flight-history')">
+                                <x-ui.dropdown.item wire:navigate.hover icon="document-text" :href="route('flight-history')">
                                     Sejarah
                                 </x-ui.dropdown.item>
                             </x-ui.dropdown.group>
@@ -49,7 +48,6 @@
                     <x-ui.dropdown position="bottom-start">
                         <x-slot:button>
                             <x-ui.navbar.item 
-                                wire:navigate.hover
                                 icon="ps:car-simple"
                                 icon:class="w-5 h-5" 
                                 label="GSE" 
@@ -60,41 +58,45 @@
                         <x-slot:menu>
                             <x-ui.dropdown.group label="Data GSE">
                                 <x-ui.dropdown.separator />
-                                <x-ui.dropdown.item icon="ps:notepad" :href="route('rekapgse')">
+                                <x-ui.dropdown.item wire:navigate.hover icon="ps:notepad" :href="route('rekapgse')">
                                     Rekap
                                 </x-ui.dropdown.item>
 
-                                <x-ui.dropdown.item icon="document-text" :href="route('rategse')">
+                                <x-ui.dropdown.item wire:navigate.hover icon="document-text" :href="route('rategse')">
                                     Biaya
                                 </x-ui.dropdown.item>
                                 <x-ui.dropdown.separator />
                                 {{-- Sub Menu For GSE Equipments Registration --}}
                                 <x-ui.dropdown.submenu label="Equipments" icon="ps:car-profile">
-                                    <x-ui.dropdown.item icon="ps:files" :href="route('gsetype')">
+                                    <x-ui.dropdown.item wire:navigate.hover icon="ps:files" :href="route('gsetype')">
                                         Tipe
                                     </x-ui.dropdown.item>
                                     
-                                    <x-ui.dropdown.item icon="ps:tire" :href="route('gseequipment')">
+                                    <x-ui.dropdown.item wire:navigate.hover icon="ps:tire" :href="route('gseequipment')">
                                         List Equipment
                                     </x-ui.dropdown.item>
                                 </x-ui.dropdown.submenu>
                                 {{-- Sub Menu for GSE Inventory inputs --}}
                                 <x-ui.dropdown.submenu label="Inventory" icon="ps:warehouse">
-                                    <x-ui.dropdown.item icon="ps:file" :href="route('gsecategories')">
+                                    <x-ui.dropdown.item wire:navigate.hover icon="ps:file" :href="route('gsecategories')">
                                         Kategori
                                     </x-ui.dropdown.item>
-                                    <x-ui.dropdown.item icon="ps:cube">
+                                    <x-ui.dropdown.item wire:navigate.hover icon="ps:cube" :href="route('gseitems')">
                                         List Barang
                                     </x-ui.dropdown.item>
-                                    <x-ui.dropdown.item icon="ps:ruler" disabled>
+                                    <x-ui.dropdown.item wire:navigate.hover icon="ps:ruler" :href="route('gseunits')">
                                         Tipe Satuan
                                     </x-ui.dropdown.item>
                                 </x-ui.dropdown.submenu>
 
                                 <x-ui.dropdown.separator />
                                 {{-- Transaksi Inventory GSE --}}
-                                <x-ui.dropdown.item icon="ps:arrows-left-right" :href="route('rategse')">
+                                <x-ui.dropdown.item wire:navigate.hover icon="ps:arrows-left-right" :href="route('gsetransactions')">
                                     Transaksi
+                                </x-ui.dropdown.item>
+                                {{-- History Transaksi Inventory GSE --}}
+                                <x-ui.dropdown.item wire:navigate.hover icon="ps:clock-counter-clockwise" :href="route('gsetransactions')">
+                                    History
                                 </x-ui.dropdown.item>
                             </x-ui.dropdown.group>
                         </x-slot:menu>
@@ -102,7 +104,6 @@
                     <x-ui.dropdown position="bottom-start">
                         <x-slot:button>
                             <x-ui.navbar.item 
-                                wire:navigate.hover
                                 icon="ps:newspaper"
                                 icon:class="w-5 h-5" 
                                 label="Invoicing" 
@@ -113,14 +114,14 @@
                         <x-slot:menu>
                             <x-ui.dropdown.group label="Sistem Invoice">
                                 <x-ui.dropdown.separator />
-                                 <x-ui.dropdown.item icon="document-plus" :href="route('deposit')">
+                                 <x-ui.dropdown.item wire:navigate.hover icon="document-plus" :href="route('deposit')">
                                     Deposit/Talangan
                                 </x-ui.dropdown.item>
                                 @role('admin', 'finance')
-                                    <x-ui.dropdown.item icon="ps:newspaper" :href="route('invoice')">
+                                    <x-ui.dropdown.item wire:navigate.hover icon="ps:newspaper" :href="route('invoice')">
                                         Regular Invoice
                                     </x-ui.dropdown.item>
-                                    <x-ui.dropdown.item icon="document" :href="route('invoicegse')">
+                                    <x-ui.dropdown.item wire:navigate.hover icon="document" :href="route('invoicegse')">
                                         GSE Invoice
                                     </x-ui.dropdown.item>
                                     <x-ui.dropdown.item disabled icon="document" :href="route('invoice')">
