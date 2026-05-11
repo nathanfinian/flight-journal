@@ -53,6 +53,15 @@ use App\Livewire\GseEquipment\Create as CreateGSEEquipment;
 use App\Livewire\GseInventoryCategories\Index as IndexGSEInventoryCategories;
 use App\Livewire\GseInventoryCategories\CategoryForm as GSEInventoryCategoryForm;
 
+use App\Livewire\GseInventoryItems\Index as IndexGSEInventoryItems;
+use App\Livewire\GseInventoryItems\ItemForm as GSEInventoryItemForm;
+
+use App\Livewire\GseInventoryUnits\Index as IndexGSEInventoryUnits;
+use App\Livewire\GseInventoryUnits\UnitForm as GSEInventoryUnitForm;
+
+use App\Livewire\GseInventoryTransactions\Index as IndexGSEInventoryTransactions;
+use App\Livewire\GseInventoryTransactions\TransactionForm as GSEInventoryTransactionForm;
+
 use App\Livewire\GseInvoices\Index as IndexGSEInvoice;
 use App\Livewire\GseInvoices\Create as CreateGSEInvoice;
 
@@ -158,6 +167,36 @@ Route::middleware('auth')->group(function () {
     Route::get('/gse/inventory/categories/{id:id}/edit', GSEInventoryCategoryForm::class)
         ->whereNumber('id')
         ->name('gsecategories.edit');
+
+    /* =======================
+     | GSE Inventory Items
+     ======================= */
+    Route::get('/gse/inventory/items', IndexGSEInventoryItems::class)->name('gseitems');
+    Route::get('/gse/inventory/items/create', GSEInventoryItemForm::class)
+        ->name('gseitems.create');
+    Route::get('/gse/inventory/items/{id:id}/edit', GSEInventoryItemForm::class)
+        ->whereNumber('id')
+        ->name('gseitems.edit');
+
+    /* =======================
+     | GSE Inventory Units
+     ======================= */
+    Route::get('/gse/inventory/units', IndexGSEInventoryUnits::class)->name('gseunits');
+    Route::get('/gse/inventory/units/create', GSEInventoryUnitForm::class)
+        ->name('gseunits.create');
+    Route::get('/gse/inventory/units/{id:id}/edit', GSEInventoryUnitForm::class)
+        ->whereNumber('id')
+        ->name('gseunits.edit');
+
+    /* =======================
+     | GSE Inventory Transactions
+     ======================= */
+    Route::get('/gse/inventory/transactions', IndexGSEInventoryTransactions::class)->name('gsetransactions');
+    Route::get('/gse/inventory/transactions/create', GSEInventoryTransactionForm::class)
+        ->name('gsetransactions.create');
+    Route::get('/gse/inventory/transactions/{id:id}/edit', GSEInventoryTransactionForm::class)
+        ->whereNumber('id')
+        ->name('gsetransactions.edit');
 
     /* =======================
      | Invoice - Talangan Data page
