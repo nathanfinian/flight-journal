@@ -62,7 +62,8 @@
             "button",
             "navlist",
             "input",
-            "date-picker"
+            "date-picker",
+            "dropdown"
         ],
         "button": [
             "sidebar",

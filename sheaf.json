@@ -4,7 +4,7 @@
             "installationTime": 1757154860
         },
         "dropdown": {
-            "installationTime": 1757085344
+            "installationTime": 1778488334
         },
         "icon": {
             "installationTime": 1777107369
@@ -95,6 +95,9 @@
         },
         "calendar": {
             "installationTime": 1778310928
+        },
+        "accordion": {
+            "installationTime": 1778485170
         }
     },
     "project_hash": "70f40171-ddbe-4c3c-84d7-4aee93d30b69"
