@@ -68,6 +68,11 @@ class Branch extends Model
         return $this->hasMany(StockMovement::class, 'branch_id');
     }
 
+    public function itemStocks()
+    {
+        return $this->hasMany(ItemStock::class, 'branch_id');
+    }
+
     public function users()
     {
         return $this->hasMany(User::class);
