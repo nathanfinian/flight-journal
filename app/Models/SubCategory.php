@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Auth;
 
@@ -38,6 +39,11 @@ class SubCategory extends Model
     public function category(): BelongsTo
     {
         return $this->belongsTo(Category::class, 'category_id');
+    }
+
+    public function items(): HasMany
+    {
+        return $this->hasMany(Item::class, 'sub_category_id');
     }
 
     public function creator(): BelongsTo
