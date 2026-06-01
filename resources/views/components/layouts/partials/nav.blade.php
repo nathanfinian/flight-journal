@@ -18,6 +18,9 @@
                         :href="route('dashboard')" 
                         :active="request()->is('dashboard')"
                     />
+
+                    {{-- Flights Journal Menu --}}
+                    @role('admin', 'finance')
                     <x-ui.dropdown position="bottom-start">
                         <x-slot:button>
                             <x-ui.navbar.item 
@@ -45,6 +48,10 @@
                             </x-ui.dropdown.group>
                         </x-slot:menu>
                     </x-ui.dropdown>
+                    @endrole
+
+                    {{-- GSE Menu --}}
+                    @role('admin', 'finance', 'teknik')
                     <x-ui.dropdown position="bottom-start">
                         <x-slot:button>
                             <x-ui.navbar.item 
@@ -101,6 +108,9 @@
                             </x-ui.dropdown.group>
                         </x-slot:menu>
                     </x-ui.dropdown>
+                    @endrole
+                    
+                    {{-- Invoicing Menu --}}
                     <x-ui.dropdown position="bottom-start">
                         <x-slot:button>
                             <x-ui.navbar.item 
@@ -114,9 +124,9 @@
                         <x-slot:menu>
                             <x-ui.dropdown.group label="Sistem Invoice">
                                 <x-ui.dropdown.separator />
-                                 <x-ui.dropdown.item wire:navigate.hover icon="document-plus" :href="route('deposit')">
-                                    Deposit/Talangan
-                                </x-ui.dropdown.item>
+                                    <x-ui.dropdown.item wire:navigate.hover icon="document-plus" :href="route('deposit')">
+                                        Deposit/Talangan
+                                    </x-ui.dropdown.item>
                                 @role('admin', 'finance')
                                     <x-ui.dropdown.item wire:navigate.hover icon="ps:newspaper" :href="route('invoice')">
                                         Regular Invoice
@@ -129,7 +139,7 @@
                                     </x-ui.dropdown.item>
                                 @endrole
                                 
-                                @role('operation')
+                                @role('operation', 'teknik')
                                 <x-ui.dropdown.item disabled icon="ps:newspaper" :href="route('invoice')">
                                     Regular Invoice
                                 </x-ui.dropdown.item>
@@ -145,6 +155,8 @@
                             </x-ui.dropdown.group>
                         </x-slot:menu>
                     </x-ui.dropdown>
+
+                    @role('admin', 'finance')
                     <x-ui.navbar.item 
                         wire:navigate.hover
                         icon="cog-6-tooth" 
@@ -153,6 +165,7 @@
                         :href="route('settings.index')" 
                         :active="request()->is('settings*')"
                     />
+                    @endrole
                     @role('admin')
                         <x-ui.navbar.item 
                             wire:navigate.hover
