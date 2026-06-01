@@ -13,6 +13,7 @@
                 <th class="px-4 py-3 text-left" rowspan="2">Ferry Flight Number</th>
                 <th class="px-4 py-3 text-left" rowspan="2">Delay Charge</th>
                 <th class="px-4 py-3 text-left" rowspan="2">Notes</th>
+                <th class="px-4 py-3 text-left" rowspan="2">PIC</th>
             </tr>
             <tr>
                 <th class="px-4 py-3 text-left">WIB</th>
@@ -49,6 +50,7 @@
                     <td class="px-4 py-3" rowspan="2">{{ $flight->ferry_flight_no ?? '' }}</td>
                     <td class="px-4 py-3" rowspan="2">{{ $flight->delay_charge ?? '' }}</td>
                     <td class="px-4 py-3" rowspan="2">{{ $flight->notes }}</td>
+                    <td class="px-4 py-3" rowspan="2">{{ $flight->pic }}</td>
                 </tr>
                 <tr>
                     <td class="px-4 py-3 font-semibold">{{ $flight->departure_flight_no ?? '—' }}</td>
@@ -65,7 +67,7 @@
                 </tr>
             @empty
                 <tr>
-                    <td colspan="12" class="px-4 py-4 text-center text-gray-400 dark:text-neutral-500">
+                    <td colspan="13" class="px-4 py-4 text-center text-gray-400 dark:text-neutral-500">
                         No flights found.
                     </td>
                 </tr>
