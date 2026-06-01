@@ -60,6 +60,7 @@ use App\Livewire\GseInventoryUnits\Index as IndexGSEInventoryUnits;
 use App\Livewire\GseInventoryUnits\UnitForm as GSEInventoryUnitForm;
 
 use App\Livewire\GseInventoryTransactions\Index as IndexGSEInventoryTransactions;
+use App\Livewire\GseInventoryTransactions\History as HistoryGSEInventoryTransactions;
 use App\Livewire\GseInventoryTransactions\TransactionForm as GSEInventoryTransactionForm;
 
 use App\Livewire\GseInvoices\Index as IndexGSEInvoice;
@@ -192,6 +193,8 @@ Route::middleware('auth')->group(function () {
      | GSE Inventory Transactions
      ======================= */
     Route::get('/gse/inventory/transactions', IndexGSEInventoryTransactions::class)->name('gsetransactions');
+    Route::get('/gse/inventory/transactions/history', HistoryGSEInventoryTransactions::class)
+        ->name('gsetransactions.history');
     Route::get('/gse/inventory/transactions/create', GSEInventoryTransactionForm::class)
         ->name('gsetransactions.create');
     Route::get('/gse/inventory/transactions/{id:id}/edit', GSEInventoryTransactionForm::class)

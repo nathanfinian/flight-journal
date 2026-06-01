@@ -3,7 +3,16 @@
         <div class="flex items-center">
             Inventory Transactions
         </div>
-        <div class="flex items-center">
+        <div class="flex items-center gap-2">
+            <x-ui.button
+                wire:navigate.hover
+                size="sm"
+                variant="outline"
+                icon="ps:clock-counter-clockwise"
+                :href="route('gsetransactions.history')"
+            >
+                History
+            </x-ui.button>
             <x-ui.button
                 wire:navigate.hover
                 size="sm"

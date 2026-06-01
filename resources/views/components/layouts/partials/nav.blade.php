@@ -95,7 +95,7 @@
                                     Transaksi
                                 </x-ui.dropdown.item>
                                 {{-- History Transaksi Inventory GSE --}}
-                                <x-ui.dropdown.item wire:navigate.hover icon="ps:clock-counter-clockwise" :href="route('gsetransactions')">
+                                <x-ui.dropdown.item wire:navigate.hover icon="ps:clock-counter-clockwise" :href="route('gsetransactions.history')">
                                     History
                                 </x-ui.dropdown.item>
                             </x-ui.dropdown.group>
