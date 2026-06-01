@@ -21,6 +21,47 @@
         <x-ui.breadcrumbs.item>Inventory Items</x-ui.breadcrumbs.item>
     </x-ui.breadcrumbs>
 
+    <div class="relative z-20 mt-4 overflow-visible rounded-lg border border-black/10 bg-white px-3 py-2 dark:border-white/10 dark:bg-neutral-900">
+        <div class="flex min-w-max flex-nowrap items-end gap-3">
+            <div class="w-64 shrink-0">
+                <x-ui.field>
+                    <x-ui.label>Name</x-ui.label>
+                    <x-ui.input
+                        size="sm"
+                        wire:model.live.debounce.300ms="search"
+                        placeholder="Search item name..."
+                    />
+                </x-ui.field>
+            </div>
+
+            <div class="w-64 shrink-0">
+                <x-ui.field>
+                    <x-ui.label>Sub Category</x-ui.label>
+                    <x-ui.select
+                        searchable
+                        size="sm"
+                        position="bottom-start"
+                        placeholder="All sub categories"
+                        wire:model.live="sub_category_id"
+                    >
+                        <x-ui.select.option value="">All sub categories</x-ui.select.option>
+                        @foreach ($subCategories as $subCategory)
+                            <x-ui.select.option value="{{ $subCategory->sub_category_id }}">
+                                {{ $subCategory->category?->category_name ?? '-' }} - {{ $subCategory->sub_category_name }}
+                            </x-ui.select.option>
+                        @endforeach
+                    </x-ui.select>
+                </x-ui.field>
+            </div>
+
+            <div class="shrink-0">
+                <x-ui.button type="button" size="sm" variant="outline" wire:click="resetFilters">
+                    Reset Filters
+                </x-ui.button>
+            </div>
+        </div>
+    </div>
+
     <table class="border border-collapse min-w-full text-sm rounded-xl overflow-hidden mt-4 shadow-lg">
         <thead class="bg-gray-200 dark:bg-neutral-800">
             <tr>

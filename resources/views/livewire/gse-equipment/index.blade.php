@@ -21,6 +21,67 @@
         <x-ui.breadcrumbs.item>GSE Equipment List</x-ui.breadcrumbs.item>
     </x-ui.breadcrumbs>
 
+    <div class="relative z-20 mt-4 overflow-visible rounded-lg border border-black/10 bg-white px-3 py-2 dark:border-white/10 dark:bg-neutral-900">
+        <div class="flex min-w-max flex-nowrap items-end gap-3">
+            <div class="w-64 shrink-0">
+                <x-ui.field>
+                    <x-ui.label>Name</x-ui.label>
+                    <x-ui.input
+                        size="sm"
+                        wire:model.live.debounce.300ms="search"
+                        placeholder="Search equipment name..."
+                    />
+                </x-ui.field>
+            </div>
+
+            <div class="w-48 shrink-0">
+                <x-ui.field>
+                    <x-ui.label>Branch</x-ui.label>
+                    <x-ui.select
+                        searchable
+                        size="sm"
+                        position="bottom-start"
+                        placeholder="All branches"
+                        wire:model.live="branch_id"
+                    >
+                        <x-ui.select.option value="">All branches</x-ui.select.option>
+                        @foreach ($branches as $branch)
+                            <x-ui.select.option value="{{ $branch->id }}">
+                                {{ $branch->name }}
+                            </x-ui.select.option>
+                        @endforeach
+                    </x-ui.select>
+                </x-ui.field>
+            </div>
+
+            <div class="w-52 shrink-0">
+                <x-ui.field>
+                    <x-ui.label>Type</x-ui.label>
+                    <x-ui.select
+                        searchable
+                        size="sm"
+                        position="bottom-start"
+                        placeholder="All types"
+                        wire:model.live="gse_type_id"
+                    >
+                        <x-ui.select.option value="">All types</x-ui.select.option>
+                        @foreach ($gseTypes as $gseType)
+                            <x-ui.select.option value="{{ $gseType->id }}">
+                                {{ $gseType->type_name }}
+                            </x-ui.select.option>
+                        @endforeach
+                    </x-ui.select>
+                </x-ui.field>
+            </div>
+
+            <div class="shrink-0">
+                <x-ui.button type="button" size="sm" variant="outline" wire:click="resetFilters">
+                    Reset Filters
+                </x-ui.button>
+            </div>
+        </div>
+    </div>
+
     <table class="border border-collapse min-w-full text-sm rounded-xl overflow-hidden mt-4 shadow-lg">
         <thead class="bg-gray-200 dark:bg-neutral-800">
             <tr>
