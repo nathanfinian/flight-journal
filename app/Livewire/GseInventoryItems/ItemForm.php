@@ -8,6 +8,7 @@ use App\Models\ItemStock;
 use App\Models\SubCategory;
 use App\Models\Unit;
 use Illuminate\Database\QueryException;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
@@ -28,9 +29,12 @@ class ItemForm extends Component
     public string $status = 'ACTIVE';
     public array $stocks = [];
     public bool $isEdit = false;
+    public bool $canEditItem = false;
 
     public function mount(?int $id = null): void
     {
+        $this->canEditItem = Auth::user()?->role?->name === 'admin';
+
         $this->subCategories = SubCategory::query()
             ->with('category:category_id,category_name')
             ->where('sub_categories.status', 'ACTIVE')
@@ -123,6 +127,15 @@ class ItemForm extends Component
 
     public function saveChanges()
     {
+        if (! $this->canEditItem) {
+            session()->flash('notify', [
+                'content' => 'Hanya admin yang dapat mengubah data barang.',
+                'type' => 'warning',
+            ]);
+
+            return;
+        }
+
         $payload = $this->validate();
         $this->validateStockRows();
 
@@ -160,6 +173,10 @@ class ItemForm extends Component
 
     public function addStock(): void
     {
+        if (! $this->canEditItem) {
+            return;
+        }
+
         $this->stocks[] = [
             'id' => null,
             'branch_id' => '',
@@ -170,6 +187,10 @@ class ItemForm extends Component
 
     public function removeStock(int $index): void
     {
+        if (! $this->canEditItem) {
+            return;
+        }
+
         if (! isset($this->stocks[$index])) {
             return;
         }
@@ -190,6 +211,10 @@ class ItemForm extends Component
 
     public function restoreStock(int $index): void
     {
+        if (! $this->canEditItem) {
+            return;
+        }
+
         if (isset($this->stocks[$index])) {
             $this->stocks[$index]['delete'] = false;
         }
@@ -197,6 +222,15 @@ class ItemForm extends Component
 
     public function delete()
     {
+        if (! $this->canEditItem) {
+            session()->flash('notify', [
+                'content' => 'Hanya admin yang dapat menghapus data barang.',
+                'type' => 'warning',
+            ]);
+
+            return;
+        }
+
         $row = Item::query()->find($this->itemId);
         $name = $row?->code ?? 'Unknown';
 

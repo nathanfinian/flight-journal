@@ -11,6 +11,12 @@
             <x-ui.breadcrumbs.item>{{ $isEdit ? 'Modify Item' : 'Create Item' }}</x-ui.breadcrumbs.item>
         </x-ui.breadcrumbs>
 
+        @unless ($canEditItem)
+            <div class="mt-4 rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-800 dark:border-amber-500/30 dark:bg-amber-500/10 dark:text-amber-200">
+                Hanya admin yang dapat mengubah data barang.
+            </div>
+        @endunless
+
         <div class="grow">
             <form
                 wire:submit="saveChanges"
@@ -24,6 +30,7 @@
                                 wire:model.defer="code"
                                 maxlength="100"
                                 placeholder="ITEM-001"
+                                :disabled="! $canEditItem"
                             />
                             <x-ui.error name="code" />
                         </x-ui.field>
@@ -35,6 +42,7 @@
                                 wire:model.defer="name"
                                 maxlength="255"
                                 placeholder="Nama barang"
+                                :disabled="! $canEditItem"
                             />
                             <x-ui.error name="name" />
                         </x-ui.field>
@@ -42,7 +50,7 @@
                     <div class="col-span-4">
                         <x-ui.field required>
                             <x-ui.label>Status</x-ui.label>
-                            <x-ui.select wire:model.live="status">
+                            <x-ui.select wire:model.live="status" :disabled="! $canEditItem">
                                 <x-ui.select.option value="ACTIVE">ACTIVE</x-ui.select.option>
                                 <x-ui.select.option value="INACTIVE">INACTIVE</x-ui.select.option>
                             </x-ui.select>
@@ -59,6 +67,7 @@
                                 searchable
                                 placeholder="Select sub category..."
                                 wire:model.live="sub_category_id"
+                                :disabled="! $canEditItem"
                             >
                                 @foreach($subCategories as $subCategory)
                                     <x-ui.select.option value="{{ $subCategory['id'] }}">
@@ -76,6 +85,7 @@
                                 searchable
                                 placeholder="Select unit..."
                                 wire:model.live="unit_id"
+                                :disabled="! $canEditItem"
                             >
                                 @foreach($units as $unit)
                                     <x-ui.select.option value="{{ $unit['id'] }}">
@@ -95,6 +105,7 @@
                                 step="1"
                                 wire:model.defer="minimum_stock"
                                 placeholder="0"
+                                :disabled="! $canEditItem"
                             />
                             <x-ui.error name="minimum_stock" />
                         </x-ui.field>
@@ -107,17 +118,19 @@
                             <x-ui.text class="font-medium">Stock By Branch</x-ui.text>
                             <x-ui.text class="opacity-60 text-sm">Satu cabang hanya boleh memiliki satu baris stok untuk barang ini.</x-ui.text>
                         </div>
-                        <x-ui.button type="button" size="sm" variant="outline" icon="plus" wire:click="addStock">
-                            Add
-                        </x-ui.button>
+                        @if ($canEditItem)
+                            <x-ui.button type="button" size="sm" variant="outline" icon="plus" wire:click="addStock">
+                                Add
+                            </x-ui.button>
+                        @endif
                     </div>
 
                     <div class="overflow-visible">
                         <table class="min-w-full text-sm">
                             <thead class="bg-gray-100 dark:bg-neutral-800/60">
                                 <tr>
-                                    <th class="px-4 py-3 text-left">Branch</th>
-                                    <th class="px-4 py-3 text-left">Starting Quantity</th>
+                                    <th class="px-4 py-3 text-left">Cabang</th>
+                                    <th class="px-4 py-3 text-left">Stock Awal</th>
                                     <th class="px-4 py-3 text-left"></th>
                                 </tr>
                             </thead>
@@ -131,7 +144,7 @@
                                                     position="bottom-start"
                                                     placeholder="Select branch..."
                                                     wire:model.live="stocks.{{ $index }}.branch_id"
-                                                    :disabled="$stock['delete'] ?? false"
+                                                    :disabled="! $canEditItem || ($stock['delete'] ?? false)"
                                                 >
                                                     @foreach($branches as $branch)
                                                         <x-ui.select.option value="{{ $branch['id'] }}">
@@ -148,19 +161,21 @@
                                                 min="0"
                                                 step="1"
                                                 wire:model.defer="stocks.{{ $index }}.quantity"
-                                                :disabled="$stock['delete'] ?? false"
+                                                :disabled="! $canEditItem || ($stock['delete'] ?? false)"
                                             />
                                             <x-ui.error name="stocks.{{ $index }}.quantity" />
                                         </td>
                                         <td class="px-4 py-3 text-right">
-                                            @if ($stock['delete'] ?? false)
-                                                <x-ui.button type="button" size="sm" variant="outline" wire:click="restoreStock({{ $index }})">
-                                                    Restore
-                                                </x-ui.button>
-                                            @else
-                                                <x-ui.button type="button" size="sm" variant="ghost" wire:click="removeStock({{ $index }})">
-                                                    <x-ui.icon name="ps:trash" variant="thin" class="text-red-600 dark:text-red-500"/>
-                                                </x-ui.button>
+                                            @if ($canEditItem)
+                                                @if ($stock['delete'] ?? false)
+                                                    <x-ui.button type="button" size="sm" variant="outline" wire:click="restoreStock({{ $index }})">
+                                                        Restore
+                                                    </x-ui.button>
+                                                @else
+                                                    <x-ui.button type="button" size="sm" variant="ghost" wire:click="removeStock({{ $index }})">
+                                                        <x-ui.icon name="ps:trash" variant="thin" class="text-red-600 dark:text-red-500"/>
+                                                    </x-ui.button>
+                                                @endif
                                             @endif
                                         </td>
                                     </tr>
@@ -175,8 +190,14 @@
                 </div>
 
                 <div class="flex items-center justify-between mt-6">
-                    <x-ui.button type="submit">Save changes</x-ui.button>
-                    @if ($this->isEdit)
+                    @if ($canEditItem)
+                        <x-ui.button type="submit">Save changes</x-ui.button>
+                    @else
+                        <x-ui.button wire:navigate.hover type="button" variant="outline" :href="route('gseitems')">
+                            Back
+                        </x-ui.button>
+                    @endif
+                    @if ($this->isEdit && $canEditItem)
                         <x-ui.modal.trigger id="delete-modal">
                             <x-ui.button variant="ghost">
                                 <x-ui.icon name="ps:trash" variant="thin" class="text-red-600 dark:text-red-500"/>
