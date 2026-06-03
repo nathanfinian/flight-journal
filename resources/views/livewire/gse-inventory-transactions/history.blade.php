@@ -20,7 +20,6 @@
 
     <x-ui.breadcrumbs>
         <x-ui.breadcrumbs.item wire:navigate.hover :href="route('dashboard')">Dashboard</x-ui.breadcrumbs.item>
-        <x-ui.breadcrumbs.item wire:navigate.hover :href="route('gsetransactions')">Inventory Transactions</x-ui.breadcrumbs.item>
         <x-ui.breadcrumbs.item>History</x-ui.breadcrumbs.item>
     </x-ui.breadcrumbs>
 
@@ -110,9 +109,7 @@
                         <th class="px-4 py-3 text-left">Item</th>
                         <th class="px-4 py-3 text-left">Type</th>
                         <th class="px-4 py-3 text-right">Qty</th>
-                        <th class="px-4 py-3 text-left">Reference</th>
                         <th class="px-4 py-3 text-left">Equipment</th>
-                        <th class="px-4 py-3 text-left">Created By</th>
                         <th class="px-4 py-3 text-right"></th>
                     </tr>
                 </thead>
@@ -145,11 +142,9 @@
                                 </span>
                             </td>
                             <td class="px-4 py-3 text-right">{{ number_format((int) $movement->quantity) }} {{ $unitLabel }}</td>
-                            <td class="px-4 py-3">{{ $movement->reference_no ?? '-' }}</td>
                             <td class="px-4 py-3">
                                 {{ $movement->gseEquipment ? $movement->gseEquipment->equipment_code . ' - ' . $movement->gseEquipment->name : '-' }}
                             </td>
-                            <td class="px-4 py-3">{{ $movement->creator?->name ?? '-' }}</td>
                             <td class="px-4 py-3 text-right">
                                 <x-ui.button
                                     wire:navigate.hover
