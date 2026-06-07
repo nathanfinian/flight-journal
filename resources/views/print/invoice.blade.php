@@ -175,7 +175,7 @@
 				PT. MULIO CITRA ANGKASA
 			</div>
 
-			<div class="name" id="right-signer-name" style="margin-top: 40px;"><b><u>{{ $invoice->signer_name }}</u></b></div>
+			<div class="name" id="right-signer-name" style="margin-top: 60px;"><b><u>{{ $invoice->signer_name }}</u></b></div>
 			<div class="title" id="right-signer-title"><b>Direktur</b></div>
 			</div>
 		</div>
@@ -276,7 +276,7 @@
 				PT. MULIO CITRA ANGKASA
 			</div>
 
-			<div class="name" id="right-signer-name" style="margin-top: 40px;"><b><u>{{ $invoice->signer_name }}</u></b></div>
+			<div class="name" id="right-signer-name" style="margin-top: 60px;"><b><u>{{ $invoice->signer_name }}</u></b></div>
 			<div class="title" id="right-signer-title"><b>Direktur</b></div>
 			</div>
 		</div>
