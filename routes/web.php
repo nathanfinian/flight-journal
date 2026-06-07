@@ -142,6 +142,7 @@ Route::middleware(['auth', 'role:admin,finance'])->group(function () {
     Route::get('/exportfh', [FlightExportController::class, 'export'])->name('export-flight-history');
     Route::get('/exportfhpdf', [FlightExportController::class, 'exportPdf'])->name('export-flight-pdf');
     Route::get('/printfh', [FlightExportController::class, 'print'])->name('export-flight-print');
+    Route::get('/printfh-summary', [FlightExportController::class, 'printSummary'])->name('export-flight-print-summary');
 
     /* =======================
      | Invoicing Menu

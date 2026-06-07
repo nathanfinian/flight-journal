@@ -25,7 +25,26 @@
                 size="sm"
                 variant="outline"
                 icon="ps:printer"
+                title="Print detail"
                 onclick="window.open('{{ route('export-flight-print', [
+                    'dateFrom' => $dateFrom,
+                    'dateTo' => $dateTo,
+                    'branch' => $selectedBranch,
+                    'branchName' => $branchName,
+                    'airline' => $selectedAirline,
+                    'flightNo' => $flightNo,
+                    'airlineName' => $airlineName,
+                    'type' => $selectedType,
+                    'typeName' => $typeName,
+                ]) }}', '_blank')"
+            >
+            </x-ui.button>
+            <x-ui.button 
+                size="sm"
+                variant="outline"
+                icon="document-text"
+                title="Print summary"
+                onclick="window.open('{{ route('export-flight-print-summary', [
                     'dateFrom' => $dateFrom,
                     'dateTo' => $dateTo,
                     'branch' => $selectedBranch,
