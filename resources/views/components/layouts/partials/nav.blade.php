@@ -1,6 +1,11 @@
 {{-- this navbar used in app pages (when the user authenticated)  --}}
  @php
      $user = Auth::user();
+     $flightMenuActive = request()->is('flight-journal*', 'flight-schedule*', 'flight-history*');
+     $depositMenuActive = request()->routeIs('deposit*');
+     $regularInvoiceMenuActive = request()->routeIs('invoice', 'invoice.create', 'invoice.edit', 'invoice.print');
+     $gseInvoiceMenuActive = request()->routeIs('invoicegse*');
+     $invoiceMenuActive = $depositMenuActive || $regularInvoiceMenuActive || $gseInvoiceMenuActive;
  @endphp
 
 <header 
@@ -27,22 +32,22 @@
                                 icon="globe-asia-australia"
                                 icon:class="w-5 h-5" 
                                 label="Flights" 
-                                :active="request()->is('flight-journal*')"
+                                :active="$flightMenuActive"
                             />
                         </x-slot:button>
                         
                         <x-slot:menu>
                             <x-ui.dropdown.group label="Data Penerbangan">
                                 <x-ui.dropdown.separator />
-                                <x-ui.dropdown.item wire:navigate.hover icon="ps:notepad" :href="route('flight-journal')">
+                                <x-ui.dropdown.item wire:navigate.hover icon="ps:notepad" :href="route('flight-journal')" :active="request()->is('flight-journal*')">
                                     Jurnal
                                 </x-ui.dropdown.item>
                                 
-                                <x-ui.dropdown.item wire:navigate.hover icon="ps:calendar-dots" :href="route('flight-schedule')">
+                                <x-ui.dropdown.item wire:navigate.hover icon="ps:calendar-dots" :href="route('flight-schedule')" :active="request()->is('flight-schedule*')">
                                     Penjadwalan
                                 </x-ui.dropdown.item>
 
-                                <x-ui.dropdown.item wire:navigate.hover icon="document-text" :href="route('flight-history')">
+                                <x-ui.dropdown.item wire:navigate.hover icon="document-text" :href="route('flight-history')" :active="request()->is('flight-history*')">
                                     Sejarah
                                 </x-ui.dropdown.item>
                             </x-ui.dropdown.group>
@@ -117,21 +122,21 @@
                                 icon="ps:newspaper"
                                 icon:class="w-5 h-5" 
                                 label="Invoicing" 
-                                :active="request()->is('invoice*')"
+                                :active="$invoiceMenuActive"
                             />
                         </x-slot:button>
                         
                         <x-slot:menu>
                             <x-ui.dropdown.group label="Sistem Invoice">
                                 <x-ui.dropdown.separator />
-                                    <x-ui.dropdown.item wire:navigate.hover icon="document-plus" :href="route('deposit')">
+                                    <x-ui.dropdown.item wire:navigate.hover icon="document-plus" :href="route('deposit')" :active="$depositMenuActive">
                                         Deposit/Talangan
                                     </x-ui.dropdown.item>
                                 @role('admin', 'finance')
-                                    <x-ui.dropdown.item wire:navigate.hover icon="ps:newspaper" :href="route('invoice')">
+                                    <x-ui.dropdown.item wire:navigate.hover icon="ps:newspaper" :href="route('invoice')" :active="$regularInvoiceMenuActive">
                                         Regular Invoice
                                     </x-ui.dropdown.item>
-                                    <x-ui.dropdown.item wire:navigate.hover icon="document" :href="route('invoicegse')">
+                                    <x-ui.dropdown.item wire:navigate.hover icon="document" :href="route('invoicegse')" :active="$gseInvoiceMenuActive">
                                         GSE Invoice
                                     </x-ui.dropdown.item>
                                     <x-ui.dropdown.item disabled icon="document" :href="route('invoice')">
@@ -267,9 +272,21 @@
                             x-cloak
                             class="mt-1 space-y-1 pl-4"
                         >
-                            <a wire:navigate.hover href="{{ route('flight-journal') }}" x-on:click="$modal.close('mobile-nav-menu')" class="block rounded-field px-3 py-2 text-sm text-neutral-600 hover:bg-neutral-100 dark:text-neutral-300 dark:hover:bg-white/5">Jurnal</a>
-                            <a wire:navigate.hover href="{{ route('flight-schedule') }}" x-on:click="$modal.close('mobile-nav-menu')" class="block rounded-field px-3 py-2 text-sm text-neutral-600 hover:bg-neutral-100 dark:text-neutral-300 dark:hover:bg-white/5">Penjadwalan</a>
-                            <a wire:navigate.hover href="{{ route('flight-history') }}" x-on:click="$modal.close('mobile-nav-menu')" class="block rounded-field px-3 py-2 text-sm text-neutral-600 hover:bg-neutral-100 dark:text-neutral-300 dark:hover:bg-white/5">Sejarah</a>
+                            <a wire:navigate.hover href="{{ route('flight-journal') }}" x-on:click="$modal.close('mobile-nav-menu')" @class([
+                                'block rounded-field px-3 py-2 text-sm hover:bg-neutral-100 dark:hover:bg-white/5',
+                                'bg-[--alpha(var(--color-primary)_/5%)] text-[var(--color-primary)]' => request()->is('flight-journal*'),
+                                'text-neutral-600 dark:text-neutral-300' => ! request()->is('flight-journal*'),
+                            ])>Jurnal</a>
+                            <a wire:navigate.hover href="{{ route('flight-schedule') }}" x-on:click="$modal.close('mobile-nav-menu')" @class([
+                                'block rounded-field px-3 py-2 text-sm hover:bg-neutral-100 dark:hover:bg-white/5',
+                                'bg-[--alpha(var(--color-primary)_/5%)] text-[var(--color-primary)]' => request()->is('flight-schedule*'),
+                                'text-neutral-600 dark:text-neutral-300' => ! request()->is('flight-schedule*'),
+                            ])>Penjadwalan</a>
+                            <a wire:navigate.hover href="{{ route('flight-history') }}" x-on:click="$modal.close('mobile-nav-menu')" @class([
+                                'block rounded-field px-3 py-2 text-sm hover:bg-neutral-100 dark:hover:bg-white/5',
+                                'bg-[--alpha(var(--color-primary)_/5%)] text-[var(--color-primary)]' => request()->is('flight-history*'),
+                                'text-neutral-600 dark:text-neutral-300' => ! request()->is('flight-history*'),
+                            ])>Sejarah</a>
                         </div>
                     </div>
 
@@ -326,10 +343,22 @@
                             x-cloak
                             class="mt-1 space-y-1 pl-4"
                         >
-                            <a wire:navigate.hover href="{{ route('deposit') }}" x-on:click="$modal.close('mobile-nav-menu')" class="block rounded-field px-3 py-2 text-sm text-neutral-600 hover:bg-neutral-100 dark:text-neutral-300 dark:hover:bg-white/5">Deposit/Talangan</a>
+                            <a wire:navigate.hover href="{{ route('deposit') }}" x-on:click="$modal.close('mobile-nav-menu')" @class([
+                                'block rounded-field px-3 py-2 text-sm hover:bg-neutral-100 dark:hover:bg-white/5',
+                                'bg-[--alpha(var(--color-primary)_/5%)] text-[var(--color-primary)]' => $depositMenuActive,
+                                'text-neutral-600 dark:text-neutral-300' => ! $depositMenuActive,
+                            ])>Deposit/Talangan</a>
                             @role('admin', 'finance')
-                                <a wire:navigate.hover href="{{ route('invoice') }}" x-on:click="$modal.close('mobile-nav-menu')" class="block rounded-field px-3 py-2 text-sm text-neutral-600 hover:bg-neutral-100 dark:text-neutral-300 dark:hover:bg-white/5">Regular Invoice</a>
-                                <a wire:navigate.hover href="{{ route('invoicegse') }}" x-on:click="$modal.close('mobile-nav-menu')" class="block rounded-field px-3 py-2 text-sm text-neutral-600 hover:bg-neutral-100 dark:text-neutral-300 dark:hover:bg-white/5">GSE Invoice</a>
+                                <a wire:navigate.hover href="{{ route('invoice') }}" x-on:click="$modal.close('mobile-nav-menu')" @class([
+                                    'block rounded-field px-3 py-2 text-sm hover:bg-neutral-100 dark:hover:bg-white/5',
+                                    'bg-[--alpha(var(--color-primary)_/5%)] text-[var(--color-primary)]' => $regularInvoiceMenuActive,
+                                    'text-neutral-600 dark:text-neutral-300' => ! $regularInvoiceMenuActive,
+                                ])>Regular Invoice</a>
+                                <a wire:navigate.hover href="{{ route('invoicegse') }}" x-on:click="$modal.close('mobile-nav-menu')" @class([
+                                    'block rounded-field px-3 py-2 text-sm hover:bg-neutral-100 dark:hover:bg-white/5',
+                                    'bg-[--alpha(var(--color-primary)_/5%)] text-[var(--color-primary)]' => $gseInvoiceMenuActive,
+                                    'text-neutral-600 dark:text-neutral-300' => ! $gseInvoiceMenuActive,
+                                ])>GSE Invoice</a>
                                 <span class="block rounded-field px-3 py-2 text-sm text-neutral-400 dark:text-neutral-500">Charter Invoice (Soon)</span>
                             @endrole
                             @role('operation')
