@@ -80,8 +80,10 @@
         <tbody class="divide-y divide-gray-400 dark:divide-neutral-800">
             @forelse ($items as $item)
                 <tr
-                    class="hover:bg-gray-50 dark:hover:bg-neutral-800/60 cursor-pointer"
-                    wire:click="openEdit({{ $item->item_id }})"
+                    class="{{ $canOpenEditPage ? 'hover:bg-gray-50 dark:hover:bg-neutral-800/60 cursor-pointer' : '' }}"
+                    @if ($canOpenEditPage)
+                        wire:click="openEdit({{ $item->item_id }})"
+                    @endif
                 >
                     <td class="px-4 py-3">
                         @php

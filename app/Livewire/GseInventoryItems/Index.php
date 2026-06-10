@@ -5,6 +5,7 @@ namespace App\Livewire\GseInventoryItems;
 use App\Models\Item;
 use App\Models\SubCategory;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -16,9 +17,19 @@ class Index extends Component
 
     public string $search = '';
     public string $sub_category_id = '';
+    public bool $canOpenEditPage = false;
+
+    public function mount(): void
+    {
+        $this->canOpenEditPage = in_array(Auth::user()?->role?->name, ['admin', 'finance'], true);
+    }
 
     public function openEdit(int $id)
     {
+        if (! $this->canOpenEditPage) {
+            return;
+        }
+
         return $this->redirectRoute('gseitems.edit', ['id' => $id], navigate: true);
     }
 
