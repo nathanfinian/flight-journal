@@ -70,6 +70,7 @@ use App\Livewire\Deposit\Index as IndexDeposit;
 use App\Livewire\Deposit\Create as CreateDeposit;
 
 use App\Http\Controllers\Export\FlightExportController;
+use App\Http\Controllers\Export\GseInventoryTransactionHistoryExportController;
 use App\Http\Controllers\Export\GseInvoiceRecapExportController;
 use App\Http\Controllers\GseInvoicePrintController;
 use App\Http\Controllers\InvoiceController;
@@ -344,6 +345,10 @@ Route::middleware(['auth', 'role:admin,finance,teknik'])->group(function () {
     Route::get('/gse/inventory/transactions', IndexGSEInventoryTransactions::class)->name('gsetransactions');
     Route::get('/gse/inventory/transactions/history', HistoryGSEInventoryTransactions::class)
         ->name('gsetransactions.history');
+    Route::get('/gse/inventory/transactions/history/export', [GseInventoryTransactionHistoryExportController::class, 'export'])
+        ->name('gsetransactions.history.export');
+    Route::get('/gse/inventory/transactions/history/print', [GseInventoryTransactionHistoryExportController::class, 'print'])
+        ->name('gsetransactions.history.print');
     Route::get('/gse/inventory/transactions/create', GSEInventoryTransactionForm::class)
         ->name('gsetransactions.create');
     Route::get('/gse/inventory/transactions/{id:id}/edit', GSEInventoryTransactionForm::class)

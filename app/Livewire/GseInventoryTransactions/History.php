@@ -3,6 +3,7 @@
 namespace App\Livewire\GseInventoryTransactions;
 
 use App\Models\Branch;
+use App\Models\Item;
 use App\Models\StockMovement;
 use App\Models\SubCategory;
 use Carbon\Carbon;
@@ -19,6 +20,7 @@ class History extends Component
 
     public string $branch_id = '';
     public string $sub_category_id = '';
+    public string $item_id = '';
     public ?string $dateFrom = '';
     public ?string $dateTo = null;
 
@@ -37,6 +39,12 @@ class History extends Component
 
     public function updatedSubCategoryId(): void
     {
+        $this->item_id = '';
+        $this->resetPage();
+    }
+
+    public function updatedItemId(): void
+    {
         $this->resetPage();
     }
 
@@ -52,7 +60,7 @@ class History extends Component
 
     public function resetFilters(): void
     {
-        $this->reset(['branch_id', 'sub_category_id']);
+        $this->reset(['branch_id', 'sub_category_id', 'item_id']);
 
         $today = today('Asia/Jakarta');
         $this->dateFrom = $today->copy()->startOfMonth()->toDateString();
@@ -61,11 +69,34 @@ class History extends Component
         $this->resetPage();
     }
 
+    public function export()
+    {
+        return $this->redirectRoute('gsetransactions.history.export', [
+            'dateFrom' => $this->dateFrom,
+            'dateTo' => $this->dateTo,
+            'branch_id' => $this->branch_id,
+            'sub_category_id' => $this->sub_category_id,
+            'item_id' => $this->item_id,
+        ]);
+    }
+
+    public function printExport()
+    {
+        return route('gsetransactions.history.print', [
+            'dateFrom' => $this->dateFrom,
+            'dateTo' => $this->dateTo,
+            'branch_id' => $this->branch_id,
+            'sub_category_id' => $this->sub_category_id,
+            'item_id' => $this->item_id,
+        ]);
+    }
+
     public function render()
     {
         return view('livewire.gse-inventory-transactions.history', [
             'branches' => $this->branches(),
             'subCategories' => $this->subCategories(),
+            'items' => $this->items(),
             'movements' => $this->movements(),
         ]);
     }
@@ -88,6 +119,20 @@ class History extends Component
             ->get(['sub_categories.sub_category_id', 'sub_categories.category_id', 'sub_categories.sub_category_name']);
     }
 
+    private function items(): Collection
+    {
+        return Item::query()
+            ->with('subCategory.category:category_id,category_name')
+            ->where('items.status', 'ACTIVE')
+            ->join('sub_categories', 'sub_categories.sub_category_id', '=', 'items.sub_category_id')
+            ->join('categories', 'categories.category_id', '=', 'sub_categories.category_id')
+            ->when(filled($this->sub_category_id), fn ($query) => $query->where('items.sub_category_id', $this->sub_category_id))
+            ->orderBy('categories.category_name')
+            ->orderBy('sub_categories.sub_category_name')
+            ->orderBy('items.name')
+            ->get(['items.item_id', 'items.name', 'items.sub_category_id', 'sub_categories.sub_category_name', 'categories.category_name']);
+    }
+
     private function movements(): LengthAwarePaginator
     {
         $from = $this->dateFrom ? Carbon::parse($this->dateFrom, 'Asia/Jakarta')->startOfDay() : null;
@@ -108,6 +153,7 @@ class History extends Component
                     ]),
             ])
             ->when(filled($this->branch_id), fn ($query) => $query->where('branch_id', $this->branch_id))
+            ->when(filled($this->item_id), fn ($query) => $query->where('item_id', $this->item_id))
             ->when(filled($this->sub_category_id), function ($query): void {
                 $query->whereHas('item', fn ($itemQuery) => $itemQuery
                     ->withTrashed()

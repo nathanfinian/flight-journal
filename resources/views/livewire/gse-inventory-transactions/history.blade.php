@@ -5,6 +5,27 @@
         </div>
         <div class="flex items-center gap-2">
             <x-ui.button
+                type="button"
+                size="sm"
+                variant="outline"
+                icon="ps:microsoft-excel-logo"
+                wire:click="export"
+            >
+            </x-ui.button>
+            <x-ui.button
+                type="button"
+                size="sm"
+                variant="outline"
+                icon="printer"
+                x-on:click="
+                    const printWindow = window.open('about:blank', '_blank');
+                    $wire.printExport().then((url) => {
+                        printWindow.location = url;
+                    });
+                "
+            >
+            </x-ui.button>
+            <x-ui.button
                 wire:navigate.hover
                 size="sm"
                 variant="outline"
@@ -59,6 +80,26 @@
                     @foreach ($subCategories as $subCategory)
                         <x-ui.select.option value="{{ $subCategory->sub_category_id }}">
                             {{ $subCategory->category?->category_name ?? '-' }} - {{ $subCategory->sub_category_name }}
+                        </x-ui.select.option>
+                    @endforeach
+                </x-ui.select>
+            </x-ui.field>
+        </div>
+
+        <div class="w-60 shrink-0">
+            <x-ui.field>
+                <x-ui.label>Item</x-ui.label>
+                <x-ui.select
+                    searchable
+                    size="sm"
+                    position="bottom-start"
+                    placeholder="All items"
+                    wire:model.live="item_id"
+                >
+                    <x-ui.select.option value="">All items</x-ui.select.option>
+                    @foreach ($items as $item)
+                        <x-ui.select.option value="{{ $item->item_id }}">
+                            {{ $item->category_name ?? '-' }} - {{ $item->sub_category_name ?? '-' }} - {{ $item->name }}
                         </x-ui.select.option>
                     @endforeach
                 </x-ui.select>
