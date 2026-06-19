@@ -111,8 +111,12 @@ class TransactionForm extends Component
         $payload = $this->validate();
 
         DB::transaction(function () use ($payload): void {
+            $balancePairs = [];
+
             if ($this->movementId) {
                 $originalMovement = StockMovement::query()->findOrFail($this->movementId);
+                $balancePairs[] = [(int) $originalMovement->item_id, (int) $originalMovement->branch_id];
+
                 $this->applyStockDelta(
                     (int) $originalMovement->item_id,
                     (int) $originalMovement->branch_id,
@@ -133,12 +137,16 @@ class TransactionForm extends Component
                 $this->movementId = $movement->getKey();
             }
 
+            $balancePairs[] = [(int) $payload['item_id'], (int) $payload['branch_id']];
+
             $this->applyStockDelta(
                 (int) $payload['item_id'],
                 (int) $payload['branch_id'],
                 (string) $payload['movement_type'],
                 (int) $payload['quantity']
             );
+
+            $this->recalculateBalances($balancePairs);
         });
 
         session()->flash('notify', [
@@ -172,6 +180,7 @@ class TransactionForm extends Component
             );
 
             $movement->delete();
+            $this->recalculateBalances([[(int) $movement->item_id, (int) $movement->branch_id]]);
         });
 
         session()->flash('notify', [
@@ -223,5 +232,21 @@ class TransactionForm extends Component
         }
 
         $stock->update(['quantity' => $newQuantity]);
+    }
+
+    private function recalculateBalances(array $pairs): void
+    {
+        $seen = [];
+
+        foreach ($pairs as [$itemId, $branchId]) {
+            $key = $itemId . ':' . $branchId;
+
+            if (isset($seen[$key])) {
+                continue;
+            }
+
+            $seen[$key] = true;
+            StockMovement::recalculateBalance((int) $itemId, (int) $branchId);
+        }
     }
 }

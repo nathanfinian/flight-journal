@@ -109,6 +109,7 @@
                         <th class="px-4 py-3 text-left">Item</th>
                         <th class="px-4 py-3 text-left">Type</th>
                         <th class="px-4 py-3 text-right">Qty</th>
+                        <th class="px-4 py-3 text-right">Balance</th>
                         <th class="px-4 py-3 text-left">Equipment</th>
                         <th class="px-4 py-3 text-right"></th>
                     </tr>
@@ -142,6 +143,7 @@
                                 </span>
                             </td>
                             <td class="px-4 py-3 text-right">{{ number_format((int) $movement->quantity) }} {{ $unitLabel }}</td>
+                            <td class="px-4 py-3 text-right">{{ number_format((int) $movement->balance) }} {{ $unitLabel }}</td>
                             <td class="px-4 py-3">
                                 {{ $movement->gseEquipment ? $movement->gseEquipment->equipment_code . ' - ' . $movement->gseEquipment->name : '-' }}
                             </td>
@@ -158,7 +160,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="11" class="px-4 py-6 text-center text-gray-500 dark:text-neutral-400">
+                            <td colspan="10" class="px-4 py-6 text-center text-gray-500 dark:text-neutral-400">
                                 No transaction history found.
                             </td>
                         </tr>

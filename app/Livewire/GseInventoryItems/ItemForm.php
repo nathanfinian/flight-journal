@@ -5,6 +5,7 @@ namespace App\Livewire\GseInventoryItems;
 use App\Models\Branch;
 use App\Models\Item;
 use App\Models\ItemStock;
+use App\Models\StockMovement;
 use App\Models\SubCategory;
 use App\Models\Unit;
 use Illuminate\Database\QueryException;
@@ -263,17 +264,29 @@ class ItemForm extends Component
 
     private function persistStocks(Item $item): void
     {
+        $balancePairs = [];
+
         foreach ($this->stocks as $row) {
             $id = $row['id'] ?? null;
             $branchId = $row['branch_id'] ?? null;
             $quantity = (int) ($row['quantity'] ?? 0);
             $shouldDelete = (bool) ($row['delete'] ?? false);
+            $originalBranchId = $id
+                ? ItemStock::query()
+                    ->where('item_id', $item->getKey())
+                    ->whereKey($id)
+                    ->value('branch_id')
+                : null;
 
             if ($id && $shouldDelete) {
                 ItemStock::query()
                     ->where('item_id', $item->getKey())
                     ->whereKey($id)
                     ->delete();
+
+                if ($originalBranchId) {
+                    $balancePairs[] = [(int) $item->getKey(), (int) $originalBranchId];
+                }
 
                 continue;
             }
@@ -304,6 +317,10 @@ class ItemForm extends Component
                         'branch_id' => $branchId,
                         'quantity' => $quantity,
                     ]);
+
+                if ($originalBranchId) {
+                    $balancePairs[] = [(int) $item->getKey(), (int) $originalBranchId];
+                }
             } else {
                 ItemStock::query()->create([
                     'item_id' => $item->getKey(),
@@ -311,6 +328,26 @@ class ItemForm extends Component
                     'quantity' => $quantity,
                 ]);
             }
+
+            $balancePairs[] = [(int) $item->getKey(), (int) $branchId];
+        }
+
+        $this->recalculateMovementBalances($balancePairs);
+    }
+
+    private function recalculateMovementBalances(array $pairs): void
+    {
+        $seen = [];
+
+        foreach ($pairs as [$itemId, $branchId]) {
+            $key = $itemId . ':' . $branchId;
+
+            if (isset($seen[$key])) {
+                continue;
+            }
+
+            $seen[$key] = true;
+            StockMovement::recalculateBalance((int) $itemId, (int) $branchId);
         }
     }
 }

@@ -19,6 +19,7 @@ class StockMovement extends Model
         'gse_equipment_id',
         'movement_type',
         'quantity',
+        'balance',
         'movement_date',
         'reference_no',
         'notes',
@@ -49,5 +50,31 @@ class StockMovement extends Model
     public function creator(): BelongsTo
     {
         return $this->belongsTo(User::class, 'created_by');
+    }
+
+    public static function recalculateBalance(int $itemId, int $branchId): void
+    {
+        $balance = (int) (ItemStock::query()
+            ->where('item_id', $itemId)
+            ->where('branch_id', $branchId)
+            ->value('quantity') ?? 0);
+
+        self::query()
+            ->where('item_id', $itemId)
+            ->where('branch_id', $branchId)
+            ->orderByDesc('movement_date')
+            ->orderByDesc('movement_id')
+            ->get(['movement_id', 'movement_type', 'quantity'])
+            ->each(function (self $movement) use (&$balance): void {
+                self::query()
+                    ->whereKey($movement->getKey())
+                    ->update(['balance' => $balance]);
+
+                $delta = $movement->movement_type === 'INPUT'
+                    ? (int) $movement->quantity
+                    : -1 * (int) $movement->quantity;
+
+                $balance -= $delta;
+            });
     }
 }
