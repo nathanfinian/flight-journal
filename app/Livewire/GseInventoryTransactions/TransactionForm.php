@@ -26,6 +26,7 @@ class TransactionForm extends Component
     public string $gse_equipment_id = '';
     public string $movement_type = 'INPUT';
     public string $quantity = '1';
+    public string $symbol = '';
     public string $movement_date = '';
     public string $reference_no = '';
     public string $notes = '';
@@ -35,16 +36,18 @@ class TransactionForm extends Component
     {
         $this->items = Item::query()
             ->with('subCategory.category:category_id,category_name')
+            ->with('unit:unit_id,unit_name,unit_symbol')
             ->where('items.status', 'ACTIVE')
             ->join('sub_categories', 'sub_categories.sub_category_id', '=', 'items.sub_category_id')
             ->join('categories', 'categories.category_id', '=', 'sub_categories.category_id')
             ->orderBy('categories.category_name')
             ->orderBy('sub_categories.sub_category_name')
             ->orderBy('items.name')
-            ->get(['items.item_id', 'items.name', 'sub_categories.sub_category_name', 'categories.category_name'])
+            ->get(['items.item_id', 'items.name', 'items.unit_id', 'sub_categories.sub_category_name', 'categories.category_name'])
             ->map(fn (Item $item): array => [
                 'id' => $item->item_id,
                 'label' => ($item->category_name ?? '-') . ' - ' . ($item->sub_category_name ?? '-') . ' - ' . $item->name,
+                'symbol' => $item->unit?->unit_symbol ?: $item->unit?->unit_name ?: '',
             ])
             ->all();
 
@@ -85,6 +88,7 @@ class TransactionForm extends Component
         $this->movement_date = $movement->movement_date?->format('Y-m-d\TH:i') ?? now()->format('Y-m-d\TH:i');
         $this->reference_no = (string) ($movement->reference_no ?? '');
         $this->notes = (string) ($movement->notes ?? '');
+        $this->updatedItemId($this->item_id);
     }
 
     protected function rules(): array
@@ -104,6 +108,12 @@ class TransactionForm extends Component
             'reference_no' => ['nullable', 'string', 'max:100'],
             'notes' => ['nullable', 'string'],
         ];
+    }
+
+    public function updatedItemId($value): void
+    {
+        $this->symbol = collect($this->items)
+            ->firstWhere('id', (int) $value)['symbol'] ?? '';
     }
 
     public function saveChanges()

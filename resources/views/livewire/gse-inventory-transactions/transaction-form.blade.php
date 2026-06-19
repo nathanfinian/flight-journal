@@ -76,7 +76,11 @@
                                 step="1"
                                 wire:model.defer="quantity"
                                 placeholder="1"
-                            />
+                            >
+                                @if ($symbol !== '')
+                                    <x-slot name="suffix">{{ $symbol }}</x-slot>
+                                @endif
+                            </x-ui.input>
                             <x-ui.error name="quantity" />
                         </x-ui.field>
                     </div>
