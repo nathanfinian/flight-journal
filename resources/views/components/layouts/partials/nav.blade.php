@@ -25,7 +25,7 @@
                     />
 
                     {{-- Flights Journal Menu --}}
-                    @role('admin', 'finance')
+                    @role('admin', 'finance', 'editor')
                     <x-ui.dropdown position="bottom-start">
                         <x-slot:button>
                             <x-ui.navbar.item 
@@ -56,7 +56,7 @@
                     @endrole
 
                     {{-- GSE Menu --}}
-                    @role('admin', 'finance', 'teknik')
+                    @role('admin', 'finance', 'teknik', 'editor')
                     <x-ui.dropdown position="bottom-start">
                         <x-slot:button>
                             <x-ui.navbar.item 
@@ -132,7 +132,7 @@
                                     <x-ui.dropdown.item wire:navigate.hover icon="document-plus" :href="route('deposit')" :active="$depositMenuActive">
                                         Deposit/Talangan
                                     </x-ui.dropdown.item>
-                                @role('admin', 'finance')
+                                @role('admin', 'finance', 'editor')
                                     <x-ui.dropdown.item wire:navigate.hover icon="ps:newspaper" :href="route('invoice')" :active="$regularInvoiceMenuActive">
                                         Regular Invoice
                                     </x-ui.dropdown.item>
@@ -161,7 +161,7 @@
                         </x-slot:menu>
                     </x-ui.dropdown>
 
-                    @role('admin', 'finance')
+                    @role('admin', 'finance', 'editor')
                     <x-ui.navbar.item 
                         wire:navigate.hover
                         icon="cog-6-tooth" 
@@ -248,76 +248,80 @@
                         Dashboard
                     </a>
 
-                    <div class="rounded-field" x-data="{ expanded: false }">
-                        <button
-                            type="button"
-                            x-on:click="expanded = ! expanded"
-                            class="flex w-full items-center justify-between rounded-field px-3 py-2 text-left text-sm font-medium text-neutral-700 hover:bg-neutral-100 dark:text-neutral-200 dark:hover:bg-white/5"
-                        >
-                            <span>Flights</span>
-                            <x-ui.icon
-                                name="chevron-down"
-                                class="h-4 w-4 transition-transform duration-200"
-                                x-bind:class="expanded ? 'rotate-180' : ''"
-                            />
-                        </button>
-                        <div
-                            x-show="expanded"
-                            x-transition:enter="transition ease-out duration-200"
-                            x-transition:enter-start="opacity-0 -translate-y-1"
-                            x-transition:enter-end="opacity-100 translate-y-0"
-                            x-transition:leave="transition ease-in duration-150"
-                            x-transition:leave-start="opacity-100 translate-y-0"
-                            x-transition:leave-end="opacity-0 -translate-y-1"
-                            x-cloak
-                            class="mt-1 space-y-1 pl-4"
-                        >
-                            <a wire:navigate.hover href="{{ route('flight-journal') }}" x-on:click="$modal.close('mobile-nav-menu')" @class([
-                                'block rounded-field px-3 py-2 text-sm hover:bg-neutral-100 dark:hover:bg-white/5',
-                                'bg-[--alpha(var(--color-primary)_/5%)] text-[var(--color-primary)]' => request()->is('flight-journal*'),
-                                'text-neutral-600 dark:text-neutral-300' => ! request()->is('flight-journal*'),
-                            ])>Jurnal</a>
-                            <a wire:navigate.hover href="{{ route('flight-schedule') }}" x-on:click="$modal.close('mobile-nav-menu')" @class([
-                                'block rounded-field px-3 py-2 text-sm hover:bg-neutral-100 dark:hover:bg-white/5',
-                                'bg-[--alpha(var(--color-primary)_/5%)] text-[var(--color-primary)]' => request()->is('flight-schedule*'),
-                                'text-neutral-600 dark:text-neutral-300' => ! request()->is('flight-schedule*'),
-                            ])>Penjadwalan</a>
-                            <a wire:navigate.hover href="{{ route('flight-history') }}" x-on:click="$modal.close('mobile-nav-menu')" @class([
-                                'block rounded-field px-3 py-2 text-sm hover:bg-neutral-100 dark:hover:bg-white/5',
-                                'bg-[--alpha(var(--color-primary)_/5%)] text-[var(--color-primary)]' => request()->is('flight-history*'),
-                                'text-neutral-600 dark:text-neutral-300' => ! request()->is('flight-history*'),
-                            ])>Sejarah</a>
+                    @role('admin', 'finance', 'editor')
+                        <div class="rounded-field" x-data="{ expanded: false }">
+                            <button
+                                type="button"
+                                x-on:click="expanded = ! expanded"
+                                class="flex w-full items-center justify-between rounded-field px-3 py-2 text-left text-sm font-medium text-neutral-700 hover:bg-neutral-100 dark:text-neutral-200 dark:hover:bg-white/5"
+                            >
+                                <span>Flights</span>
+                                <x-ui.icon
+                                    name="chevron-down"
+                                    class="h-4 w-4 transition-transform duration-200"
+                                    x-bind:class="expanded ? 'rotate-180' : ''"
+                                />
+                            </button>
+                            <div
+                                x-show="expanded"
+                                x-transition:enter="transition ease-out duration-200"
+                                x-transition:enter-start="opacity-0 -translate-y-1"
+                                x-transition:enter-end="opacity-100 translate-y-0"
+                                x-transition:leave="transition ease-in duration-150"
+                                x-transition:leave-start="opacity-100 translate-y-0"
+                                x-transition:leave-end="opacity-0 -translate-y-1"
+                                x-cloak
+                                class="mt-1 space-y-1 pl-4"
+                            >
+                                <a wire:navigate.hover href="{{ route('flight-journal') }}" x-on:click="$modal.close('mobile-nav-menu')" @class([
+                                    'block rounded-field px-3 py-2 text-sm hover:bg-neutral-100 dark:hover:bg-white/5',
+                                    'bg-[--alpha(var(--color-primary)_/5%)] text-[var(--color-primary)]' => request()->is('flight-journal*'),
+                                    'text-neutral-600 dark:text-neutral-300' => ! request()->is('flight-journal*'),
+                                ])>Jurnal</a>
+                                <a wire:navigate.hover href="{{ route('flight-schedule') }}" x-on:click="$modal.close('mobile-nav-menu')" @class([
+                                    'block rounded-field px-3 py-2 text-sm hover:bg-neutral-100 dark:hover:bg-white/5',
+                                    'bg-[--alpha(var(--color-primary)_/5%)] text-[var(--color-primary)]' => request()->is('flight-schedule*'),
+                                    'text-neutral-600 dark:text-neutral-300' => ! request()->is('flight-schedule*'),
+                                ])>Penjadwalan</a>
+                                <a wire:navigate.hover href="{{ route('flight-history') }}" x-on:click="$modal.close('mobile-nav-menu')" @class([
+                                    'block rounded-field px-3 py-2 text-sm hover:bg-neutral-100 dark:hover:bg-white/5',
+                                    'bg-[--alpha(var(--color-primary)_/5%)] text-[var(--color-primary)]' => request()->is('flight-history*'),
+                                    'text-neutral-600 dark:text-neutral-300' => ! request()->is('flight-history*'),
+                                ])>Sejarah</a>
+                            </div>
                         </div>
-                    </div>
+                    @endrole
 
-                    <div class="rounded-field" x-data="{ expanded: false }">
-                        <button
-                            type="button"
-                            x-on:click="expanded = ! expanded"
-                            class="flex w-full items-center justify-between rounded-field px-3 py-2 text-left text-sm font-medium text-neutral-700 hover:bg-neutral-100 dark:text-neutral-200 dark:hover:bg-white/5"
-                        >
-                            <span>GSE</span>
-                            <x-ui.icon
-                                name="chevron-down"
-                                class="h-4 w-4 transition-transform duration-200"
-                                x-bind:class="expanded ? 'rotate-180' : ''"
-                            />
-                        </button>
-                        <div
-                            x-show="expanded"
-                            x-transition:enter="transition ease-out duration-200"
-                            x-transition:enter-start="opacity-0 -translate-y-1"
-                            x-transition:enter-end="opacity-100 translate-y-0"
-                            x-transition:leave="transition ease-in duration-150"
-                            x-transition:leave-start="opacity-100 translate-y-0"
-                            x-transition:leave-end="opacity-0 -translate-y-1"
-                            x-cloak
-                            class="mt-1 space-y-1 pl-4"
-                        >
-                            <a wire:navigate.hover href="{{ route('rekapgse') }}" x-on:click="$modal.close('mobile-nav-menu')" class="block rounded-field px-3 py-2 text-sm text-neutral-600 hover:bg-neutral-100 dark:text-neutral-300 dark:hover:bg-white/5">Rekap</a>
-                            <a wire:navigate.hover href="{{ route('rategse') }}" x-on:click="$modal.close('mobile-nav-menu')" class="block rounded-field px-3 py-2 text-sm text-neutral-600 hover:bg-neutral-100 dark:text-neutral-300 dark:hover:bg-white/5">Biaya</a>
+                    @role('admin', 'finance', 'teknik', 'editor')
+                        <div class="rounded-field" x-data="{ expanded: false }">
+                            <button
+                                type="button"
+                                x-on:click="expanded = ! expanded"
+                                class="flex w-full items-center justify-between rounded-field px-3 py-2 text-left text-sm font-medium text-neutral-700 hover:bg-neutral-100 dark:text-neutral-200 dark:hover:bg-white/5"
+                            >
+                                <span>GSE</span>
+                                <x-ui.icon
+                                    name="chevron-down"
+                                    class="h-4 w-4 transition-transform duration-200"
+                                    x-bind:class="expanded ? 'rotate-180' : ''"
+                                />
+                            </button>
+                            <div
+                                x-show="expanded"
+                                x-transition:enter="transition ease-out duration-200"
+                                x-transition:enter-start="opacity-0 -translate-y-1"
+                                x-transition:enter-end="opacity-100 translate-y-0"
+                                x-transition:leave="transition ease-in duration-150"
+                                x-transition:leave-start="opacity-100 translate-y-0"
+                                x-transition:leave-end="opacity-0 -translate-y-1"
+                                x-cloak
+                                class="mt-1 space-y-1 pl-4"
+                            >
+                                <a wire:navigate.hover href="{{ route('rekapgse') }}" x-on:click="$modal.close('mobile-nav-menu')" class="block rounded-field px-3 py-2 text-sm text-neutral-600 hover:bg-neutral-100 dark:text-neutral-300 dark:hover:bg-white/5">Rekap</a>
+                                <a wire:navigate.hover href="{{ route('rategse') }}" x-on:click="$modal.close('mobile-nav-menu')" class="block rounded-field px-3 py-2 text-sm text-neutral-600 hover:bg-neutral-100 dark:text-neutral-300 dark:hover:bg-white/5">Biaya</a>
+                            </div>
                         </div>
-                    </div>
+                    @endrole
 
                     <div class="rounded-field" x-data="{ expanded: false }">
                         <button
@@ -348,7 +352,7 @@
                                 'bg-[--alpha(var(--color-primary)_/5%)] text-[var(--color-primary)]' => $depositMenuActive,
                                 'text-neutral-600 dark:text-neutral-300' => ! $depositMenuActive,
                             ])>Deposit/Talangan</a>
-                            @role('admin', 'finance')
+                            @role('admin', 'finance', 'editor')
                                 <a wire:navigate.hover href="{{ route('invoice') }}" x-on:click="$modal.close('mobile-nav-menu')" @class([
                                     'block rounded-field px-3 py-2 text-sm hover:bg-neutral-100 dark:hover:bg-white/5',
                                     'bg-[--alpha(var(--color-primary)_/5%)] text-[var(--color-primary)]' => $regularInvoiceMenuActive,
@@ -369,12 +373,14 @@
                         </div>
                     </div>
 
-                    <a wire:navigate.hover
-                       href="{{ route('settings.index') }}"
-                       x-on:click="$modal.close('mobile-nav-menu')"
-                       class="block rounded-field px-3 py-2 text-sm font-medium text-neutral-700 hover:bg-neutral-100 dark:text-neutral-200 dark:hover:bg-white/5">
-                        Settings
-                    </a>
+                    @role('admin', 'finance', 'editor')
+                        <a wire:navigate.hover
+                           href="{{ route('settings.index') }}"
+                           x-on:click="$modal.close('mobile-nav-menu')"
+                           class="block rounded-field px-3 py-2 text-sm font-medium text-neutral-700 hover:bg-neutral-100 dark:text-neutral-200 dark:hover:bg-white/5">
+                            Settings
+                        </a>
+                    @endrole
 
                     @role('admin')
                         <a wire:navigate.hover

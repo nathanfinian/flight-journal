@@ -21,7 +21,7 @@ class Index extends Component
 
     public function mount(): void
     {
-        $this->canOpenEditPage = in_array(Auth::user()?->role?->name, ['admin'], true);
+        $this->canOpenEditPage = in_array(Auth::user()?->role?->name, ['admin', 'editor'], true);
     }
 
     public function openEdit(int $id)

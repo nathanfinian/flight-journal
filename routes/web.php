@@ -104,7 +104,7 @@ Route::middleware('auth')->group(function () {
 
 });
 
-Route::middleware(['auth', 'role:admin,finance'])->group(function () {
+Route::middleware(['auth', 'role:admin,finance,editor'])->group(function () {
 
     /* =======================
      | Flights Menu
@@ -258,7 +258,7 @@ Route::middleware(['auth', 'role:admin,finance'])->group(function () {
 
 });
 
-Route::middleware(['auth', 'role:admin,finance,teknik'])->group(function () {
+Route::middleware(['auth', 'role:admin,finance,editor,teknik'])->group(function () {
 
      /* =======================
      | GSE Menu
@@ -326,7 +326,7 @@ Route::middleware(['auth', 'role:admin,finance,teknik'])->group(function () {
         ->name('gseitems.create');
     Route::get('/gse/inventory/items/{id:id}/edit', GSEInventoryItemForm::class)
         ->whereNumber('id')
-        ->middleware('role:admin,finance')
+        ->middleware('role:admin,editor')
         ->name('gseitems.edit');
 
     /* =======================
