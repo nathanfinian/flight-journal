@@ -20,19 +20,6 @@
                     <x-ui.icon name="arrow-up-right" class="text-gray-800 dark:text-white size-4" />
                 </x-ui.card>
             </x-ui.link>
-            {{-- <x-ui.link 
-                wire:navigate.hover
-                :href="route('settings.branch')" 
-                variant="ghost"
-            >
-                <x-ui.card class="flex items-center justify-between mb-4" size="xl">
-                    <div class="flex">
-                        <x-ui.icon name="ps:building-office" variant="light" class="text-gray-800 dark:text-white mr-2"/>
-                        <span>daftar cabang</span>
-                    </div>
-                    <x-ui.icon name="arrow-up-right" class="text-gray-800 dark:text-white size-4" />
-                </x-ui.card>
-            </x-ui.link> --}}
             <x-ui.link 
                 wire:navigate.hover
                 :href="route('settings.airport')" 
