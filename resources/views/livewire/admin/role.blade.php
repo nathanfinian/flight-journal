@@ -15,7 +15,7 @@
     </x-ui.heading>
 
     <x-ui.separator class="my-2"/>
-     <x-ui.breadcrumbs>
+    <x-ui.breadcrumbs>
         <x-ui.breadcrumbs.item wire:navigate.hover :href="route('admin.index')">Admin</x-ui.breadcrumbs.item>
         <x-ui.breadcrumbs.item>Roles</x-ui.breadcrumbs.item>
     </x-ui.breadcrumbs>
