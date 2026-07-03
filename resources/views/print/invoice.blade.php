@@ -159,7 +159,7 @@
 				<div id="left-company-name" style="font-weight: bold; margin-bottom: 4px;">
 					{{ $invoice->toCompany }}
 				</div>
-				<div id="left-sign-date" style="margin-bottom: 60px;">&nbsp;</div>
+				<div id="left-sign-date" style="margin-bottom: 80px;">&nbsp;</div>
 				<div class="name" id="left-signer-name">
 					<b><u>{{ $invoice->toWhom }}</u></b>
 				</div>
@@ -175,7 +175,7 @@
 				PT. MULIO CITRA ANGKASA
 			</div>
 
-			<div class="name" id="right-signer-name" style="margin-top: 60px;"><b><u>{{ $invoice->signer_name }}</u></b></div>
+			<div class="name" id="right-signer-name" style="margin-top: 80px;"><b><u>{{ $invoice->signer_name }}</u></b></div>
 			<div class="title" id="right-signer-title"><b>{{ $invoice->signer_title ?: 'Direktur' }}</b></div>
 			</div>
 		</div>
@@ -260,7 +260,7 @@
 				<div id="left-company-name" style="font-weight: bold; margin-bottom: 4px;">
 					{{ $invoice->toCompany }}
 				</div>
-				<div id="left-sign-date" style="margin-bottom: 60px;">&nbsp;</div>
+				<div id="left-sign-date" style="margin-bottom: 80px;">&nbsp;</div>
 				<div class="name" id="left-signer-name">
 					<b><u>{{ $invoice->toWhom }}</u></b>
 				</div>
@@ -276,7 +276,7 @@
 				PT. MULIO CITRA ANGKASA
 			</div>
 
-			<div class="name" id="right-signer-name" style="margin-top: 60px;"><b><u>{{ $invoice->signer_name }}</u></b></div>
+			<div class="name" id="right-signer-name" style="margin-top: 80px;"><b><u>{{ $invoice->signer_name }}</u></b></div>
 			<div class="title" id="right-signer-title"><b>{{ $invoice->signer_title ?: 'Direktur' }}</b></div>
 			</div>
 		</div>
