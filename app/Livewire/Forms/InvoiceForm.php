@@ -25,6 +25,9 @@ class InvoiceForm extends Form
     #[Validate('nullable|string|max:255')]
     public string $signer_name = '';
 
+    #[Validate('nullable|string|max:255')]
+    public string $signer_title = '';
+
     #[Validate('required|string|min:3|max:80')]
     public string $invoice_number = '';
 
@@ -63,6 +66,7 @@ class InvoiceForm extends Form
         $this->toTitle        = (string) $invoice->toTitle;
         $this->toCompany      = (string) $invoice->toCompany;
         $this->signer_name    = (string) $invoice->signer_name;
+        $this->signer_title   = (string) $invoice->signer_title;
         $this->invoice_number = $invoice->invoice_number;
         $this->airline_rates_id = (string) $invoice->airline_rates_id;
         $this->airline_id     = (string) $invoice->airline_id;
@@ -87,6 +91,7 @@ class InvoiceForm extends Form
             'toTitle'        => $this->toTitle ?: null,
             'toCompany'      => $this->toCompany ?: null,
             'signer_name'    => $this->signer_name ?: null,
+            'signer_title'   => $this->signer_title ?: null,
             'invoice_number' => $this->invoice_number,
             'airline_rates_id'=> $this->airline_rates_id,
             'airline_id'     => $this->airline_id,
@@ -119,6 +124,7 @@ class InvoiceForm extends Form
             'toTitle'        => $this->toTitle ?: null,
             'toCompany'      => $this->toCompany ?: null,
             'signer_name'    => $this->signer_name ?: null,
+            'signer_title'   => $this->signer_title ?: null,
             'invoice_number' => $this->invoice_number,
             'airline_rates_id'=> $this->airline_rates_id,
             'airline_id'     => $this->airline_id,
@@ -159,6 +165,7 @@ class InvoiceForm extends Form
             'toTitle',
             'toCompany',
             'signer_name',
+            'signer_title',
             'invoice_number',
             'airline_rates_id',
             'airline_id',

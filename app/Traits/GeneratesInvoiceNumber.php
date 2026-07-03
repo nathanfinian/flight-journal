@@ -17,7 +17,8 @@ trait GeneratesInvoiceNumber
 
             $period = now()->format('Ym');
 
-            $last = Invoice::where('branch_id', $branchId)
+            $last = Invoice::withTrashed()
+                ->where('branch_id', $branchId)
                 ->whereYear('created_at', now()->year)
                 ->whereMonth('created_at', now()->month)
                 ->lockForUpdate()

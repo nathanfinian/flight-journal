@@ -16,7 +16,7 @@ trait GeneratesGseInvoiceNumber
             $typeCode = $this->makeGseTypeCode($gseType->type_name, $gseType->getKey());
             $period = now()->format('Ym');
 
-            $last = Invoice_gse::query()
+            $last = Invoice_gse::withTrashed()
                 ->where('gse_type_id', $gseTypeId)
                 ->whereYear('created_at', now()->year)
                 ->whereMonth('created_at', now()->month)

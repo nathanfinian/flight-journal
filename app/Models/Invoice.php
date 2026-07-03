@@ -24,6 +24,7 @@ class Invoice extends Model
         'toTitle',
         'toCompany',
         'signer_name',
+        'signer_title',
         'invoice_number',
         'date',
         'dateFrom',

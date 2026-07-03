@@ -459,7 +459,7 @@ class Create extends Component
         return DB::transaction(function (): string {
             $period = now()->format('Ym');
 
-            $last = GseInvoice::query()
+            $last = GseInvoice::withTrashed()
                 ->where('invoice_number', 'like', "INV-GSE-GPUATT-{$period}-%")
                 ->whereYear('created_at', now()->year)
                 ->whereMonth('created_at', now()->month)

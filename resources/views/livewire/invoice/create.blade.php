@@ -87,7 +87,15 @@
                         </x-ui.field>
                     </div>
                     <div class="col-span-6">
-                        {{-- empty --}}
+                        <x-ui.field required>
+                            <x-ui.label>Jabatan Penandatangan</x-ui.label>
+                            <x-ui.input
+                                wire:model.defer="form.signer_title"
+                                maxlength="255"
+                                placeholder="Jabatan direktur/penandatangan"
+                            />
+                            <x-ui.error name="form.signer_title" />
+                        </x-ui.field>
                     </div>
                 </div>
                 <div class="grid grid-cols-12 gap-6">
@@ -99,7 +107,7 @@
                                 wire:model="form.date"
                                 placeholder="Date"
                                 class="
-                                    dark:[color-scheme:dark]
+                                    dark:scheme-dark
                                     dark:[&::-webkit-calendar-picker-indicator]:invert
                                 "
                             />
@@ -114,7 +122,7 @@
                                 wire:model="form.due_date"
                                 placeholder="Date"
                                 class="
-                                    dark:[color-scheme:dark]
+                                    dark:scheme-dark
                                     dark:[&::-webkit-calendar-picker-indicator]:invert
                                 "
                             />
@@ -235,7 +243,7 @@
                                 wire:model="form.dateFrom"
                                 placeholder="Dari"
                                 class="
-                                    dark:[color-scheme:dark]
+                                    dark:scheme-dark
                                     dark:[&::-webkit-calendar-picker-indicator]:invert
                                 "
                             />
@@ -250,7 +258,7 @@
                                 wire:model="form.dateTo"
                                 placeholder="Sampai"
                                 class="
-                                    dark:[color-scheme:dark]
+                                    dark:scheme-dark
                                     dark:[&::-webkit-calendar-picker-indicator]:invert
                                 "
                             />
