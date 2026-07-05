@@ -173,9 +173,9 @@ class InvoiceController extends Controller
         $totalPPH = $totalPreTax * $invoice->rate->pph_rate;
         $totalKON = $totalPreTax * $invoice->rate->konsesi_rate;
 
-        $formattedPPN = number_format($invoice->rate->ppn_rate * 100);
-        $formattedPPH = number_format($invoice->rate->pph_rate * 100);
-        $formattedKON = number_format($invoice->rate->konsesi_rate * 100);
+        $formattedPPN = $this->formatPercentage($invoice->rate->ppn_rate * 100);
+        $formattedPPH = $this->formatPercentage($invoice->rate->pph_rate * 100);
+        $formattedKON = $this->formatPercentage($invoice->rate->konsesi_rate * 100);
 
         $totalAfterPPN = $totalPreTax + $totalPPN;
         $totalAfterKON = $totalAfterPPN + $totalKON;
@@ -208,5 +208,10 @@ class InvoiceController extends Controller
             'finalTerbilang' => $finalTerbilang,
             'currentDate' => $currentDate,
         ]);
+    }
+
+    private function formatPercentage(float $value): string
+    {
+        return rtrim(rtrim(number_format($value, 2, '.', ''), '0'), '.');
     }
 }
