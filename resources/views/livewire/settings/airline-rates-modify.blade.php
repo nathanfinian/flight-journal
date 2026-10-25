@@ -85,7 +85,7 @@
                                 type="date"
                                 wire:model.defer="date_from"
                                 class="
-                                    dark:[color-scheme:dark]
+                                    dark:scheme-dark
                                     dark:[&::-webkit-calendar-picker-indicator]:invert
                                 "
                             />
@@ -99,7 +99,7 @@
                                 type="date"
                                 wire:model.defer="date_to"
                                 class="
-                                    dark:[color-scheme:dark]
+                                    dark:scheme-dark
                                     dark:[&::-webkit-calendar-picker-indicator]:invert
                                 "
                             />
