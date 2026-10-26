@@ -25,6 +25,8 @@
             <tr>
                 <th class="px-4 py-3 text-left">#</th>
                 <th class="px-4 py-3 text-left">Service</th>
+                <th class="px-4 py-3 text-left">Airline</th>
+                <th class="px-4 py-3 text-left">Cabang</th>
                 <th class="px-4 py-3 text-left">Charge Type</th>
                 <th class="px-4 py-3 text-left">Rate</th>
                 <th class="px-4 py-3 text-left">Effective From</th>
@@ -47,14 +49,16 @@
                         {{ $num }}
                     </td>
                     <td class="px-4 py-3">{{ $gseRate->gseType->type_name ?? '-' }}</td>
+                    <td class="px-4 py-3">{{ $gseRate->airline->name ?? 'Belum ditetapkan' }}</td>
+                    <td class="px-4 py-3">{{ $gseRate->branch->name ?? 'Belum ditetapkan' }}</td>
                     <td class="px-4 py-3">{{ $gseRate->charge_type }}</td>
-                    <td class="px-4 py-3">Rp. {{ number_format((float) $gseRate->service_rate, 0, ',', '.') }}</td>
+                    <td class="px-4 py-3">Rp. {{ number_format((float) $gseRate->service_rate, 2, ',', '.') }}</td>
                     <td class="px-4 py-3">{{ $gseRate->effective_from?->format('Y-m-d') ?? '-' }}</td>
                     <td class="px-4 py-3">{{ $gseRate->effective_to?->format('Y-m-d') ?? '-' }}</td>
                 </tr>
             @empty
                 <tr>
-                    <td colspan="6" class="px-4 py-6 text-center text-gray-500">
+                    <td colspan="8" class="px-4 py-6 text-center text-gray-500">
                         No GSE rate found.
                     </td>
                 </tr>

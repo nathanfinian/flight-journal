@@ -185,7 +185,7 @@
                     @endif
 					<tr>
 						<td class="text-center">{{ $loop->iteration }}</td>
-						<td class="text-center nowrap">{{ $recap?->service_date?->format('d/m/Y') ?? '-' }}</td>
+						<td class="text-center nowrap">{{ $recap?->service_date?->format('d-M-Y') ?? '-' }}</td>
 						<td class="text-center">{{ $recap?->er_number ?? '-' }}</td>
 						<td class="text-center">{{ $recap?->flight_number ?? '-' }}</td>
 						<td>{{ $serviceName }}</td>

@@ -16,6 +16,26 @@
                 wire:submit="saveChanges"
                 class="mt-8 space-y-4 rounded-lg bg-white p-6 dark:bg-neutral-800/10"
             >
+                <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
+                    <x-ui.field required>
+                        <x-ui.label>Airline</x-ui.label>
+                        <x-ui.select searchable placeholder="Select airline..." wire:model.live="airline_id">
+                            @foreach ($airlines as $airline)
+                                <x-ui.select.option value="{{ $airline->id }}">{{ $airline->name }}</x-ui.select.option>
+                            @endforeach
+                        </x-ui.select>
+                        <x-ui.error name="airline_id" />
+                    </x-ui.field>
+                    <x-ui.field required>
+                        <x-ui.label>Cabang</x-ui.label>
+                        <x-ui.select searchable placeholder="Select branch..." wire:model.live="branch_id">
+                            @foreach ($branches as $branch)
+                                <x-ui.select.option value="{{ $branch->id }}">{{ $branch->name }}</x-ui.select.option>
+                            @endforeach
+                        </x-ui.select>
+                        <x-ui.error name="branch_id" />
+                    </x-ui.field>
+                </div>
                 <div class="grid grid-cols-12 gap-6">
                     <div class="col-span-6">
                         <x-ui.field required>
@@ -54,7 +74,7 @@
                             <x-ui.label>Effective From</x-ui.label>
                             <x-ui.input
                                 type="date"
-                                wire:model.defer="effective_from"
+                                wire:model.live="effective_from"
                                 class="dark:[color-scheme:dark] dark:[&::-webkit-calendar-picker-indicator]:invert"
                             />
                             <x-ui.error name="effective_from" />
@@ -65,7 +85,7 @@
                             <x-ui.label>Effective To</x-ui.label>
                             <x-ui.input
                                 type="date"
-                                wire:model.defer="effective_to"
+                                wire:model.live="effective_to"
                                 class="dark:[color-scheme:dark] dark:[&::-webkit-calendar-picker-indicator]:invert"
                             />
                             <x-ui.error name="effective_to" />
@@ -78,7 +98,7 @@
                         <x-ui.field required>
                             <x-ui.label>Service Rate</x-ui.label>
                             <x-ui.input
-                                wire:model.defer="service_rate"
+                                wire:model.live.debounce.300ms="service_rate"
                                 x-mask:dynamic="$money($input, ',')"
                                 placeholder="0.00"
                             >

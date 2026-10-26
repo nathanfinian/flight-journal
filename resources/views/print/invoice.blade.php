@@ -222,7 +222,7 @@
 						$totalFlightFee += $lineTotal;
 					@endphp
 					<tr>
-						<td rowspan="2" class="text-center">{{ \Carbon\Carbon::parse($flight->service_date)->format('d/m/Y') }}</td>
+						<td rowspan="2" class="text-center">{{ \Carbon\Carbon::parse($flight->service_date)->format('d-M-Y') }}</td>
 						<td rowspan="2" class="text-center">
 							{{ $flight->departure_flight_no }}<br>
 							{{ $flight->flight_type_name }}{{ $flight->ferry_direction ? ' - ' . $flight->ferry_direction : '' }}

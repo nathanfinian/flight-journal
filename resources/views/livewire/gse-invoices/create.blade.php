@@ -197,7 +197,7 @@
                                         @foreach ($availableRecaps as $recap)
                                             <tr class="align-top">
                                                 <td class="px-4 py-3">
-                                                    <x-ui.checkbox value="{{ $recap['id'] }}" />
+                                                    <x-ui.checkbox value="{{ $recap['id'] }}" :disabled="!$recap['has_rate']" />
                                                 </td>
                                                 <td class="px-4 py-3">{{ $recap['service_date'] }}</td>
                                                 <td class="px-4 py-3">
@@ -212,7 +212,11 @@
                                                     {{ $pivotRows[$recap['id']]['charge_type'] ?: '-' }}
                                                 </td>
                                                 <td class="px-4 py-3">
-                                                    Rp. {{ number_format((float) ($pivotRows[$recap['id']]['service_rate'] ?? 0), 2, ',', '.') }}
+                                                    @if ($recap['has_rate'])
+                                                        Rp. {{ number_format((float) ($pivotRows[$recap['id']]['service_rate'] ?? 0), 2, ',', '.') }}
+                                                    @else
+                                                        <span class="text-red-600 dark:text-red-400">Rate belum tersedia atau periode tumpang tindih</span>
+                                                    @endif
                                                 </td>
                                                 <td class="px-4 py-3">
                                                     <x-ui.input
@@ -220,11 +224,17 @@
                                                         min="0"
                                                         step="0.01"
                                                         wire:model.live="pivotRows.{{ $recap['id'] }}.quantity"
+                                                        :disabled="!$recap['has_rate']"
                                                         class="min-w-24"
                                                     />
+                                                    <x-ui.error :name="'pivotRows.' . $recap['id'] . '.quantity'" />
                                                 </td>
                                                 <td class="px-4 py-3">
-                                                    Rp. {{ number_format((float) ($pivotRows[$recap['id']]['amount'] ?? 0), 2, ',', '.') }}
+                                                    @if ($recap['has_rate'])
+                                                        Rp. {{ number_format((float) ($pivotRows[$recap['id']]['amount'] ?? 0), 2, ',', '.') }}
+                                                    @else
+                                                        -
+                                                    @endif
                                                 </td>
                                             </tr>
                                         @endforeach

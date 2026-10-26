@@ -20,7 +20,7 @@ class Index extends Component
     public function render()
     {
         $gseRates = GseTypeRate::query()
-            ->with('gseType:id,type_name')
+            ->with(['gseType:id,type_name', 'airline:id,name', 'branch:id,name'])
             ->orderByDesc('effective_from')
             ->paginate($this->perPage);
 

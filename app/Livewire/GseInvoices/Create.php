@@ -9,11 +9,12 @@ use App\Models\GseRecap;
 use App\Models\GseType;
 use App\Models\GseTypeRate;
 use App\Models\Invoice_gse as GseInvoice;
+use App\Support\GseDuration;
 use App\Traits\GeneratesGseInvoiceNumber;
-use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\ValidationException;
 use Livewire\Component;
 
 class Create extends Component
@@ -141,7 +142,6 @@ class Create extends Component
     {
         $this->form->validate($this->form->headerRules());
 
-        // Only show recaps that have an active rate for their own service date.
         $recaps = GseRecap::query()
             ->with([
                 'gseType:id,type_name',
@@ -155,16 +155,6 @@ class Create extends Component
             ->where('branch_id', $this->form->branch_id)
             ->where('airline_id', $this->form->airline_id)
             ->whereBetween('service_date', [$this->form->dateFrom, $this->form->dateTo])
-            ->whereHas('gseType.rates', function (Builder $query): void {
-                $query
-                    ->whereColumn('gse_type_rates.gse_type_id', 'gse_recaps.gse_type_id')
-                    ->whereDate('gse_type_rates.effective_from', '<=', DB::raw('DATE(gse_recaps.service_date)'))
-                    ->where(function (Builder $subQuery): void {
-                        $subQuery
-                            ->whereNull('gse_type_rates.effective_to')
-                            ->orWhereDate('gse_type_rates.effective_to', '>=', DB::raw('DATE(gse_recaps.service_date)'));
-                    });
-            })
             ->orderBy('service_date')
             ->orderBy('flight_number')
             ->get();
@@ -173,10 +163,10 @@ class Create extends Component
             ? collect($this->selectedRecapIds)->map(fn ($id) => (string) $id)->all()
             : [];
 
-        $this->availableRecaps = $this->mapRecapsForDisplay($recaps);
         $this->pivotRows = $this->buildPivotRows($recaps, preserveExisting: $keepExistingSelection);
+        $this->availableRecaps = $this->mapRecapsForDisplay($recaps);
 
-        $recapIds = $recaps->pluck('id')->map(fn ($id) => (string) $id)->all();
+        $recapIds = collect($this->availableRecaps)->where('has_rate', true)->pluck('id')->all();
         $this->selectedRecapIds = $keepExistingSelection
             ? array_values(array_intersect($existingSelection, $recapIds))
             : $recapIds;
@@ -197,53 +187,78 @@ class Create extends Component
             ->unique()
             ->values();
 
-        $eligibleRecapCount = GseRecap::query()
+        $eligibleRecaps = GseRecap::query()
+            ->with(['gpuDetail', 'pushbackDetail'])
             ->whereIn('id', $selectedRecapIds)
             ->whereIn('gse_type_id', $this->selectedGseTypeIds())
             ->where('branch_id', $this->form->branch_id)
             ->where('airline_id', $this->form->airline_id)
             ->whereBetween('service_date', [$this->form->dateFrom, $this->form->dateTo])
-            ->count();
+            ->get();
 
-        if ($eligibleRecapCount !== $selectedRecapIds->count()) {
+        if ($eligibleRecaps->count() !== $selectedRecapIds->count()) {
             $this->addError('selectedRecapIds', 'Ada recap terpilih yang tidak sesuai dengan GSE type, cabang, airline, atau rentang tanggal invoice.');
 
             return null;
         }
 
-        foreach ($payload['selectedRecapIds'] as $recapId) {
-            $row = $this->pivotRows[$recapId] ?? null;
-
-            if (! $row || blank($row['gse_type_rate_id']) || blank($row['charge_type'])) {
-                $this->addError('selectedRecapIds', 'Ada recap terpilih yang tidak memiliki rate aktif untuk GSE type dan tanggal servicenya.');
-
-                return null;
-            }
+        $quantityRules = [];
+        foreach ($selectedRecapIds as $recapId) {
+            $quantityRules["pivotRows.{$recapId}.quantity"] = ['required', 'numeric', 'min:0', 'max:9999999999.99'];
         }
+        $this->validate($quantityRules);
 
-        return DB::transaction(function () use ($payload) {
+        return DB::transaction(function () use ($eligibleRecaps) {
+            GseType::whereIn('id', $eligibleRecaps->pluck('gse_type_id')->unique())
+                ->orderBy('id')->lockForUpdate()->get();
+
+            $this->form->record?->load('recaps');
+            $billingRows = $this->buildPivotRows($eligibleRecaps);
+            $syncData = [];
+
+            foreach ($billingRows as $recapId => $row) {
+                if (blank($row['charge_type'])) {
+                    throw ValidationException::withMessages([
+                        'selectedRecapIds' => 'Ada recap terpilih yang belum memiliki satu rate aktif untuk airline, cabang, GSE type, dan tanggal service.',
+                    ]);
+                }
+
+                $quantity = $this->normalizeDecimal($this->pivotRows[$recapId]['quantity']);
+                $saved = $this->form->record?->recaps->firstWhere('id', $recapId)?->pivot;
+                $loaded = $this->pivotRows[$recapId];
+                if (! $saved && (
+                    (string) $row['gse_type_rate_id'] !== (string) ($loaded['gse_type_rate_id'] ?? '')
+                    || $row['charge_type'] !== ($loaded['charge_type'] ?? '')
+                    || (float) $row['service_rate'] !== (float) ($loaded['service_rate'] ?? 0)
+                )) {
+                    throw ValidationException::withMessages([
+                        'selectedRecapIds' => 'Rate telah berubah. Muat ulang recap sebelum menyimpan invoice.',
+                    ]);
+                }
+
+                $amount = $saved && $quantity === (float) $saved->quantity
+                    ? (float) $saved->amount
+                    : round($quantity * $row['service_rate'], 2);
+
+                if ($amount > 9999999999.99) {
+                    throw ValidationException::withMessages([
+                        "pivotRows.{$recapId}.quantity" => 'Jumlah tagihan melebihi batas yang dapat disimpan.',
+                    ]);
+                }
+
+                $syncData[$recapId] = [
+                    'gse_type_rate_id' => $row['gse_type_rate_id'] ?: null,
+                    'charge_type' => $row['charge_type'],
+                    'service_rate' => $row['service_rate'],
+                    'quantity' => $quantity,
+                    'amount' => $amount,
+                ];
+            }
+
             $invoice = $this->form->persist();
 
             $this->invoice = $invoice;
             $this->isEdit = true;
-
-            // Store the computed billing details on the pivot so later rate
-            // changes do not rewrite historical invoice amounts.
-            $syncData = collect($payload['selectedRecapIds'])
-                ->mapWithKeys(function ($recapId): array {
-                    $row = $this->pivotRows[$recapId] ?? [];
-
-                    return [
-                        $recapId => [
-                            'gse_type_rate_id' => $row['gse_type_rate_id'] ?: null,
-                            'charge_type' => $row['charge_type'],
-                            'service_rate' => $this->normalizeDecimal($row['service_rate']),
-                            'quantity' => $this->normalizeDecimal($row['quantity']),
-                            'amount' => $this->normalizeDecimal($row['amount']),
-                        ],
-                    ];
-                })
-                ->all();
 
             $invoice->recaps()->sync($syncData);
 
@@ -308,9 +323,7 @@ class Create extends Component
     {
         return $recaps
             ->map(function (GseRecap $recap): array {
-                $rate = $this->resolveRateForRecap($recap);
-                $quantity = $this->calculateQuantity($recap, $rate?->charge_type);
-                $serviceRate = (float) ($rate?->service_rate ?? 0);
+                $row = $this->pivotRows[(string) $recap->getKey()];
 
                 return [
                     'id' => (string) $recap->getKey(),
@@ -321,10 +334,7 @@ class Create extends Component
                     'branch' => $recap->branch?->name ?? '-',
                     'equipment' => $recap->equipment?->registration ?? '-',
                     'service' => $recap->gseType?->type_name ?? '-',
-                    'charge_type' => (string) ($rate?->charge_type ?? '-'),
-                    'service_rate' => $serviceRate,
-                    'quantity' => $quantity,
-                    'amount' => round($quantity * $serviceRate, 2),
+                    'has_rate' => filled($row['charge_type']),
                 ];
             })
             ->all();
@@ -332,17 +342,27 @@ class Create extends Component
 
     private function buildPivotRows(Collection $recaps, bool $preserveExisting = false): array
     {
-        $rows = $preserveExisting ? $this->pivotRows : [];
+        $rows = [];
 
         foreach ($recaps as $recap) {
             $recapId = (string) $recap->getKey();
 
-            if ($preserveExisting && isset($rows[$recapId])) {
+            $saved = $this->form->record?->recaps->firstWhere('id', $recap->getKey())?->pivot;
+            if ($saved) {
+                $rows[$recapId] = [
+                    'gse_type_rate_id' => (string) ($saved->gse_type_rate_id ?? ''),
+                    'charge_type' => (string) $saved->charge_type,
+                    'service_rate' => (float) $saved->service_rate,
+                    'quantity' => (float) $saved->quantity,
+                    'amount' => (float) $saved->amount,
+                ];
                 continue;
             }
 
             $rate = $this->resolveRateForRecap($recap);
-            $quantity = $this->calculateQuantity($recap, $rate?->charge_type);
+            $quantity = $preserveExisting && isset($this->pivotRows[$recapId])
+                ? $this->normalizeDecimal($this->pivotRows[$recapId]['quantity'])
+                : $this->calculateQuantity($recap, $rate?->charge_type);
             $serviceRate = (float) ($rate?->service_rate ?? 0);
 
             $rows[$recapId] = [
@@ -359,16 +379,9 @@ class Create extends Component
 
     private function resolveRateForRecap(GseRecap $recap): ?GseTypeRate
     {
-        return GseTypeRate::query()
-            ->where('gse_type_id', $recap->gse_type_id)
-            ->whereDate('effective_from', '<=', $recap->service_date)
-            ->where(function (Builder $query) use ($recap): void {
-                $query
-                    ->whereNull('effective_to')
-                    ->orWhereDate('effective_to', '>=', $recap->service_date);
-            })
-            ->orderByDesc('effective_from')
-            ->first();
+        $rates = GseTypeRate::forRecap($recap)->limit(2)->get();
+
+        return $rates->count() === 1 ? $rates->first() : null;
     }
 
     private function calculateQuantity(GseRecap $recap, ?string $chargeType): float
@@ -377,28 +390,10 @@ class Create extends Component
             return 1.0;
         }
 
-        // Hourly charges use the detail table times and round partial hours up.
         $start = $recap->gpuDetail?->start_time ?? $recap->pushbackDetail?->start_ps;
         $end = $recap->gpuDetail?->end_time ?? $recap->pushbackDetail?->end_ps;
 
-        if (blank($start) || blank($end)) {
-            return 1.0;
-        }
-
-        try {
-            $startTime = Carbon::createFromFormat(strlen((string) $start) === 8 ? 'H:i:s' : 'H:i', (string) $start);
-            $endTime = Carbon::createFromFormat(strlen((string) $end) === 8 ? 'H:i:s' : 'H:i', (string) $end);
-        } catch (\Throwable) {
-            return 1.0;
-        }
-
-        $minutes = $startTime->diffInMinutes($endTime, false);
-
-        if ($minutes <= 0) {
-            return 1.0;
-        }
-
-        return (float) ceil($minutes / 60);
+        return GseDuration::billableHours($start, $end);
     }
 
     private function normalizeDecimal(mixed $value): float

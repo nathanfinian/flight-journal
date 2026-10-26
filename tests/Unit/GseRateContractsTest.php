@@ -146,7 +146,8 @@ test('rate form rejects overlap but accepts a separate airline contract', functi
         ->set('effective_from', '2026-08-15')->set('effective_to', '2026-09-30')
         ->set('charge_type', 'HOURLY')->set('service_rate', '250,50');
     $form->call('saveChanges')->assertHasErrors(['effective_from']);
-    $form->set('airline_id', '2')->call('saveChanges')->assertHasNoErrors()->assertRedirect(route('rategse'));
+    $form->set('airline_id', '2')->assertHasNoErrors(['effective_from'])
+        ->call('saveChanges')->assertHasNoErrors()->assertRedirect(route('rategse'));
     expect(GseTypeRate::where('airline_id', 2)->first()->service_rate)->toBe('250.50');
 });
 
@@ -233,9 +234,24 @@ test('saved invoice snapshots remain editable without an assigned legacy rate', 
         ->call('saveChanges')->assertHasNoErrors();
 
     expect((float) $invoice->fresh()->recaps->first()->pivot->amount)->toBe(75.0);
-    Livewire::test(RateCreate::class, ['id' => $rate->id])
+    $rateForm = Livewire::test(RateCreate::class, ['id' => $rate->id])
         ->set('airline_id', '1')->set('branch_id', '1')->set('service_rate', '500,00')
-        ->call('saveChanges')->assertHasErrors(['service_rate']);
+        ->call('saveChanges')->assertHasNoErrors();
+
+    expect($rate->fresh()->service_rate)->toBe('500.00');
+    $rateForm->set('airline_id', '2')->call('saveChanges')->assertHasErrors(['airline_id']);
+    $rateForm->set('airline_id', '1')->assertHasNoErrors(['airline_id'])
+        ->set('service_rate', '600,00')->call('saveChanges')->assertHasNoErrors();
+
+    Livewire::test(InvoiceCreate::class, ['id' => $invoice->id])
+        ->call('loadRecaps')->assertSet("pivotRows.{$id}.service_rate", 75.0)
+        ->call('saveChanges')->assertHasNoErrors();
+    expect((float) $invoice->fresh()->recaps->first()->pivot->amount)->toBe(75.0);
+
+    Livewire::test(InvoiceCreate::class)
+        ->set('form.gse_type_id', '1')->set('form.branch_id', '1')->set('form.airline_id', '1')
+        ->set('form.dateFrom', '2026-08-01')->set('form.dateTo', '2026-08-31')
+        ->call('loadRecaps')->assertSet("pivotRows.{$id}.service_rate", 600.0);
 });
 
 test('a changed contract must be reviewed again before a new invoice can be saved', function () {
