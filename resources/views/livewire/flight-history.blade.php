@@ -4,6 +4,10 @@
            History
         </div>
         <div class="flex items-center  gap-2">
+            <x-ui.modal.trigger id="monthly-flight-export">
+                <x-ui.button size="sm" variant="outline" icon="calendar-days"
+                    title="Export Excel bulanan" aria-label="Export Excel bulanan" />
+            </x-ui.modal.trigger>
             <x-ui.button 
                 size="sm"
                 variant="outline"
@@ -59,6 +63,27 @@
             </x-ui.button>
         </div>
     </x-ui.heading>
+
+    <x-ui.modal id="monthly-flight-export" position="center" heading="Export Excel Bulanan">
+        <form wire:submit="exportMonthlyFlight" class="space-y-4">
+            <x-ui.field required>
+                <x-ui.label for="export-month">Bulan</x-ui.label>
+                <x-ui.input id="export-month" type="month" wire:model="exportMonth" required />
+                <x-ui.error name="exportMonth" />
+            </x-ui.field>
+            <x-ui.field required>
+                <x-ui.label for="export-flight-no">Flight Number</x-ui.label>
+                <x-ui.input id="export-flight-no" wire:model="exportFlightNo" maxlength="10" required />
+                <x-ui.error name="exportFlightNo" />
+            </x-ui.field>
+            <x-ui.error name="selectedBranch" />
+            <div class="flex justify-end gap-2">
+                <x-ui.button variant="outline" x-on:click="$data.close()">Batal</x-ui.button>
+                <x-ui.button type="submit" icon="ps:microsoft-excel-logo"
+                    wire:loading.attr="disabled" wire:target="exportMonthlyFlight">Export Excel</x-ui.button>
+            </div>
+        </form>
+    </x-ui.modal>
 
     <x-ui.separator class="my-2"/>
 

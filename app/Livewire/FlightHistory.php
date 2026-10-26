@@ -3,6 +3,8 @@
 namespace App\Livewire;
 
 use Carbon\Carbon;
+use App\Exports\MonthlyFlightExport;
+use Maatwebsite\Excel\Facades\Excel;
 
 use App\Models\Branch;
 use App\Models\Flight;
@@ -30,6 +32,8 @@ class FlightHistory extends Component
     public ?string $typeName = '';
     public ?string $selectedType = '';
     public ?string $flightNo = '';
+    public string $exportMonth = '';
+    public string $exportFlightNo = '';
 
     public function mount()
     {
@@ -39,6 +43,7 @@ class FlightHistory extends Component
 
         $today = today('Asia/Jakarta')->toDateString(); // "2025-11-09"
         $this->dateTo = $today;
+        $this->exportMonth = now('Asia/Jakarta')->format('Y-m');
 
         // Load filters
         $this->branches = Branch::orderBy('name')->get(['id', 'name']);
@@ -157,6 +162,22 @@ class FlightHistory extends Component
     public function clearDates(): void
     {
         $this->reset(['dateFrom', 'dateTo']);
+    }
+
+    public function exportMonthlyFlight()
+    {
+        $this->exportFlightNo = strtoupper(trim($this->exportFlightNo));
+        $this->validate([
+            'exportMonth' => ['required', 'date_format:Y-m'],
+            'exportFlightNo' => ['required', 'string', 'max:10', 'regex:/^[A-Z0-9 -]+$/'],
+            'selectedBranch' => ['nullable', 'exists:branches,id'],
+        ]);
+
+        $export = new MonthlyFlightExport($this->exportMonth, $this->exportFlightNo, $this->selectedBranch);
+        $download = Excel::download($export, "{$this->branchName}-{$this->exportFlightNo}-{$this->exportMonth}.xlsx");
+        $this->dispatch('close-modal', id: 'monthly-flight-export');
+
+        return $download;
     }
 
     public function generateInvoice()

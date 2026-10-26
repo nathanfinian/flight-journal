@@ -2,6 +2,8 @@
 
 namespace App\Livewire\GseRecap;
 
+use App\Exports\MonthlyGseRecapExport;
+use Maatwebsite\Excel\Facades\Excel;
 use App\Models\Airline;
 use App\Models\Branch;
 use App\Models\GseRecap;
@@ -25,12 +27,15 @@ class Index extends Component
     public ?string $airlineName = '';
     public ?string $selectedAirline = '';
     public ?string $selectedGseType = '';
+    public string $exportMonth = '';
+    public string $exportGseType = '';
 
     public function mount()
     {
         $start = now('Asia/Jakarta');
         $this->dateFrom = $start->startOfMonth()->toDateString();
         $this->dateTo = today('Asia/Jakarta')->toDateString();
+        $this->exportMonth = now('Asia/Jakarta')->format('Y-m');
 
         $this->branches = Branch::orderBy('name')->get(['id', 'name']);
         $this->airlines = Airline::orderBy('name')->get(['id', 'name']);
@@ -120,6 +125,27 @@ class Index extends Component
     public function generateInvoice()
     {
         return redirect()->route('rekapgse.create');
+    }
+
+    public function exportMonthlyRecaps()
+    {
+        $this->validate([
+            'exportMonth' => ['required', 'date_format:Y-m'],
+            'exportGseType' => ['required', 'integer', 'exists:gse_types,id'],
+            'selectedBranch' => ['nullable', 'exists:branches,id'],
+            'selectedAirline' => ['nullable', 'exists:airlines,id'],
+        ]);
+
+        $typeName = GseType::findOrFail($this->exportGseType)->type_name;
+        $typeName = str_replace(['/', '\\'], '-', $typeName);
+
+        $download = Excel::download(
+            new MonthlyGseRecapExport($this->exportMonth, (int) $this->exportGseType, $this->selectedBranch, $this->selectedAirline),
+            "{$this->branchName}-{$typeName}-{$this->exportMonth}.xlsx"
+        );
+        $this->dispatch('close-modal', id: 'monthly-gse-export');
+
+        return $download;
     }
 
     public function openEdit(int $id)

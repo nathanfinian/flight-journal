@@ -4,6 +4,10 @@
            GSE Recaps
         </div>
         <div class="flex items-center  gap-2">
+            <x-ui.modal.trigger id="monthly-gse-export">
+                <x-ui.button size="sm" variant="outline" icon="ps:microsoft-excel-logo"
+                    title="Export Excel bulanan" aria-label="Export Excel bulanan" />
+            </x-ui.modal.trigger>
             <x-ui.button
                 size="sm"
                 variant="outline"
@@ -16,6 +20,33 @@
     </x-ui.heading>
 
     <x-ui.separator class="my-2"/>
+
+    <x-ui.modal id="monthly-gse-export" position="center" heading="Export GSE Bulanan">
+        <form wire:submit="exportMonthlyRecaps" class="space-y-4">
+            <x-ui.field required>
+                <x-ui.label for="gse-export-month">Bulan</x-ui.label>
+                <x-ui.input id="gse-export-month" type="month" wire:model="exportMonth" required />
+                <x-ui.error name="exportMonth" />
+            </x-ui.field>
+            <x-ui.field required>
+                <x-ui.label>GSE Type</x-ui.label>
+                <x-ui.select searchable wire:model="exportGseType" placeholder="Pilih GSE Type">
+                    <x-ui.select.option value="">Pilih GSE Type</x-ui.select.option>
+                    @foreach ($gseTypes as $gseType)
+                        <x-ui.select.option value="{{ $gseType->id }}">{{ $gseType->type_name }}</x-ui.select.option>
+                    @endforeach
+                </x-ui.select>
+                <x-ui.error name="exportGseType" />
+            </x-ui.field>
+            <x-ui.error name="selectedBranch" />
+            <x-ui.error name="selectedAirline" />
+            <div class="flex justify-end gap-2">
+                <x-ui.button variant="outline" x-on:click="$data.close()">Batal</x-ui.button>
+                <x-ui.button type="submit" icon="ps:microsoft-excel-logo"
+                    wire:loading.attr="disabled" wire:target="exportMonthlyRecaps">Export Excel</x-ui.button>
+            </div>
+        </form>
+    </x-ui.modal>
 
     <div class="flex flex-wrap items-center gap-4 justify-between">
         <div class="flex flex-wrap items-center gap-4">
