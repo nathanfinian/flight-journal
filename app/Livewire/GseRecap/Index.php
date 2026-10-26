@@ -30,6 +30,7 @@ class Index extends Component
     public ?string $selectedGseType = '';
     public string $exportMonth = '';
     public string $exportGseType = '';
+    public ?string $exportAirline = '';
 
     public function mount()
     {
@@ -136,14 +137,14 @@ class Index extends Component
             'exportMonth' => ['required', 'date_format:Y-m'],
             'exportGseType' => ['required', 'integer', 'exists:gse_types,id'],
             'selectedBranch' => ['nullable', 'exists:branches,id'],
-            'selectedAirline' => ['nullable', 'exists:airlines,id'],
+            'exportAirline' => ['nullable', 'exists:airlines,id'],
         ]);
 
         $typeName = GseType::findOrFail($this->exportGseType)->type_name;
         $typeName = str_replace(['/', '\\'], '-', $typeName);
 
         $download = Excel::download(
-            new MonthlyGseRecapExport($this->exportMonth, (int) $this->exportGseType, $this->selectedBranch, $this->selectedAirline),
+            new MonthlyGseRecapExport($this->exportMonth, (int) $this->exportGseType, $this->selectedBranch, $this->exportAirline),
             "{$this->branchName}-{$typeName}-{$this->exportMonth}.xlsx"
         );
         $this->dispatch('close-modal', id: 'monthly-gse-export');

@@ -39,7 +39,16 @@
                 <x-ui.error name="exportGseType" />
             </x-ui.field>
             <x-ui.error name="selectedBranch" />
-            <x-ui.error name="selectedAirline" />
+            <x-ui.field>
+                <x-ui.label>Airline (opsional)</x-ui.label>
+                <x-ui.select searchable wire:model="exportAirline" placeholder="Semua Airline">
+                    <x-ui.select.option value="">Semua Airline</x-ui.select.option>
+                    @foreach ($airlines as $airline)
+                        <x-ui.select.option value="{{ $airline->id }}">{{ $airline->name }}</x-ui.select.option>
+                    @endforeach
+                </x-ui.select>
+                <x-ui.error name="exportAirline" />
+            </x-ui.field>
             <div class="flex justify-end gap-2">
                 <x-ui.button variant="outline" x-on:click="$data.close()">Batal</x-ui.button>
                 <x-ui.button type="submit" icon="ps:microsoft-excel-logo"
