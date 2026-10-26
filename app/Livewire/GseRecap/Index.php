@@ -9,6 +9,7 @@ use App\Models\Branch;
 use App\Models\GseRecap;
 use App\Models\GseType;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 
 class Index extends Component
@@ -40,6 +41,8 @@ class Index extends Component
         $this->branches = Branch::orderBy('name')->get(['id', 'name']);
         $this->airlines = Airline::orderBy('name')->get(['id', 'name']);
         $this->gseTypes = GseType::orderBy('type_name')->get(['id', 'type_name']);
+
+        $this->selectedBranch = (string) (Auth::user()?->branch_id ?? '');
 
         $this->loadInvoices();
     }
