@@ -20,6 +20,29 @@
         <x-ui.breadcrumbs.item>Airline Rates List</x-ui.breadcrumbs.item>
     </x-ui.breadcrumbs>
 
+    <div class="mt-4 grid grid-cols-1 gap-6 md:grid-cols-2">
+        <x-ui.field>
+            <x-ui.label>Cabang</x-ui.label>
+            <x-ui.select searchable placeholder="Semua Cabang" wire:model.live="selectedBranch"
+                class="mt-1 block w-full sm:text-sm">
+                <x-ui.select.option value="">Semua Cabang</x-ui.select.option>
+                @foreach ($branches as $branch)
+                    <x-ui.select.option value="{{ $branch->id }}">{{ $branch->name }}</x-ui.select.option>
+                @endforeach
+            </x-ui.select>
+        </x-ui.field>
+        <x-ui.field>
+            <x-ui.label>Airline</x-ui.label>
+            <x-ui.select searchable placeholder="Semua Airline" wire:model.live="selectedAirline"
+                class="mt-1 block w-full sm:text-sm">
+                <x-ui.select.option value="">Semua Airline</x-ui.select.option>
+                @foreach ($airlines as $airline)
+                    <x-ui.select.option value="{{ $airline->id }}">{{ $airline->name }}</x-ui.select.option>
+                @endforeach
+            </x-ui.select>
+        </x-ui.field>
+    </div>
+
     <table class="border border-collapse min-w-full text-sm rounded-xl overflow-hidden mt-4 shadow-lg">
         <thead class="bg-gray-200 dark:bg-neutral-800">
             <tr>
@@ -41,8 +64,8 @@
                 <td class="px-4 py-3">
                 {{-- Works for both paginate() and get() --}}
                 @php
-                    $num = method_exists($airlineRate, 'firstItem') && $airlineRate->firstItem()
-                        ? $airlineRate->firstItem() + $loop->index   // paginated
+                    $num = method_exists($airlineRates, 'firstItem') && $airlineRates->firstItem()
+                        ? $airlineRates->firstItem() + $loop->index   // paginated
                         : $loop->iteration;                        // non-paginated
                 @endphp
                 {{ $num }}
@@ -70,5 +93,8 @@
             @endforelse
         </tbody>
     </table>
+    <div class="mt-4">
+        {{ $airlineRates->links() }}
+    </div>
 </div>
 
